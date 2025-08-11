@@ -18,7 +18,9 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Typing :: Typed",
 ]
-dependencies = []
+dependencies = [
+  "pythonic-fp>=1.2.0",
+]
 dynamic = ["description"]
 
 [project.urls]

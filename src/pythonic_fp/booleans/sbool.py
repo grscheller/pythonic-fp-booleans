@@ -16,7 +16,7 @@
 """Subtypable Booleans."""
 
 from typing import cast, Final, final, Never, Self, TypeVar
-from pythonic_fp.gadgets.lca import least_common_ancestor
+from pythonic_fp.gadgets.lca import latest_common_ancestor
 
 __all__ = ['SBool', 'snot', 'TRUTH', 'LIE']
 
@@ -69,7 +69,7 @@ class SBool(int):
             )
             raise TypeError(msg)
 
-        base_class = least_common_ancestor(type(self), type(other))
+        base_class = latest_common_ancestor(type(self), type(other))
 
         if base_class is int or base_class is object:
             msg = (
@@ -89,7 +89,7 @@ class SBool(int):
             )
             raise TypeError(msg)
 
-        base_class = least_common_ancestor(type(self), type(other))
+        base_class = latest_common_ancestor(type(self), type(other))
 
         if base_class is int or base_class is object:
             msg = (
@@ -109,7 +109,7 @@ class SBool(int):
             )
             raise TypeError(msg)
 
-        base_class = least_common_ancestor(type(self), type(other))
+        base_class = latest_common_ancestor(type(self), type(other))
 
         if base_class is int or base_class is object:
             msg = (
@@ -129,7 +129,7 @@ class SBool(int):
             )
             raise TypeError(msg)
 
-        base_class = least_common_ancestor(type(self), type(other))
+        base_class = latest_common_ancestor(type(self), type(other))
 
         if base_class is int or base_class is object:
             msg = (
