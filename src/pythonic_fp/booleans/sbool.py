@@ -15,13 +15,15 @@
 
 """Subtypable Booleans."""
 
-from typing import cast, Final, final, Never, Self, TypeVar
+from typing import cast, ClassVar, Final, final, Never, Self, TypeVar
 from pythonic_fp.gadgets.lca import latest_common_ancestor
 
 __all__ = ['SBool', 'snot', 'TRUTH', 'LIE']
 
 I = TypeVar('I', bound=int)
 
+# IDEA: provide a Final classmethod that generates the subclasses?
+# The cls.__bases__ can provide immediate predecessor classes.
 class SBool(int):
     """Subtypable Booleans.
 
@@ -38,10 +40,25 @@ class SBool(int):
     - ``unitary -`` for "Boolean not"
 
     """
+    # will need to replace with a dictionary for subclass instances?
+    # or require such variables in each subclass?
+    _instance0: 'ClassVar[SBool | None]' = None
+    _instance1: 'ClassVar[SBool | None]' = None
 
-    def __new__(cls, value: int) -> Self:
-        val = 1 if value else 0
-        return super(SBool, cls).__new__(cls, val)
+    # will need to make thread safe when subclassed instances brought in
+    def __new__(cls, obj: object) -> 'SBool':
+        """
+        :param value: The truthiness of obj determines truthiness of SBool created.
+        :returns: The truthy or falsy SBool subclass instance
+        """
+        if obj:
+            if cls._instance1 is None:
+                cls._instance1 = super(SBool, cls).__new__(cls, 1)
+            return cls._instance1
+        else:
+            if cls._instance0 is None:
+                cls._instance0 = super(SBool, cls).__new__(cls, 0)
+            return cls._instance0
 
     # override in derived classes
     def __repr__(self) -> str:
