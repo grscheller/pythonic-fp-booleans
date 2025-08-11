@@ -12,14 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Singletons.
+"""Subtypable Booleans.
 
-Four singleton classes that can represent
-
-  - missing values (actually missing, not potentially missing)
-  - sentinel values
-  - failed calculations
-  - boolean-like types with "truthy" and "falsy" subtypes
+Like Python's built in bool, class SBool is a subclass of int.
+Unlike bool, this class can be further subclassed. 
 
 """
 
