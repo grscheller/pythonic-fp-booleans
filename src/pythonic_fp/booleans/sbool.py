@@ -69,8 +69,8 @@ class SBool(int):
     @final
     def __neg__(self) -> Self:
         if self:
-            return type(self)(0)
-        return type(self)(1)
+            return type(self)(False)
+        return type(self)(True)
 
     @final
     def __add__(self, other: I) -> Self | Never:
@@ -94,32 +94,10 @@ class SBool(int):
 
     @final
     def __radd__(self, other: I) -> Self | Never:
-        if type(other) is bool:
-            msg = (
-                f"unsupported operand type(s) for +: '{type(other)}' and '{type(self)}'"
-            )
-            raise TypeError(msg)
-
-        base_class = latest_common_ancestor(type(self), type(other))
-
-        if base_class is int or base_class is object:
-            msg = (
-                f"unsupported operand type(s) for +: '{type(other)}' and '{type(self)}'"
-            )
-            raise TypeError(msg)
-
-        if self or other:
-            return cast(Self, base_class(1))
-        return cast(Self, base_class(0))
+        return self.__mul__(other)
 
     @final
-    def __mult__(self, other: I) -> Self | Never:
-        if type(other) is bool:
-            msg = (
-                f"unsupported operand type(s) for +: '{type(self)}' and '{type(other)}'"
-            )
-            raise TypeError(msg)
-
+    def __mul__(self, other: I) -> Self | Never:
         base_class = latest_common_ancestor(type(self), type(other))
 
         if base_class is int or base_class is object:
@@ -133,24 +111,8 @@ class SBool(int):
         return cast(Self, base_class(0))
 
     @final
-    def __rmult__(self, other: I) -> Self | Never:
-        if type(other) is bool:
-            msg = (
-                f"unsupported operand type(s) for +: '{type(other)}' and '{type(self)}'"
-            )
-            raise TypeError(msg)
-
-        base_class = latest_common_ancestor(type(self), type(other))
-
-        if base_class is int or base_class is object:
-            msg = (
-                f"unsupported operand type(s) for +: '{type(other)}' and '{type(self)}'"
-            )
-            raise TypeError(msg)
-
-        if self and other:
-            return cast(Self, base_class(1))
-        return cast(Self, base_class(0))
+    def __rmul__(self, other: I) -> Self | Never:
+        return self.__mul__(other)
 
 
 S = TypeVar('S', bound=SBool)

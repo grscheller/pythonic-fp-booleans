@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.gadgets.lca import latest_common_ancestor as lca
 from pythonic_fp.booleans.sbool import SBool, snot, TRUTH, LIE
 
 class TestBooleanBehaviors():
