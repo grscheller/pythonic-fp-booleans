@@ -63,12 +63,6 @@ class SBool(int):
     # override in derived classes
     def __repr__(self) -> str:
         if self:
-            return 'SBool(1)'
-        return 'SBool(0)'
-
-    # override in derived classes
-    def __str__(self) -> str:
-        if self:
             return 'TRUTH'
         return 'LIE'
 
