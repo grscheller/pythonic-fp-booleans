@@ -38,7 +38,7 @@ class SBool(int):
     *------------+--------+------------+-------------+
     | Boolean op | symbol | dunder     | Python name |
     *============+========+============+=============+
-    | and        | ``&``  | __add__    | bitwise and |
+    | and        | ``&``  | __and__    | bitwise and |
     *------------+--------+------------+-------------+
     | or         | ``|``  | __or__     | bitwise or  |
     *------------+--------+------------+-------------+
@@ -46,6 +46,12 @@ class SBool(int):
     *------------+--------+------------+-------------+
     | not        | ``~``  | __invert__ | bitwise not |
     *------------+--------+------------+-------------+
+
+    .. warning::
+
+    These "bitwise" operators will raise ``TypeError`` exceptions
+    when applied against an ``SBool`` and objects not descended
+    from ``SBool``.
 
     """
     # will need to replace with a dictionary for subclass instances?
