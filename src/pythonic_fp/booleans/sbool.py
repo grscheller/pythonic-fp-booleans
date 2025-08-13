@@ -35,9 +35,17 @@ class SBool(int):
 
     This type can also do (non-shortcut) Boolean logic using
 
-    - ``+`` for "Boolean or"
-    - ``*`` for "Boolean and"
-    - ``unitary -`` for "Boolean not"
+    *------------+--------+------------+-------------+
+    | Boolean op | symbol | dunder     | Python name |
+    *============+========+============+=============+
+    | and        | ``&``  | __add__    | bitwise and |
+    *------------+--------+------------+-------------+
+    | or         | ``|``  | __or__     | bitwise or  |
+    *------------+--------+------------+-------------+
+    | xor        | ``^``  | __xor__    | bitwise xor |
+    *------------+--------+------------+-------------+
+    | not        | ``~``  | __invert__ | bitwise not |
+    *------------+--------+------------+-------------+
 
     """
     # will need to replace with a dictionary for subclass instances?
@@ -67,43 +75,21 @@ class SBool(int):
         return 'LIE'
 
     @final
-    def __neg__(self) -> Self:
+    def __invert__(self) -> Self:
         if self:
             return type(self)(False)
         return type(self)(True)
 
     @final
-    def __add__(self, other: I) -> Self | Never:
-        if type(other) is bool:
-            msg = (
-                f"unsupported operand type(s) for +: '{type(self)}' and '{type(other)}'"
-            )
+    def __and__(self, other: I) -> Self | Never:
+        try:
+            base_class = latest_common_ancestor(type(self), type(other))
+        except TypeError:
+            msg = f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
             raise TypeError(msg)
 
-        base_class = latest_common_ancestor(type(self), type(other))
-
         if base_class is int or base_class is object:
-            msg = (
-                f"unsupported operand type(s) for +: '{type(self)}' and '{type(other)}'"
-            )
-            raise TypeError(msg)
-
-        if self or other:
-            return cast(Self, base_class(1))
-        return cast(Self, base_class(0))
-
-    @final
-    def __radd__(self, other: I) -> Self | Never:
-        return self.__mul__(other)
-
-    @final
-    def __mul__(self, other: I) -> Self | Never:
-        base_class = latest_common_ancestor(type(self), type(other))
-
-        if base_class is int or base_class is object:
-            msg = (
-                f"unsupported operand type(s) for +: '{type(self)}' and '{type(other)}'"
-            )
+            msg = f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
             raise TypeError(msg)
 
         if self and other:
@@ -111,8 +97,48 @@ class SBool(int):
         return cast(Self, base_class(0))
 
     @final
-    def __rmul__(self, other: I) -> Self | Never:
-        return self.__mul__(other)
+    def __rand__(self, other: I) -> Self | Never:
+        return self.__and__(other)
+
+    @final
+    def __or__(self, other: I) -> Self | Never:
+        try:
+            base_class = latest_common_ancestor(type(self), type(other))
+        except TypeError:
+            msg = f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
+            raise TypeError(msg)
+
+        if base_class is int or base_class is object:
+            msg = f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
+            raise TypeError(msg)
+
+        if self or other:
+            return cast(Self, base_class(1))
+        return cast(Self, base_class(0))
+
+    @final
+    def __ror__(self, other: I) -> Self | Never:
+        return self.__and__(other)
+
+    @final
+    def __xor__(self, other: I) -> Self | Never:
+        try:
+            base_class = latest_common_ancestor(type(self), type(other))
+        except TypeError:
+            msg = f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
+            raise TypeError(msg)
+
+        if base_class is int or base_class is object:
+            msg = f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
+            raise TypeError(msg)
+
+        if self and not other or other and not self:
+            return cast(Self, base_class(1))
+        return cast(Self, base_class(0))
+
+    @final
+    def __rxor__(self, other: I) -> Self | Never:
+        return self.__and__(other)
 
 
 S = TypeVar('S', bound=SBool)
@@ -133,5 +159,5 @@ def snot(sbool: S) -> S:
     return type(sbool)(1)
 
 # Optionally define other "truthy" and "falsy" types for subtypes.
-TRUTH: Final[SBool] = SBool(1)
-LIE: Final[SBool] = SBool(0)
+TRUTH: Final[SBool] = SBool(True)
+LIE: Final[SBool] = SBool(False)
