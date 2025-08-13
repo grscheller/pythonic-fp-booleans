@@ -35,23 +35,23 @@ class SBool(int):
 
     This type can also do (non-shortcut) Boolean logic using
 
-    *------------+--------+------------+-------------+
+    +------------+--------+------------+-------------+
     | Boolean op | symbol | dunder     | Python name |
-    *============+========+============+=============+
+    +============+========+============+=============+
     | and        | ``&``  | __and__    | bitwise and |
-    *------------+--------+------------+-------------+
+    +------------+--------+------------+-------------+
     | or         | ``|``  | __or__     | bitwise or  |
-    *------------+--------+------------+-------------+
+    +------------+--------+------------+-------------+
     | xor        | ``^``  | __xor__    | bitwise xor |
-    *------------+--------+------------+-------------+
+    +------------+--------+------------+-------------+
     | not        | ``~``  | __invert__ | bitwise not |
-    *------------+--------+------------+-------------+
+    +------------+--------+------------+-------------+
 
     .. warning::
 
-    These "bitwise" operators will raise ``TypeError`` exceptions
-    when applied against an ``SBool`` and objects not descended
-    from ``SBool``.
+       These "bitwise" operators will raise ``TypeError`` exceptions
+       when applied against an ``SBool`` and objects not descended
+       from ``SBool``.
 
     """
     # will need to replace with a dictionary for subclass instances?
@@ -64,6 +64,7 @@ class SBool(int):
         """
         :param value: The truthiness of obj determines truthiness of SBool created.
         :returns: The truthy or falsy SBool subclass instance
+
         """
         if obj:
             if cls._instance1 is None:
@@ -151,7 +152,7 @@ S = TypeVar('S', bound=SBool)
 
 
 def snot(sbool: S) -> S:
-    """Return the SBool of the opposite truthiness.
+    """Return the subtype ``S`` of ``SBool`` of the opposite truthiness. 
 
     .. note::
 

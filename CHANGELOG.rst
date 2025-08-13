@@ -20,4 +20,4 @@ Releases and Important Milestones
 0.1.0 - TBD
 ~~~~~~~~~~~
 
-Moved pythonic_fp.singletons.sbool -> pythonic_fp.booleans.{ibool,sbool}.
+Moved pythonic_fp.singletons.sbool -> pythonic_fp.booleans.sbool

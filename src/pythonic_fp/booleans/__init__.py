@@ -12,10 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Subtypable Booleans.
+"""**Booleans**
+
+Boolean like classes. Compatible with Python shortcut logic.
+
+----
+
+**class SBool** Subclassable Booleans
 
 Like Python's built in bool, class SBool is a subclass of int.
-Unlike bool, this class can be further subclassed. 
+Unlike bool, this class can be further subclassed.
+
+----
+
+**class FBool** - Flavored Booleans
+
+TODO. When you need different flavors of truth. Invariant.
 
 """
 
