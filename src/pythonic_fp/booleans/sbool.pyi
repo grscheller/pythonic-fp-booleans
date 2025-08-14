@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import threading
 from typing import ClassVar, Final, final, Never, Self, TypeVar
 
 __all__ = ['SBool', 'snot', 'TRUTH', 'LIE']
@@ -19,9 +20,13 @@ __all__ = ['SBool', 'snot', 'TRUTH', 'LIE']
 I = TypeVar('I', bound=int)
 
 class SBool(int):
-    _instance0: ClassVar[SBool | None]
-    _instance1: ClassVar[SBool | None]
-    def __new__(cls, obj: object) -> SBool: ...
+    _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
+    _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
+
+    _falsy: 'ClassVar[SBool | None]' = None
+    _truthy: 'ClassVar[SBool | None]' = None
+
+    def __new__(cls, witness: object) -> 'SBool': ...
     def __repr__(self) -> str: ...
     @final
     def __invert__(self) -> Self: ...
@@ -32,8 +37,7 @@ class SBool(int):
     @final
     def __or__(self, other: I) -> Self | Never: ...
     @final
-    def __ror__(self, other: I) -> Self | Never:
-        return self.__and__(other)
+    def __ror__(self, other: I) -> Self | Never: ...
     @final
     def __xor__(self, other: I) -> Self | Never: ...
     @final
@@ -43,5 +47,5 @@ S = TypeVar('S', bound=SBool)
 
 def snot(sbool: S) -> S: ...
 
-TRUTH: Final[SBool] = SBool(True)
-LIE: Final[SBool] = SBool(False)
+TRUTH: Final[SBool]
+LIE: Final[SBool]

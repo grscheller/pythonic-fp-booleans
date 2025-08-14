@@ -15,6 +15,7 @@
 
 """Subtypable Booleans."""
 
+import threading
 from typing import cast, ClassVar, Final, final, Never, Self, TypeVar
 from pythonic_fp.gadgets.lca import latest_common_ancestor
 
@@ -22,8 +23,6 @@ __all__ = ['SBool', 'snot', 'TRUTH', 'LIE']
 
 I = TypeVar('I', bound=int)
 
-# IDEA: provide a Final classmethod that generates the subclasses?
-# The cls.__bases__ can provide immediate predecessor classes.
 class SBool(int):
     """Subtypable Booleans.
 
@@ -54,26 +53,32 @@ class SBool(int):
        from ``SBool``.
 
     """
-    # will need to replace with a dictionary for subclass instances?
-    # or require such variables in each subclass?
-    _instance0: 'ClassVar[SBool | None]' = None
-    _instance1: 'ClassVar[SBool | None]' = None
+
+    _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
+    _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
+
+    _falsy: 'ClassVar[SBool | None]' = None
+    _truthy: 'ClassVar[SBool | None]' = None
 
     # will need to make thread safe when subclassed instances brought in
-    def __new__(cls, obj: object) -> 'SBool':
+    def __new__(cls, witness: object) -> 'SBool':
         """
         :param value: The truthiness of obj determines truthiness of SBool created.
-        :returns: The truthy or falsy SBool subclass instance
+        :returns: The truthy or falsy SBool subclass instance.
 
         """
-        if obj:
-            if cls._instance1 is None:
-                cls._instance1 = super(SBool, cls).__new__(cls, 1)
-            return cls._instance1
+        if witness:
+            if cls._truthy is None:
+                with cls._truthy_lock:
+                    if cls._truthy is None:
+                        cls._truthy = super(SBool, cls).__new__(cls, 1)
+            return cls._truthy
         else:
-            if cls._instance0 is None:
-                cls._instance0 = super(SBool, cls).__new__(cls, 0)
-            return cls._instance0
+            if cls._falsy is None:
+                with cls._falsy_lock:
+                    if cls._falsy is None:
+                        cls._falsy = super(SBool, cls).__new__(cls, 0)
+            return cls._falsy
 
     # override in derived classes
     def __repr__(self) -> str:
@@ -92,11 +97,15 @@ class SBool(int):
         try:
             base_class = latest_common_ancestor(type(self), type(other))
         except TypeError:
-            msg = f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
+            msg = (
+                f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
+            )
             raise TypeError(msg)
 
-        if base_class is int or base_class is object:
-            msg = f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
+        if base_class is int:
+            msg = (
+                f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
+            )
             raise TypeError(msg)
 
         if self and other:
@@ -112,11 +121,15 @@ class SBool(int):
         try:
             base_class = latest_common_ancestor(type(self), type(other))
         except TypeError:
-            msg = f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
+            msg = (
+                f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
+            )
             raise TypeError(msg)
 
         if base_class is int or base_class is object:
-            msg = f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
+            msg = (
+                f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
+            )
             raise TypeError(msg)
 
         if self or other:
@@ -132,11 +145,15 @@ class SBool(int):
         try:
             base_class = latest_common_ancestor(type(self), type(other))
         except TypeError:
-            msg = f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
+            msg = (
+                f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
+            )
             raise TypeError(msg)
 
         if base_class is int or base_class is object:
-            msg = f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
+            msg = (
+                f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
+            )
             raise TypeError(msg)
 
         if self and not other or other and not self:
@@ -152,7 +169,7 @@ S = TypeVar('S', bound=SBool)
 
 
 def snot(sbool: S) -> S:
-    """Return the subtype ``S`` of ``SBool`` of the opposite truthiness. 
+    """Return the subtype ``S`` of ``SBool`` of the opposite truthiness.
 
     .. note::
 
@@ -162,9 +179,9 @@ def snot(sbool: S) -> S:
 
     """
     if sbool:
-        return type(sbool)(0)
-    return type(sbool)(1)
+        return type(sbool)(False)
+    return type(sbool)(True)
 
-# Optionally define other "truthy" and "falsy" types for subtypes.
+
 TRUTH: Final[SBool] = SBool(True)
 LIE: Final[SBool] = SBool(False)
