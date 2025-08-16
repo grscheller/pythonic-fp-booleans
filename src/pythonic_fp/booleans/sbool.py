@@ -16,12 +16,22 @@
 """Subtypable Booleans."""
 
 import threading
-from typing import cast, ClassVar, Final, final, Never, Self, TypeVar
+from typing import cast, ClassVar, Final, final, Never, TypeVar
 from pythonic_fp.gadgets.lca import latest_common_ancestor
 
-__all__ = ['SBool', 'snot', 'TRUTH', 'LIE']
+__all__ = [
+    'SBool',
+    'snot',
+    'TRUTH',
+    'LIE',
+    'TSBool',
+    'FSBool',
+    'ALWAYS',
+    'NEVER_EVER',
+]
 
 I = TypeVar('I', bound=int)
+
 
 class SBool(int):
     """Subtypable Booleans.
@@ -48,17 +58,17 @@ class SBool(int):
 
     .. warning::
 
-       These "bitwise" operators will raise ``TypeError`` exceptions
+       These "bitwise" operators could raise ``TypeError`` exceptions
        when applied against an ``SBool`` and objects not descended
        from ``SBool``.
 
     """
 
+    _falsy_: 'ClassVar[SBool | None]' = None
     _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
-    _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    _falsy: 'ClassVar[SBool | None]' = None
-    _truthy: 'ClassVar[SBool | None]' = None
+    _truthy_: 'ClassVar[SBool | None]' = None
+    _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
 
     # will need to make thread safe when subclassed instances brought in
     def __new__(cls, witness: object) -> 'SBool':
@@ -68,17 +78,17 @@ class SBool(int):
 
         """
         if witness:
-            if cls._truthy is None:
+            if cls._truthy_ is None:
                 with cls._truthy_lock:
-                    if cls._truthy is None:
-                        cls._truthy = super(SBool, cls).__new__(cls, 1)
-            return cls._truthy
+                    if cls._truthy_ is None:
+                        cls._truthy_ = super().__new__(cls, 1)
+            return cls._truthy_
         else:
-            if cls._falsy is None:
+            if cls._falsy_ is None:
                 with cls._falsy_lock:
-                    if cls._falsy is None:
-                        cls._falsy = super(SBool, cls).__new__(cls, 0)
-            return cls._falsy
+                    if cls._falsy_ is None:
+                        cls._falsy_ = super().__new__(cls, 0)
+            return cls._falsy_
 
     # override in derived classes
     def __repr__(self) -> str:
@@ -86,62 +96,44 @@ class SBool(int):
             return 'TRUTH'
         return 'LIE'
 
-    @final
-    def __invert__(self) -> Self:
+    def __invert__(self) -> 'SBool':
         if self:
             return type(self)(False)
         return type(self)(True)
 
-    @final
-    def __and__(self, other: I) -> Self | Never:
+    def __and__(self, other: I) -> 'SBool | Never':
         try:
             base_class = latest_common_ancestor(type(self), type(other))
         except TypeError:
-            msg = (
-                f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
-            )
-            raise TypeError(msg)
-
-        if base_class is int:
             msg = (
                 f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
             )
             raise TypeError(msg)
 
         if self and other:
-            return cast(Self, base_class(1))
-        return cast(Self, base_class(0))
+            return cast(SBool, base_class(1))
+        return cast(SBool, base_class(0))
 
-    @final
-    def __rand__(self, other: I) -> Self | Never:
+    def __rand__(self, other: I) -> 'SBool | Never':
         return self.__and__(other)
 
-    @final
-    def __or__(self, other: I) -> Self | Never:
+    def __or__(self, other: I) -> 'SBool | Never':
         try:
             base_class = latest_common_ancestor(type(self), type(other))
         except TypeError:
-            msg = (
-                f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
-            )
-            raise TypeError(msg)
-
-        if base_class is int or base_class is object:
             msg = (
                 f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
             )
             raise TypeError(msg)
 
         if self or other:
-            return cast(Self, base_class(1))
-        return cast(Self, base_class(0))
+            return cast('SBool', base_class(1))
+        return cast('SBool', base_class(0))
 
-    @final
-    def __ror__(self, other: I) -> Self | Never:
+    def __ror__(self, other: I) -> 'SBool | Never':
         return self.__and__(other)
 
-    @final
-    def __xor__(self, other: I) -> Self | Never:
+    def __xor__(self, other: I) -> 'SBool | Never':
         try:
             base_class = latest_common_ancestor(type(self), type(other))
         except TypeError:
@@ -150,18 +142,11 @@ class SBool(int):
             )
             raise TypeError(msg)
 
-        if base_class is int or base_class is object:
-            msg = (
-                f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
-            )
-            raise TypeError(msg)
-
         if self and not other or other and not self:
-            return cast(Self, base_class(1))
-        return cast(Self, base_class(0))
+            return cast(SBool, base_class(1))
+        return cast(SBool, base_class(0))
 
-    @final
-    def __rxor__(self, other: I) -> Self | Never:
+    def __rxor__(self, other: I) -> 'SBool | Never':
         return self.__and__(other)
 
 
@@ -185,3 +170,49 @@ def snot(sbool: S) -> S:
 
 TRUTH: Final[SBool] = SBool(True)
 LIE: Final[SBool] = SBool(False)
+
+
+@final
+class TSBool(SBool):
+    """Truthy SBool subtype."""
+
+    _truthy: 'ClassVar[TSBool | None]' = None
+    _lock: ClassVar[threading.Lock] = threading.Lock()
+
+    def __new__(cls, ignored: bool = True) -> 'TSBool':
+        if cls._truthy is None:
+            with cls._lock:
+                if cls._truthy is None:
+                    cls._truthy = super(SBool, cls).__new__(cls, True)
+        return cls._truthy
+
+    def __repr__(self) -> str:
+        return 'ALWAYS'
+
+    def __invert__(self) -> SBool:
+        return FSBool()
+
+
+@final
+class FSBool(SBool):
+    """Falsy SBool subtype."""
+
+    _falsy: 'ClassVar[FSBool | None]' = None
+    _lock: ClassVar[threading.Lock] = threading.Lock()
+
+    def __new__(cls, ignored: bool = False) -> 'FSBool':
+        if cls._falsy is None:
+            with cls._lock:
+                if cls._falsy is None:
+                    cls._falsy = super(SBool, cls).__new__(cls, False)
+        return cls._falsy
+
+    def __repr__(self) -> str:
+        return 'NEVER_EVER'
+
+    def __invert__(self) -> SBool:
+        return TSBool()
+
+
+ALWAYS: Final[TSBool] = TSBool()
+NEVER_EVER: Final[FSBool] = FSBool()
