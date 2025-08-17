@@ -16,7 +16,7 @@
 """Subtypable Booleans."""
 
 import threading
-from typing import cast, ClassVar, Final, final, Never, TypeVar
+from typing import cast, ClassVar, Final, Never, TypeVar
 from pythonic_fp.gadgets.lca import latest_common_ancestor
 
 __all__ = [
@@ -24,10 +24,6 @@ __all__ = [
     'snot',
     'TRUTH',
     'LIE',
-    'TSBool',
-    'FSBool',
-    'ALWAYS',
-    'NEVER_EVER',
 ]
 
 I = TypeVar('I', bound=int)
@@ -40,7 +36,7 @@ class SBool(int):
     Unlike bool, this version can be further subclassed. It can be
     used with Python ``and`` and ``or`` short-cut logic. The ``not``
     operator will just return a ``bool``. Use the ``snot`` function
-    to return an ``SBool`` or one of its subclasses.
+    to return an ``SBool`` or ``SBool`` subclass.
 
     This type can also do (non-shortcut) Boolean logic using
 
@@ -170,49 +166,3 @@ def snot(sbool: S) -> S:
 
 TRUTH: Final[SBool] = SBool(True)
 LIE: Final[SBool] = SBool(False)
-
-
-@final
-class TSBool(SBool):
-    """Truthy SBool subtype."""
-
-    _truthy: 'ClassVar[TSBool | None]' = None
-    _lock: ClassVar[threading.Lock] = threading.Lock()
-
-    def __new__(cls, ignored: bool = True) -> 'TSBool':
-        if cls._truthy is None:
-            with cls._lock:
-                if cls._truthy is None:
-                    cls._truthy = super(SBool, cls).__new__(cls, True)
-        return cls._truthy
-
-    def __repr__(self) -> str:
-        return 'ALWAYS'
-
-    def __invert__(self) -> SBool:
-        return FSBool()
-
-
-@final
-class FSBool(SBool):
-    """Falsy SBool subtype."""
-
-    _falsy: 'ClassVar[FSBool | None]' = None
-    _lock: ClassVar[threading.Lock] = threading.Lock()
-
-    def __new__(cls, ignored: bool = False) -> 'FSBool':
-        if cls._falsy is None:
-            with cls._lock:
-                if cls._falsy is None:
-                    cls._falsy = super(SBool, cls).__new__(cls, False)
-        return cls._falsy
-
-    def __repr__(self) -> str:
-        return 'NEVER_EVER'
-
-    def __invert__(self) -> SBool:
-        return TSBool()
-
-
-ALWAYS: Final[TSBool] = TSBool()
-NEVER_EVER: Final[FSBool] = FSBool()

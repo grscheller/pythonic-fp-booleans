@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.sbool import SBool, snot, TRUTH, LIE
+from pythonic_fp.booleans.subtypable.sbool import SBool, snot, TRUTH, LIE
 
 class TestBooleanBehaviors():
     def test_bool(self) -> None:

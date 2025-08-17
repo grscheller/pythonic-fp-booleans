@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
-from typing import reveal_type
-from pythonic_fp.booleans.sbool import SBool, TRUTH, LIE
-from pythonic_fp.booleans.sbool import TSBool, FSBool, ALWAYS, NEVER_EVER
+from pythonic_fp.booleans.subtypable.sbool import SBool, TRUTH, LIE
+from pythonic_fp.booleans.subtypable.tfsbool import TSBool, FSBool, ALWAYS, NEVER_EVER
 
 
 class TestSBool:
@@ -77,9 +76,7 @@ class TestSBoolSubclass:
         a_bool = False
         my_int = 0
         myTruth: TSBool = TSBool(True)
-        reveal_type(myTruth)
         myLie: FSBool = FSBool(False)
-        reveal_type(myLie)
 
         assert isinstance(a_bool, int)
         assert isinstance(a_bool, bool)
