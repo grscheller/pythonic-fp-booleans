@@ -16,7 +16,7 @@
 """Subtypable Booleans."""
 
 import threading
-from typing import cast, ClassVar, Final, Never, TypeVar
+from typing import ClassVar, Final, Never, TypeVar
 from pythonic_fp.gadgets.lca import latest_common_ancestor
 
 __all__ = [
@@ -107,8 +107,8 @@ class SBool(int):
             raise TypeError(msg)
 
         if self and other:
-            return cast(SBool, base_class(1))
-        return cast(SBool, base_class(0))
+            return SBool(base_class(1))
+        return SBool(base_class(0))
 
     def __rand__(self, other: I) -> 'SBool | Never':
         return self.__and__(other)
@@ -123,8 +123,8 @@ class SBool(int):
             raise TypeError(msg)
 
         if self or other:
-            return cast('SBool', base_class(1))
-        return cast('SBool', base_class(0))
+            return SBool(base_class(1))
+        return SBool(base_class(0))
 
     def __ror__(self, other: I) -> 'SBool | Never':
         return self.__and__(other)
@@ -139,8 +139,8 @@ class SBool(int):
             raise TypeError(msg)
 
         if self and not other or other and not self:
-            return cast(SBool, base_class(1))
-        return cast(SBool, base_class(0))
+            return SBool(base_class(1))
+        return SBool(base_class(0))
 
     def __rxor__(self, other: I) -> 'SBool | Never':
         return self.__and__(other)

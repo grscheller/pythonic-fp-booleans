@@ -16,8 +16,22 @@
 
 Boolean like classes. Compatible with Python shortcut logic.
 
-- module subtypable
-- module invariant
+- module subtypable_boolean
+
+  - like Python's built in bool, class SBool is a subclass of int
+  - unlike bool, this class can be further subclassed
+
+- module flavored_booleans
+
+  - When you need different flavors of the truth
+
+- module true_and_false_subtyped_booleans
+
+  - contains two final subclasses of SBool
+
+    - TSBool instances are always truthy
+    - FSBool instances are always falsy
+
 
 """
 

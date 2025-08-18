@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable.sbool import SBool, TRUTH, LIE
+from pythonic_fp.booleans.subtypable_boolean import SBool, TRUTH, LIE
 
 truth1 = SBool(1 == 1)
 truth2 = SBool(42 == 42)
