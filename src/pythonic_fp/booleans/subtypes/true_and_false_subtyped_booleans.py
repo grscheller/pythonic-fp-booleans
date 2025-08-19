@@ -13,11 +13,11 @@
 # limitations under the License.
 
 
-"""Subtypable Booleans."""
+"""Booleans which are either always true or always false."""
 
 import threading
 from typing import ClassVar, Final, final
-from .subtypable_boolean import SBool 
+from ..subtypable_boolean import SBool 
 
 __all__ = [
     'TSBool',

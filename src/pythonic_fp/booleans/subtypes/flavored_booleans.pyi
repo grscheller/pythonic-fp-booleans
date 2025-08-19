@@ -14,7 +14,7 @@
 
 import threading
 from typing import ClassVar, Hashable, TypeVar
-from subtypable_boolean import SBool
+from ..subtypable_boolean import SBool
 
 __all__ = [
     'FBool',

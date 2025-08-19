@@ -12,14 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""**module booleans**
+"""**module subtypes**
 
-Boolean like classes. Compatible with Python shortcut logic.
+Subtypes of the pythonic_fp.booleans.subtypable_boolean SBool class.
 
-- module subtypable_boolean
+- module flavored_booleans
 
-  - like Python's built in bool, class SBool is a subclass of int
-  - unlike bool, this class can be further subclassed
+  - When you need different flavors of the truth
+  - Different "flavors" or the truth based on any hashable value
+
+- module true_and_false_subtyped_booleans
+
+  - contains two final subclasses of SBool
+
+    - ``TSBool`` instances are always truthy
+    - FSBool instances are always falsy
+
 
 """
 

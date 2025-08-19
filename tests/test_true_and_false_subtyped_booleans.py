@@ -13,7 +13,12 @@
 # limitations under the License.
 
 from pythonic_fp.booleans.subtypable_boolean import SBool, TRUTH, LIE
-from pythonic_fp.booleans.true_and_false_subtyped_booleans import TSBool, FSBool, ALWAYS, NEVER_EVER
+from pythonic_fp.booleans.subtypes.true_and_false_subtyped_booleans import (
+    TSBool,
+    FSBool,
+    ALWAYS,
+    NEVER_EVER,
+)
 
 
 class TestSBool:
@@ -158,8 +163,8 @@ class Test_not:
 
 class TestTruthsAndLies:
     def test_truths_and_lies(self) -> None:
-        baseT: SBool = SBool("foofoo")
-        baseF: SBool = SBool("")
+        baseT: SBool = SBool('foofoo')
+        baseF: SBool = SBool('')
         derivedT1: TSBool = TSBool()
         derivedF1: FSBool = FSBool()
         derivedT2: SBool = TSBool()
@@ -167,7 +172,6 @@ class TestTruthsAndLies:
 
         assert baseT == derivedT1 == derivedT2 == TRUTH == ALWAYS
         assert baseF == derivedF1 == derivedF2 == LIE == NEVER_EVER
-
 
     def test_identities(self) -> None:
         yooT: SBool = ALWAYS
