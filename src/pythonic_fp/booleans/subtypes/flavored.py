@@ -16,19 +16,16 @@
 """Flavored Booleans."""
 
 import threading
-from typing import ClassVar, Hashable, TypeVar
+from collections.abc import Hashable
+from typing import ClassVar, TypeVar, final
 from ..subtypable import SBool
 
-__all__ = [
-    'FBool',
-    'truthy',
-    'falsy',
-]
+__all__ = ['FBool', 'truthy', 'falsy']
 
-H = TypeVar('H', bound=Hashable)
 I = TypeVar('I', bound=int)
 
 
+@final
 class FBool(SBool):
     """Flavored Booleans.
 
@@ -53,7 +50,7 @@ class FBool(SBool):
 
        These "bitwise" operators could raise ``TypeError`` exceptions
        when applied against an ``FBool`` and objects not descended
-       from ``FBool``.
+       from ``SBool``.
 
     """
 
@@ -63,7 +60,7 @@ class FBool(SBool):
     _falsy: 'ClassVar[dict[Hashable, FBool]]' = {}
     _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, flavor: H, witness: object) -> 'FBool':
+    def __new__(cls, witness: object, flavor: Hashable) -> 'FBool':
         """
         :param flavor: the ``flavor`` of ``FBool`` created.
         :param witness: the truthiness of ``witness`` determines truthiness of ``FBool`` returned
@@ -83,82 +80,64 @@ class FBool(SBool):
                         cls._falsy[flavor] = super(SBool, cls).__new__(cls, False)
             return cls._falsy[flavor]
 
-    def __init__(self, flavor: H, witness: object) -> None:
+    def __init__(self, witness: object, flavor: Hashable) -> None:
         if not hasattr(self, '_flavor'):
             self._flavor = flavor
 
     # override in derived classes
     def __repr__(self) -> str:
         if self:
-            return f'FBool({repr(self._flavor)}, True)'
-        return f'FBool({repr(self._flavor)}, False)'
+            return f'FBool(True, {repr(self._flavor)})'
+        return f'FBool(False, {repr(self._flavor)})'
 
     def __invert__(self) -> 'FBool':
         if self:
-            return FBool(self._flavor, False)
-        return FBool(self._flavor, True)
+            return FBool(False, self._flavor)
+        return FBool(True, self._flavor)
 
     def __and__(self, other: I) -> SBool:
         if isinstance(other, FBool):
-            if isinstance(self._flavor, type(other._flavor)):
-                if self and other:
-                    return FBool(other._flavor, True)
-                return FBool(other._flavor, False)
-            if isinstance(other._flavor, type(self._flavor)):
-                if self and other:
-                    return FBool(self._flavor, True)
-                return FBool(self._flavor, False)
-            return SBool(other)
-        return self & SBool(other)
+            if self._flavor == other._flavor:
+                return FBool(self and other, self._flavor)
+        return SBool(self and other)
 
     def __rand__(self, other: I) -> SBool:
         return self & other
 
     def __or__(self, other: I) -> SBool:
         if isinstance(other, FBool):
-            if isinstance(self._flavor, type(other._flavor)):
-                if self or other:
-                    return FBool(other._flavor, True)
-                return FBool(other._flavor, False)
-            if isinstance(other._flavor, type(self._flavor)):
-                if self or other:
-                    return FBool(self._flavor, True)
-                return FBool(self._flavor, False)
-        return self | SBool(other)
+            if self._flavor == other._flavor:
+                return FBool(self or other, self._flavor)
+        return SBool(self or other)
 
     def __ror__(self, other: I) -> SBool:
         return self | other
 
     def __xor__(self, other: I) -> SBool:
         if isinstance(other, FBool):
-            if isinstance(self._flavor, type(other._flavor)):
-                if (self or other) and not (self and other):
-                    return FBool(other._flavor, True)
-                return FBool(other._flavor, False)
-            if isinstance(other._flavor, type(self._flavor)):
-                if self or other:
-                    return FBool(self._flavor, True)
-                return FBool(self._flavor, False)
-        return self | SBool(other)
+            if self._flavor == other._flavor:
+                return FBool(not (self and other) and (self or other), self._flavor)
+        return SBool(not (self and other) and (self or other))
 
     def __rxor__(self, other: I) -> SBool:
         return self ^ other
 
 
-def truthy(flavor: H) -> FBool:
-    """ Get the truthy ``FBool`` of a particular ``flavor``.
+def truthy(flavor: Hashable) -> FBool:
+    """Get the truthy ``FBool`` of a particular ``flavor``.
 
     :param flavor: hashable value to determine which ``flavor`` of singleton to return
     :returns: the singleton with a particular  ``flavor``
 
     """
-    return FBool(flavor, True)
+    return FBool(True, flavor)
 
-def falsy(flavor: H) -> FBool:
-    """ Get the falsy ``FBool`` of a particular ``flavor``.
+
+def falsy(flavor: Hashable) -> FBool:
+    """Get the falsy ``FBool`` of a particular ``flavor``.
 
     :param flavor: hashable value to determine which ``flavor`` of singleton to return
     :returns: the ``FBool`` singleton with a particular  ``flavor``
 
     """
-    return FBool(flavor, False)
+    return FBool(False, flavor)

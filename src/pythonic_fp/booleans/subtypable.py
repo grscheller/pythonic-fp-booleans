@@ -16,7 +16,8 @@
 """Subtypable Booleans."""
 
 import threading
-from typing import ClassVar, Final, Never, TypeVar
+from collections.abc import Hashable
+from typing import cast, ClassVar, Final, Never, TypeVar, overload
 from pythonic_fp.gadgets.lca import latest_common_ancestor
 
 __all__ = [
@@ -27,7 +28,6 @@ __all__ = [
 ]
 
 I = TypeVar('I', bound=int)
-
 
 class SBool(int):
     """Subtypable Booleans.
@@ -66,10 +66,24 @@ class SBool(int):
     _truthy_: 'ClassVar[SBool | None]' = None
     _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    # will need to make thread safe when subclassed instances brought in
-    def __new__(cls, witness: object) -> 'SBool':
-        """
-        :param witness: truthiness of ``witness`` determines truthiness of the ``SBool`` returned
+    @overload
+    def __new__(cls, witness: object) -> 'SBool': ...
+    @overload
+    def __new__(cls, witness: object, flavor: Hashable) -> 'SBool': ...
+
+    def __new__(cls, witness: object, flavor: Hashable = None) -> 'SBool':
+        """Create a "subtypable" Boolean-like value.
+
+        - ``witness`` determines whether its "truthy" or "falsy"
+
+          - defaults to falsy if no ``witness`` is provided
+
+        - ``flavor`` is ignored for the ``SBool`` base class
+
+          - its here to ensure the Liskov substitution principle holds
+
+
+        :param witness: determines truthiness of the ``SBool``
         :returns: the truthy or falsy SBool class instance
 
         """
@@ -162,9 +176,14 @@ def snot(sbool: S) -> S:
     :returns: the ``SBool`` subtype of the opposite truthiness
 
     """
+    if hasattr(sbool, '_flavor'):
+        flavor = cast(Hashable, sbool._flavor)
+    else:
+        flavor = None
+
     if sbool:
-        return type(sbool)(False)
-    return type(sbool)(True)
+        return type(sbool)(False, flavor)
+    return type(sbool)(True, flavor)
 
 
 TRUTH: Final[SBool] = SBool(True)  #: the truthy singleton of type ``SBool``

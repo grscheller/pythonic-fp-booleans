@@ -16,6 +16,7 @@
 """Booleans which are either always "truthy" or always "falsy"."""
 
 import threading
+from collections.abc import Hashable
 from typing import ClassVar, Final, final
 from ..subtypable import SBool
 
@@ -26,19 +27,19 @@ __all__ = [
     'NEVER_EVER',
 ]
 
-
 @final
 class TSBool(SBool):
-    """Subtype of ``SBool`` which is always Truthy."""
+    """A subtype of ``SBool`` which is always Truthy."""
 
     _truthy: 'ClassVar[TSBool | None]' = None
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, ignored: bool = True) -> 'TSBool':
-        """Get the ``TSBool`` always truthy instance subtype of ``SBool``.
+    def __new__(cls, witness: object = True, flavor: Hashable = 0) -> 'TSBool':
+        """Get the ``TSBool`` always truthy singleton instance.
 
-        :param ignored: ignored parameter, for Liskov substitution principle to hold
-        :returns: the truthy or falsy SBool subclass instance
+        :param witness: ignored parameter, always "truthy"
+        :param flavor: ignored parameter, only one "flavor"
+        :returns: the truthy ``TSBool`` singleton instance, an ``SBool`` subtype
 
         """
         if cls._truthy is None:
@@ -56,12 +57,19 @@ class TSBool(SBool):
 
 @final
 class FSBool(SBool):
-    """Subtype of ``SBool`` which is always Falsy."""
+    """A subtype of ``SBool`` which is always Falsy."""
 
     _falsy: 'ClassVar[FSBool | None]' = None
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, ignored: bool = False) -> 'FSBool':
+    def __new__(cls, witness: bool = False) -> 'FSBool':
+        """Get the ``FSBool`` always falsy singleton instance.
+
+        :param witness: parameter ignored, always "falsy"
+        :param flavor: parameter ignored, only one "flavor"
+        :returns: the falsy ``FSBool`` singleton instance, an ``SBool`` subtype
+
+        """
         if cls._falsy is None:
             with cls._lock:
                 if cls._falsy is None:
