@@ -69,8 +69,8 @@ class SBool(int):
     # will need to make thread safe when subclassed instances brought in
     def __new__(cls, witness: object) -> 'SBool':
         """
-        :param value: The truthiness of obj determines truthiness of SBool created.
-        :returns: The truthy or falsy SBool subclass instance.
+        :param witness: truthiness of ``witness`` determines truthiness of the ``SBool`` returned
+        :returns: the truthy or falsy SBool class instance
 
         """
         if witness:
@@ -158,11 +158,14 @@ def snot(sbool: S) -> S:
         return a ``bool``. There is no ``__not__`` dunder method
         that will change the behavior of ``not``.
 
+    :param sbool: an ``SBool`` subtypes
+    :returns: the ``SBool`` subtype of the opposite truthiness
+
     """
     if sbool:
         return type(sbool)(False)
     return type(sbool)(True)
 
 
-TRUTH: Final[SBool] = SBool(True)
-LIE: Final[SBool] = SBool(False)
+TRUTH: Final[SBool] = SBool(True)  #: the truthy singleton of type ``SBool``
+LIE: Final[SBool] = SBool(False)  #: the falsy singleton of type ``SBool``

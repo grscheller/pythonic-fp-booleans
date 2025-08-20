@@ -65,8 +65,9 @@ class FBool(SBool):
 
     def __new__(cls, flavor: H, witness: object) -> 'FBool':
         """
-        :param flavor: The truthiness of obj determines truthiness of FBool created.
-        :returns: The truthy or falsy SBool subclass instance.
+        :param flavor: the ``flavor`` of ``FBool`` created.
+        :param witness: the truthiness of ``witness`` determines truthiness of ``FBool`` returned
+        :returns: The truthy or falsy ``FBool`` instance of a particular ``flavor``
 
         """
         if witness:
@@ -145,7 +146,19 @@ class FBool(SBool):
 
 
 def truthy(flavor: H) -> FBool:
+    """ Get the truthy ``FBool`` of a particular ``flavor``.
+
+    :param flavor: hashable value to determine which ``flavor`` of singleton to return
+    :returns: the singleton with a particular  ``flavor``
+
+    """
     return FBool(flavor, True)
 
 def falsy(flavor: H) -> FBool:
+    """ Get the falsy ``FBool`` of a particular ``flavor``.
+
+    :param flavor: hashable value to determine which ``flavor`` of singleton to return
+    :returns: the ``FBool`` singleton with a particular  ``flavor``
+
+    """
     return FBool(flavor, False)

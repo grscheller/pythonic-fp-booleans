@@ -17,7 +17,7 @@
 
 import threading
 from typing import ClassVar, Final, final
-from ..subtypable import SBool 
+from ..subtypable import SBool
 
 __all__ = [
     'TSBool',
@@ -35,6 +35,12 @@ class TSBool(SBool):
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
     def __new__(cls, ignored: bool = True) -> 'TSBool':
+        """Get the ``TSBool`` always truthy instance subtype of ``SBool``.
+
+        :param ignored: ignored parameter, for Liskov substitution principle to hold
+        :returns: the truthy or falsy SBool subclass instance
+
+        """
         if cls._truthy is None:
             with cls._lock:
                 if cls._truthy is None:
@@ -69,5 +75,5 @@ class FSBool(SBool):
         return TSBool()
 
 
-ALWAYS: Final[TSBool] = TSBool()
-NEVER_EVER: Final[FSBool] = FSBool()
+ALWAYS: Final[TSBool] = TSBool()  #: the truthy singleton of type ``TSBool``
+NEVER_EVER: Final[FSBool] = FSBool()  #: the falsy singleton of type ``TSBool``
