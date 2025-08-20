@@ -12,22 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""**module subtypes**
+"""Subtypes of the booleans.subtypable ``SBool`` class.
 
-Subtypes of the pythonic_fp.booleans.subtypable_boolean SBool class.
+- module flavored
 
-- module flavored_booleans
+  - When you need different "flavors" of the truth
+  - Flavors of ``FBool`` based on any hashable value
 
-  - When you need different flavors of the truth
-  - Different "flavors" or the truth based on any hashable value
+- module true_false
 
-- module true_and_false_subtyped_booleans
-
-  - contains two final subclasses of SBool
+  - contains two final subclasses of ``SBool``
 
     - ``TSBool`` instances are always truthy
-    - FSBool instances are always falsy
-
+    - ``FSBool`` instances are always falsy
 
 """
 

@@ -17,7 +17,7 @@
 
 import threading
 from typing import ClassVar, Hashable, TypeVar
-from ..subtypable_boolean import SBool
+from ..subtypable import SBool
 
 __all__ = [
     'FBool',
@@ -33,6 +33,7 @@ class FBool(SBool):
     """Flavored Booleans.
 
     When you need to deal with different flavors of the truth.
+    Each "flavor" corresponds to a hashable value.
 
     This type can also do (non-shortcut) Boolean logic using
 

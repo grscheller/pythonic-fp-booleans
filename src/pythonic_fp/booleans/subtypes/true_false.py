@@ -13,11 +13,11 @@
 # limitations under the License.
 
 
-"""Booleans which are either always true or always false."""
+"""Booleans which are either always "truthy" or always "falsy"."""
 
 import threading
 from typing import ClassVar, Final, final
-from ..subtypable_boolean import SBool 
+from ..subtypable import SBool 
 
 __all__ = [
     'TSBool',
@@ -29,10 +29,7 @@ __all__ = [
 
 @final
 class TSBool(SBool):
-    """**SBool truthy subtype**
-
-    Can fully interact with ``FSBool`` and ``SBool`` types.
-    """
+    """Subtype of ``SBool`` which is always Truthy."""
 
     _truthy: 'ClassVar[TSBool | None]' = None
     _lock: ClassVar[threading.Lock] = threading.Lock()
@@ -53,7 +50,7 @@ class TSBool(SBool):
 
 @final
 class FSBool(SBool):
-    """Falsy SBool subtype."""
+    """Subtype of ``SBool`` which is always Falsy."""
 
     _falsy: 'ClassVar[FSBool | None]' = None
     _lock: ClassVar[threading.Lock] = threading.Lock()

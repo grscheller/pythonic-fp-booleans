@@ -1,6 +1,6 @@
 import threading
 from typing import ClassVar, Final, final
-from ..subtypable_boolean import SBool
+from ..subtypable import SBool
 
 __all__ = [
     'TSBool',

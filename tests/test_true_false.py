@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable_boolean import SBool, TRUTH, LIE
-from pythonic_fp.booleans.subtypes.true_and_false_subtyped_booleans import (
+from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
+from pythonic_fp.booleans.subtypes.true_false import (
     TSBool,
     FSBool,
     ALWAYS,
