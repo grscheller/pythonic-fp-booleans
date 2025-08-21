@@ -19,6 +19,8 @@ import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, Never, TypeVar, overload
 from pythonic_fp.gadgets.lca import latest_common_ancestor
+from pythonic_fp.sentinels.novalue import NoValue
+from pythonic_fp.sentinels.sentinel import Sentinel
 
 __all__ = [
     'SBool',
@@ -28,6 +30,9 @@ __all__ = [
 ]
 
 I = TypeVar('I', bound=int)
+
+_novalue = NoValue()
+
 
 class SBool(int):
     """Subtypable Booleans.
@@ -44,7 +49,7 @@ class SBool(int):
     | Boolean op | symbol | dunder     | Python name |
     +============+========+============+=============+
     | and        | ``&``  | __and__    | bitwise and |
-    +------------+--------+------------+-------------+
+    +------------+--------+intantiatable------------+-------------+
     | or         | ``|``  | __or__     | bitwise or  |
     +------------+--------+------------+-------------+
     | xor        | ``^``  | __xor__    | bitwise xor |
@@ -60,18 +65,18 @@ class SBool(int):
 
     """
 
-    _falsy_: 'ClassVar[SBool | None]' = None
+    _falsy: 'ClassVar[SBool | NoValue]' = _novalue
     _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    _truthy_: 'ClassVar[SBool | None]' = None
+    _truthy: 'ClassVar[SBool | NoValue]' = _novalue
     _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
 
     @overload
-    def __new__(cls, witness: object) -> 'SBool': ...
+    def __new__(cls) -> 'SBool': ...
     @overload
-    def __new__(cls, witness: object, flavor: Hashable) -> 'SBool': ...
+    def __new__(cls, witness: object) -> 'SBool': ...
 
-    def __new__(cls, witness: object, flavor: Hashable = None) -> 'SBool':
+    def __new__(cls, witness: object = False, flavor: Hashable = _novalue) -> 'SBool':
         """Create a "subtypable" Boolean-like value.
 
         - ``witness`` determines whether its "truthy" or "falsy"
@@ -80,7 +85,8 @@ class SBool(int):
 
         - ``flavor`` is ignored for the ``SBool`` base class
 
-          - its here to ensure the Liskov substitution principle holds
+          - there is only one "flavor"
+          - ``flavor`` ensures Liskov substitution principle holds
 
 
         :param witness: determines truthiness of the ``SBool``
@@ -88,17 +94,20 @@ class SBool(int):
 
         """
         if witness:
-            if cls._truthy_ is None:
+            if cls._truthy is _novalue:
                 with cls._truthy_lock:
-                    if cls._truthy_ is None:
-                        cls._truthy_ = super().__new__(cls, 1)
-            return cls._truthy_
+                    if cls._truthy is _novalue:
+                        cls._truthy = super().__new__(cls, 1)
+            return cast(SBool, cls._truthy)
         else:
-            if cls._falsy_ is None:
+            if cls._falsy is _novalue:
                 with cls._falsy_lock:
-                    if cls._falsy_ is None:
-                        cls._falsy_ = super().__new__(cls, 0)
-            return cls._falsy_
+                    if cls._falsy is _novalue:
+                        cls._falsy = super().__new__(cls, 0)
+            return cast(SBool, cls._falsy)
+
+    def __init__(self, witness: object = False, flavor: Hashable = _novalue) -> None:
+        self._flavor = flavor
 
     # override in derived classes
     def __repr__(self) -> str:
@@ -172,12 +181,12 @@ def snot(sbool: S) -> S:
         return a ``bool``. There is no ``__not__`` dunder method
         that will change the behavior of ``not``.
 
-    :param sbool: an ``SBool`` subtypes
-    :returns: the ``SBool`` subtype of the opposite truthiness
+    :param sbool: an ``SBool`` or ``SBool`` subtype
+    :returns: the ``SBool`` or ``SBool`` subtype of the opposite truthiness
 
     """
-    if hasattr(sbool, '_flavor'):
-        flavor = cast(Hashable, sbool._flavor)
+    if sbool._flavor is _novalue:
+        flavor = Hashable, sbool._flavor
     else:
         flavor = None
 

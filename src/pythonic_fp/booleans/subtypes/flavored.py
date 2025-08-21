@@ -60,7 +60,9 @@ class FBool(SBool):
     _falsy: 'ClassVar[dict[Hashable, FBool]]' = {}
     _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, witness: object, flavor: Hashable) -> 'FBool':
+    def __new__(
+        cls, witness: object, flavor: Hashable
+    ) -> 'FBool':
         """
         :param flavor: the ``flavor`` of ``FBool`` created.
         :param witness: the truthiness of ``witness`` determines truthiness of ``FBool`` returned
@@ -81,8 +83,7 @@ class FBool(SBool):
             return cls._falsy[flavor]
 
     def __init__(self, witness: object, flavor: Hashable) -> None:
-        if not hasattr(self, '_flavor'):
-            self._flavor = flavor
+        self._flavor = flavor
 
     # override in derived classes
     def __repr__(self) -> str:

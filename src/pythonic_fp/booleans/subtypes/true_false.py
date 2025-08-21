@@ -18,27 +18,43 @@
 import threading
 from collections.abc import Hashable
 from typing import ClassVar, Final, final
+from pythonic_fp.sentinels.novalue import NoValue
 from ..subtypable import SBool
 
 __all__ = [
+    'TFSBool',
     'TSBool',
     'FSBool',
     'ALWAYS',
     'NEVER_EVER',
 ]
 
+
+class TFSBool(SBool):
+    """Rough idea"""
+
+    def __new__(
+        cls, witness: object, flavor: Hashable = NoValue()
+    ) -> 'TFSBool':
+        if witness:
+            return TSBool()
+        return FSBool()
+
+
 @final
-class TSBool(SBool):
-    """A subtype of ``SBool`` which is always Truthy."""
+class TSBool(TFSBool):
+    """The subtype of ``TFSBool`` which is always Truthy."""
 
     _truthy: 'ClassVar[TSBool | None]' = None
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, witness: object = True, flavor: Hashable = 0) -> 'TSBool':
+    def __new__(
+        cls, witness: object = NoValue(), flavor: Hashable = NoValue()
+    ) -> 'TSBool':
         """Get the ``TSBool`` always truthy singleton instance.
 
-        :param witness: ignored parameter, always "truthy"
-        :param flavor: ignored parameter, only one "flavor"
+        :param witness: ignored parameter, always truthy"
+        :param flavor: ignored parameter, only one truthy "flavor"
         :returns: the truthy ``TSBool`` singleton instance, an ``SBool`` subtype
 
         """
@@ -56,17 +72,19 @@ class TSBool(SBool):
 
 
 @final
-class FSBool(SBool):
-    """A subtype of ``SBool`` which is always Falsy."""
+class FSBool(TFSBool):
+    """The subtype of ``SBool`` which is always Falsy."""
 
     _falsy: 'ClassVar[FSBool | None]' = None
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, witness: bool = False) -> 'FSBool':
+    def __new__(
+        cls, witness: object = NoValue(), flavor: Hashable = NoValue()
+    ) -> 'FSBool':
         """Get the ``FSBool`` always falsy singleton instance.
 
-        :param witness: parameter ignored, always "falsy"
-        :param flavor: parameter ignored, only one "flavor"
+        :param witness: parameter ignored, ``FSBool`` always falsy
+        :param flavor: parameter ignored, only one falsy "flavor"
         :returns: the falsy ``FSBool`` singleton instance, an ``SBool`` subtype
 
         """
