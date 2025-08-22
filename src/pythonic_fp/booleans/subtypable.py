@@ -20,7 +20,6 @@ from collections.abc import Hashable
 from typing import cast, ClassVar, Final, Never, TypeVar, overload
 from pythonic_fp.gadgets.lca import latest_common_ancestor
 from pythonic_fp.sentinels.novalue import NoValue
-from pythonic_fp.sentinels.sentinel import Sentinel
 
 __all__ = [
     'SBool',
@@ -169,11 +168,8 @@ class SBool(int):
         return self.__and__(other)
 
 
-S = TypeVar('S', bound=SBool)
-
-
-def snot(sbool: S) -> S:
-    """Return the subtype ``S`` of ``SBool`` of the opposite truthiness.
+def snot(sbool: SBool) -> SBool:
+    """Return the ``SBool`` subtype of the opposite truthiness.
 
     .. note::
 
@@ -185,14 +181,7 @@ def snot(sbool: S) -> S:
     :returns: the ``SBool`` or ``SBool`` subtype of the opposite truthiness
 
     """
-    if sbool._flavor is _novalue:
-        flavor = Hashable, sbool._flavor
-    else:
-        flavor = None
-
-    if sbool:
-        return type(sbool)(False, flavor)
-    return type(sbool)(True, flavor)
+    return ~sbool
 
 
 TRUTH: Final[SBool] = SBool(True)  #: the truthy singleton of type ``SBool``

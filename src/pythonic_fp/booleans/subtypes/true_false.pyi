@@ -1,13 +1,29 @@
 import threading
-from typing import ClassVar, Final, final
+from collections.abc import Hashable
+from typing import ClassVar, Final, final, TypeVar
+from pythonic_fp.sentinels.novalue import NoValue
 from ..subtypable import SBool
 
 __all__ = [
+    'TFSBool',
     'TSBool',
     'FSBool',
     'ALWAYS',
     'NEVER_EVER',
 ]
+
+I = TypeVar('I', bound=int)
+
+class TFSBool(SBool):
+    def __new__(cls, witness: object, flavor: Hashable = NoValue()) -> TFSBool: ...
+    def __repr__(self) -> str: ...
+    def __invert__(self) -> TFSBool: ...
+    def __and__(self, other: I) -> TFSBool: ...
+    def __rand__(self, other: I) -> TFSBool: ...
+    def __or__(self, other: I) -> TFSBool: ...
+    def __ror(self, other: I) -> TFSBool: ...
+    def __xor__(self, other: I) -> TFSBool: ...
+    def __rxor(self, other: I) -> TFSBool: ...
 
 @final
 class TSBool(SBool):
