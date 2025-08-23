@@ -12,31 +12,78 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Boolean like class. Compatible with Python shortcut logic.
+"""
+Subtypable Boolean like classes
+===============================
 
-- module subtypable
+While still compatible with Python shortcut logic, these classes can
+be non-shortcut logically composed with Python's bitwise operators.
+These classes are implemented with the Singleton Pattern.
 
-  - class ``subtypable``
+Covariant class hierarchy
+-------------------------
 
-    - like Python's built-in ``bool``, class ``SBool`` is a subclass of ``int``
-    - unlike ``bool``, class ``SBool`` can be further subclassed
+.. graphviz::
 
-- module ``subtypes``
+    digraph Booleans {
+        int -> bool;
+        int -> SBool;
+        SBool -> FBool;
+        SBool -> TF_Bool;
+        TF_Bool -> T_Bool;
+        TF_Bool -> F_Bool;
+    }
 
-  - module ``flavored`` 
+Contravariant non-shortcut operators
+------------------------------------
 
-    - class ``FBool`` is a subclass of ``SBool``
+    +------------+--------+------------+-------------+
+    | Boolean op | symbol | dunder     | Python name |
+    +============+========+============+=============+
+    | not        | ``~``  | __invert__ | bitwise not |
+    +------------+--------+------------+-------------+
+    | and        | ``&``  | __and__    | bitwise and |
+    +------------+--------+------------+-------------+
+    | or         | ``|``  | __or__     | bitwise or  |
+    +------------+--------+------------+-------------+
+    | xor        | ``^``  | __xor__    | bitwise xor |
+    +------------+--------+------------+-------------+
 
-      - for when you need to deal with different "flavors" of the truth
-      - each "flavor" corresponds to a hashable value
+    .. warning::
 
-    - module ``true_false``
+       These "bitwise" operators could raise ``TypeError`` exceptions
+       when applied against an ``SBool`` and objects not descended
+       from ``SBool``.
 
-      - class ``TSBool`` is an ``SBool`` which is always truthy
-      - class ``FSBool`` is ``SBool`` which is always falsy
+Classes
+-------
+
+Class SBool
+~~~~~~~~~~~
+
+- base of the hierarchy
+
+  - like Python's built-in ``bool``, ``SBool`` is a subclass of ``int``
+  - unlike ``bool``, class ``SBool`` can be further subclassed
+
+Class FBool
+~~~~~~~~~~~~~~~~~~~
+
+- for when you need to deal with different "flavors" of the truth
+
+  - each "flavor" corresponds to a hashable value
+  - ``FBool`` instances are invariant in their flavor
+
+Class TF_Bool
+~~~~~~~~~~~~~
+
+  - ``TF_Bool`` consists of just two disjoint subtypes, each a singleton
+
+    - class ``T_Bool`` is the  always truthy ``TF_Bool`` subtype
+    - class ``F_Bool`` is the  always falsy ``TF_Bool`` subtype
 
 """
 
 __author__ = 'Geoffrey R. Scheller'
-__copyright__ = 'Copyright (c) 2023-2025 Geoffrey R. Scheller'
+__copyright__ = 'Copyright (c) 2025 Geoffrey R. Scheller'
 __license__ = 'Apache License 2.0'

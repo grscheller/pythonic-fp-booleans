@@ -14,8 +14,8 @@
 
 from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
 from pythonic_fp.booleans.subtypes.true_false import (
-    TSBool,
-    FSBool,
+    T_Bool,
+    F_Bool,
     ALWAYS,
     NEVER_EVER,
 )
@@ -68,10 +68,10 @@ class TestSBool:
 
 class TestSBoolSubclass:
     def test_subclass_hierarchy(self) -> None:
-        assert issubclass(TSBool, SBool)
-        assert issubclass(FSBool, SBool)
-        assert issubclass(TSBool, int)
-        assert issubclass(FSBool, int)
+        assert issubclass(T_Bool, SBool)
+        assert issubclass(F_Bool, SBool)
+        assert issubclass(T_Bool, int)
+        assert issubclass(F_Bool, int)
         assert issubclass(SBool, int)
         assert issubclass(bool, int)
         assert not issubclass(bool, SBool)
@@ -80,16 +80,16 @@ class TestSBoolSubclass:
     def test_isinstance(self) -> None:
         a_bool = False
         my_int = 0
-        myTruth: TSBool = TSBool(True)
-        myLie: FSBool = FSBool(False)
+        myTruth: T_Bool = T_Bool(True)
+        myLie: F_Bool = F_Bool(False)
 
         assert isinstance(a_bool, int)
         assert isinstance(a_bool, bool)
         assert isinstance(my_int, int)
         assert isinstance(myLie, int)
         assert isinstance(myLie, SBool)
-        assert isinstance(myLie, FSBool)
-        assert not isinstance(myLie, TSBool)
+        assert isinstance(myLie, F_Bool)
+        assert not isinstance(myLie, T_Bool)
         assert not isinstance(myLie, bool)
         assert isinstance(not myLie, bool)
         assert not isinstance(~myLie, bool)
@@ -102,8 +102,8 @@ class TestSBoolSubclass:
         assert isinstance(my_int, int)
         assert isinstance(myTruth, int)
         assert isinstance(myTruth, SBool)
-        assert isinstance(myTruth, TSBool)
-        assert not isinstance(myTruth, FSBool)
+        assert isinstance(myTruth, T_Bool)
+        assert not isinstance(myTruth, F_Bool)
         assert not isinstance(myTruth, bool)
         assert isinstance(not myTruth, bool)
         assert not isinstance(~myTruth, bool)
@@ -146,14 +146,14 @@ class Test_not:
         assert isinstance(not putz, bool)
         assert not isinstance(not putz, SBool)
 
-        futz: SBool = FSBool()
+        futz: SBool = F_Bool()
         assert isinstance(futz, int)
         assert not isinstance(futz, bool)
         assert isinstance(not futz, int)
         assert isinstance(not futz, bool)
         assert not isinstance(not futz, SBool)
 
-        tutz: SBool = TSBool()
+        tutz: SBool = T_Bool()
         assert isinstance(tutz, int)
         assert not isinstance(tutz, bool)
         assert isinstance(not tutz, int)
@@ -165,18 +165,18 @@ class TestTruthsAndLies:
     def test_truths_and_lies(self) -> None:
         baseT: SBool = SBool('foofoo')
         baseF: SBool = SBool('')
-        derivedT1: TSBool = TSBool()
-        derivedF1: FSBool = FSBool()
-        derivedT2: SBool = TSBool()
-        derivedF2: SBool = FSBool()
+        derivedT1: T_Bool = T_Bool()
+        derivedF1: F_Bool = F_Bool()
+        derivedT2: SBool = T_Bool()
+        derivedF2: SBool = F_Bool()
 
         assert baseT == derivedT1 == derivedT2 == TRUTH == ALWAYS
         assert baseF == derivedF1 == derivedF2 == LIE == NEVER_EVER
 
     def test_identities(self) -> None:
         yooT: SBool = ALWAYS
-        mooT: SBool = FSBool()
-        mooF: SBool = TSBool()
+        mooT: SBool = F_Bool()
+        mooF: SBool = T_Bool()
         yooF: SBool = NEVER_EVER
 
         mooT == yooT

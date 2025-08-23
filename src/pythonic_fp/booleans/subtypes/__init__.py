@@ -12,22 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Subtypes of the booleans.subtypable ``SBool`` class.
+"""
+Module subtypes
+===============
 
-- module flavored
+Module flavored
+---------------
 
-  - When you need different "flavors" of the truth
-  - Flavors of ``FBool`` based on any hashable value
+- When you need different "flavors" of the truth
+- Flavors of ``FBool`` instances are based on any hashable value
 
-- module true_false
+Module true_false
+-----------------
 
-  - contains two final subclasses of ``SBool``
+- where truthy and falsy are typeable
+- class ``TS_Bool`` consists of two disjoint subclasses
 
-    - ``TSBool`` instances are always truthy
-    - ``FSBool`` instances are always falsy
+  - ``T_Bool`` instances are always truthy
+  - ``F_Bool`` instances are always falsy
 
 """
 
 __author__ = 'Geoffrey R. Scheller'
-__copyright__ = 'Copyright (c) 2023-2025 Geoffrey R. Scheller'
+__copyright__ = 'Copyright (c) 2025 Geoffrey R. Scheller'
 __license__ = 'Apache License 2.0'

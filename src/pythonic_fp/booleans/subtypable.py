@@ -42,25 +42,26 @@ class SBool(int):
     operator will just return a ``bool``. Use the ``snot`` function
     to return an ``SBool`` or ``SBool`` subclass.
 
-    This type can also do (non-shortcut) Boolean logic using
+    This type  and its subtypes can also do (non-shortcut) Boolean logic
+    using Python bitwise operators.
 
     +------------+--------+------------+-------------+
     | Boolean op | symbol | dunder     | Python name |
     +============+========+============+=============+
+    | not        | ``~``  | __invert__ | bitwise not |
+    +------------+--------+------------+-------------+
     | and        | ``&``  | __and__    | bitwise and |
     +------------+--------+------------+-------------+
     | or         | ``|``  | __or__     | bitwise or  |
     +------------+--------+------------+-------------+
     | xor        | ``^``  | __xor__    | bitwise xor |
     +------------+--------+------------+-------------+
-    | not        | ``~``  | __invert__ | bitwise not |
-    +------------+--------+------------+-------------+
 
-    .. warning::
-
-       These "bitwise" operators could raise ``TypeError`` exceptions
-       when applied against an ``SBool`` and objects not descended
-       from ``SBool``.
+    These operators are contravariant, that is they will return
+    the instance of the latest common ancestor of the arguments.
+    More specifically, the instance returned will have the type
+    of the least upper bound in the inheritance graph of the classes
+    of the two arguments.
 
     """
 
@@ -85,7 +86,7 @@ class SBool(int):
         - ``flavor`` is ignored for the ``SBool`` base class
 
           - there is only one "flavor"
-          - ``flavor`` ensures Liskov substitution principle holds
+          - ``flavor`` is to ensures Liskov substitution principle holds
 
 
         :param witness: determines truthiness of the ``SBool``

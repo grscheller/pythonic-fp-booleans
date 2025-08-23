@@ -14,7 +14,7 @@
 
 from pythonic_fp.booleans.subtypable import SBool, snot, TRUTH, LIE
 from pythonic_fp.booleans.subtypes.flavored import FBool, truthy, falsy
-from pythonic_fp.booleans.subtypes.true_false import TFSBool, TSBool, FSBool, ALWAYS, NEVER_EVER
+from pythonic_fp.booleans.subtypes.true_false import TF_Bool, T_Bool, F_Bool, ALWAYS, NEVER_EVER
 
 class TestSnot():
     def test_sbool(self) -> None:
@@ -60,11 +60,11 @@ class TestSnot():
 
     def test_true_false(self) -> None:
         # Not sure why mypy does not like the first two, snot returns
-        # an SBool and TSBool and FSBool are both SBool subtypes.
-        assert snot(TSBool()) is FSBool()
-        assert snot(FSBool()) is TSBool()
-        assert snot(TFSBool(True)) is TFSBool(False)
-        assert snot(TFSBool(False)) is TFSBool(True)
+        # an SBool and T_Bool and F_Bool are both SBool subtypes.
+        assert snot(T_Bool()) is F_Bool()
+        assert snot(F_Bool()) is T_Bool()
+        assert snot(TF_Bool(True)) is TF_Bool(False)
+        assert snot(TF_Bool(False)) is TF_Bool(True)
 
     def test_sbool_fbool(self) -> None:
         assert snot(SBool(False) & FBool(False, 'bar')) is SBool(True)
