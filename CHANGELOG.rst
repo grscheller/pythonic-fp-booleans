@@ -17,7 +17,18 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
-0.1.0 - TBD
+1.1.0 - TBD
 ~~~~~~~~~~~
+
+Preparing for first PyPI release.
+
+- module booleans.subtypable
+- package booleans.subtypes
+
+  - module booleans.subtypes.flavored
+  - module booleans.subtypes.true_false
+
+Created pythonic-fp-boolean GitHub repo - 2025-08-06
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Moved pythonic_fp.singletons.sbool -> pythonic_fp.booleans.sbool
