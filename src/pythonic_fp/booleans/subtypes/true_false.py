@@ -22,6 +22,7 @@ from pythonic_fp.sentinels.novalue import NoValue
 from ..subtypable import SBool
 
 __all__ = [
+    'TF_Boolean',
     'TF_Bool',
     'T_Bool',
     'F_Bool',
@@ -141,6 +142,7 @@ class F_Bool(TF_Bool):
     def __repr__(self) -> str:
         return 'NEVER_EVER'
 
+TF_Boolean = T_Bool | F_Bool | TF_Bool  #: use only as a type, never a constructor
 
-ALWAYS: Final[T_Bool] = T_Bool()  #: the truthy singleton ``TF_Bool`` subtype
-NEVER_EVER: Final[F_Bool] = F_Bool()  #: the falsy singleton ``TF_Bool`` subtype
+ALWAYS: Final[TF_Boolean] = T_Bool()  #: the truthy singleton ``TF_Bool`` subtype
+NEVER_EVER: Final[TF_Boolean] = F_Bool()  #: the falsy singleton ``TF_Bool`` subtype
