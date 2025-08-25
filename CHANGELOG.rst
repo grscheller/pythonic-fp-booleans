@@ -28,6 +28,11 @@ Preparing for first PyPI release.
   - module booleans.subtypes.flavored
   - module booleans.subtypes.true_false
 
+Needs
+
+-  "pythonic-fp>=1.2.0" for gadgets
+-  "pythonic-fp-sentinels>=2.0.0",
+
 Created pythonic-fp-boolean GitHub repo - 2025-08-06
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
