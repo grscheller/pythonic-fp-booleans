@@ -17,22 +17,20 @@
 
 import threading
 from collections.abc import Hashable
-from typing import cast, ClassVar, Final, final, TypeVar
+from typing import cast, ClassVar, Final, final
 from pythonic_fp.sentinels.novalue import NoValue
 from ..subtypable import SBool
 
 __all__ = [
-    'TF_Boolean',
     'TF_Bool',
     'T_Bool',
     'F_Bool',
     'ALWAYS',
     'NEVER_EVER',
+    'TF_Boolean',
 ]
 
 _novalue = NoValue()
-
-I = TypeVar('I', bound=int)
 
 
 class TF_Bool(SBool):
@@ -66,29 +64,26 @@ class TF_Bool(SBool):
             return F_Bool()
         return T_Bool()
 
-    def __and__(self, other: I) -> 'TF_Bool':
-        if self and other:
-            return T_Bool()
-        return F_Bool()
+    def __and__(self, other: int) -> SBool:
+        if isinstance(other, TF_Bool):
+            if self and other:
+                return T_Bool()
+            return F_Bool()
+        return SBool(self and other)
 
-    def __rand__(self, other: I) -> 'TF_Bool':
-        return self.__and__(other)
+    def __or__(self, other: int) -> SBool:
+        if isinstance(other, TF_Bool):
+            if self or other:
+                return T_Bool()
+            return F_Bool()
+        return SBool(self or other)
 
-    def __or__(self, other: I) -> 'TF_Bool':
-        if self or other:
-            return T_Bool()
-        return F_Bool()
-
-    def __ror(self, other: I) -> 'TF_Bool':
-        return self.__or__(other)
-
-    def __xor__(self, other: I) -> 'TF_Bool':
-        if self and not other or other and not self:
-            return T_Bool()
-        return F_Bool()
-
-    def __rxor(self, other: I) -> 'TF_Bool':
-        return self.__xor__(other)
+    def __xor__(self, other: int) -> SBool:
+        if isinstance(other, TF_Bool):
+            if not (self and other) and (self or other):
+                return T_Bool()
+            return F_Bool()
+        return SBool(not (self and other) and (self or other))
 
 
 @final

@@ -97,3 +97,31 @@ class TestBooleanBehaviors():
         # Why we need snot
         True is (not LIE)
         False is (not TRUTH)
+
+    def test_arithmetic(self) -> None:
+        bt1 = True
+        bt2 = True
+        bf1 = False
+        bf2 = False
+
+        st1 = TRUTH
+        st2 = TRUTH
+        sf1 = LIE
+        sf2 = LIE
+
+        assert isinstance(bt1, int)
+        assert isinstance(bt1, bool)
+        assert not isinstance(bt1, SBool)
+
+        assert isinstance(st1, int)
+        assert not isinstance(st1, bool)
+        assert isinstance(st1, SBool)
+
+        assert bt1 + bt2 + bf1 + bf2 == 2
+        assert bt1 * bt2 == 1
+        assert bt1 * bf2 == 0
+
+        assert st1 * st2 == 1
+        assert st1 * sf2 == 0
+        assert st1 + st2 + sf1 + sf2 == 2
+

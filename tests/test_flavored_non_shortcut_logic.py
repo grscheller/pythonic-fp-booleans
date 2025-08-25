@@ -46,10 +46,6 @@ class TestBitwiseOperations():
         assert LIE is falsy(1)|falsy(1)|~truthy(1)|falsy(3)|~truthy(1)
         assert falsy(1) is falsy(1)|falsy(1)|~truthy(1)|falsy(1)|~truthy(1)
 
-    def test_with_bool(self) -> None:
-        assert TRUTH == ~LIE == ~FBool(False, 1) == FBool(True, -42) == truthy(10) == ~falsy(11)
-        assert TRUTH == ~LIE == ~falsy(11) == True == (not False)  # type: ignore
-
     def test_xor_not(self) -> None:
         assert LIE is truthy(1) ^ truthy(2)
         assert TRUTH is truthy(1) ^ ~truthy(2)

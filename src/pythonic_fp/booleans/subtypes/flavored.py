@@ -17,12 +17,10 @@
 
 import threading
 from collections.abc import Hashable
-from typing import ClassVar, TypeVar, final
+from typing import ClassVar, final
 from ..subtypable import SBool
 
 __all__ = ['FBool', 'truthy', 'falsy']
-
-I = TypeVar('I', bound=int)
 
 
 @final
@@ -30,10 +28,12 @@ class FBool(SBool):
     """Flavored Booleans.
 
     When you need to deal with different flavors of the truth.
-    Each "flavor" is indexed by a hashable value.
+    Each "flavor" is "indexed" by a hashable value, not "subtyped"
+    by it.
 
     This type can also do (non-shortcut) Boolean logic using Python
-    bitwise operators.
+    bitwise operators. Combining ``FBool`` instances of different
+    flavors in this way will just result in an ``SBool``.
 
     """
 
@@ -79,31 +79,31 @@ class FBool(SBool):
             return FBool(False, self._flavor)
         return FBool(True, self._flavor)
 
-    def __and__(self, other: I) -> SBool:
+    def __and__(self, other: int) -> SBool:
         if isinstance(other, FBool):
             if self._flavor == other._flavor:
                 return FBool(self and other, self._flavor)
         return SBool(self and other)
 
-    def __rand__(self, other: I) -> SBool:
+    def __rand__(self, other: int) -> SBool:
         return self & other
 
-    def __or__(self, other: I) -> SBool:
+    def __or__(self, other: int) -> SBool:
         if isinstance(other, FBool):
             if self._flavor == other._flavor:
                 return FBool(self or other, self._flavor)
         return SBool(self or other)
 
-    def __ror__(self, other: I) -> SBool:
+    def __ror__(self, other: int) -> SBool:
         return self | other
 
-    def __xor__(self, other: I) -> SBool:
+    def __xor__(self, other: int) -> SBool:
         if isinstance(other, FBool):
             if self._flavor == other._flavor:
                 return FBool(not (self and other) and (self or other), self._flavor)
         return SBool(not (self and other) and (self or other))
 
-    def __rxor__(self, other: I) -> SBool:
+    def __rxor__(self, other: int) -> SBool:
         return self ^ other
 
     def flavor(self) -> Hashable:

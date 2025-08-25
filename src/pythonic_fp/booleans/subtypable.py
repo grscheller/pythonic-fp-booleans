@@ -17,7 +17,7 @@
 
 import threading
 from collections.abc import Hashable
-from typing import cast, ClassVar, Final, Never, TypeVar, overload
+from typing import cast, ClassVar, Final, Never, overload
 from pythonic_fp.gadgets.lca import latest_common_ancestor
 from pythonic_fp.sentinels.novalue import NoValue
 
@@ -27,8 +27,6 @@ __all__ = [
     'TRUTH',
     'LIE',
 ]
-
-I = TypeVar('I', bound=int)
 
 _novalue = NoValue()
 
@@ -120,7 +118,7 @@ class SBool(int):
             return type(self)(False)
         return type(self)(True)
 
-    def __and__(self, other: I) -> 'SBool | Never':
+    def __and__(self, other: int) -> 'SBool | Never':
         try:
             base_class = latest_common_ancestor(type(self), type(other))
         except TypeError:
@@ -133,10 +131,10 @@ class SBool(int):
             return SBool(base_class(1))
         return SBool(base_class(0))
 
-    def __rand__(self, other: I) -> 'SBool | Never':
+    def __rand__(self, other: int) -> 'SBool | Never':
         return self.__and__(other)
 
-    def __or__(self, other: I) -> 'SBool | Never':
+    def __or__(self, other: int) -> 'SBool | Never':
         try:
             base_class = latest_common_ancestor(type(self), type(other))
         except TypeError:
@@ -149,10 +147,10 @@ class SBool(int):
             return SBool(base_class(1))
         return SBool(base_class(0))
 
-    def __ror__(self, other: I) -> 'SBool | Never':
+    def __ror__(self, other: int) -> 'SBool | Never':
         return self.__and__(other)
 
-    def __xor__(self, other: I) -> 'SBool | Never':
+    def __xor__(self, other: int) -> 'SBool | Never':
         try:
             base_class = latest_common_ancestor(type(self), type(other))
         except TypeError:
@@ -165,7 +163,7 @@ class SBool(int):
             return SBool(base_class(1))
         return SBool(base_class(0))
 
-    def __rxor__(self, other: I) -> 'SBool | Never':
+    def __rxor__(self, other: int) -> 'SBool | Never':
         return self.__and__(other)
 
 

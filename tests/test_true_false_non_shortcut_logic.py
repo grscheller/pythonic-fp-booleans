@@ -16,11 +16,25 @@ from pythonic_fp.booleans.subtypable import TRUTH, LIE
 from pythonic_fp.booleans.subtypes.true_false import TF_Boolean, TF_Bool, T_Bool, F_Bool
 from pythonic_fp.booleans.subtypes.true_false import ALWAYS, NEVER_EVER
 
-true1: TF_Boolean = TF_Bool(1 < 42)
-true2: TF_Boolean = T_Bool()
+false0: TF_Boolean = F_Bool('ignored', 'also ignored')
 false1: TF_Boolean = TF_Bool(1 > 42)
 false2: TF_Boolean = F_Bool()
+false3: TF_Boolean = TF_Bool('')
+true0: TF_Boolean = T_Bool('', 'ignored')
+true1: TF_Boolean = TF_Bool(1 < 42)
+true2: TF_Boolean = T_Bool()
+true3: TF_Boolean = TF_Bool('foobar')
 
+
+class TestConfirmTruthiness():
+    assert not false0
+    assert not false1
+    assert not false2
+    assert not false3
+    assert true0
+    assert true1
+    assert true2
+    assert true3
 
 class TestBitwiseOperations():
     def test_typed_identity(self) -> None:
@@ -50,13 +64,76 @@ class TestBitwiseOperations():
         assert NEVER_EVER == false1 == false2
 
     def test_or_not(self) -> None:
-        assert True
+        assert true0 is true0 | true0
+        assert true0 == true0 | true0
+        assert ALWAYS is true0 | true1
+        assert TRUTH == true0 | true1
+        assert false3 is ~true2
+        assert true3 is ~true3 | true3
+        assert ALWAYS is ~true3 | true1
+        assert LIE == ~true1 | ~true3
+        assert LIE is not ~true1 | ~true3
+        assert NEVER_EVER == ~true1 | ~true3
+        assert NEVER_EVER is ~true1 | ~true3
+        assert false3 is ~true2 | ~true0
+        assert true1 is true1 | ~true1
+        assert true2 is ~true1 | true1
+        assert NEVER_EVER is ~true1 | false2
+        assert ALWAYS is true1 | ~false0
+        assert NEVER_EVER is false2 | false3
+        assert NEVER_EVER == false2 | false3
+        assert TRUTH is ~LIE | ~false2
+        assert TRUTH is ~false2 | ~LIE
+        assert TRUTH is ALWAYS | TRUTH
+        assert TRUTH is TRUTH | ALWAYS
+        assert TRUTH is ~NEVER_EVER | TRUTH
+        assert TRUTH is ~false2 | TRUTH
+        assert TRUTH is ~false2 | ~LIE
+        assert LIE is false2 | LIE
+        assert TRUTH == false2 | ~false3
+        assert ALWAYS is false2 | ~false3
+
+        assert TRUTH is false1 | true1 | TRUTH | false1 | false2
+        assert true1 is false1 | true1 | true1 | false1 | false3
+        assert TRUTH is false3 | true1 | true2 | LIE | false2
+        assert NEVER_EVER is false1|false1|~true2|false1|~true3
+        assert NEVER_EVER is false1|false1|~true1|false3|~true1
+        assert ALWAYS is true1|false2|~true2|~true3|~true1
 
     def test_xor_not(self) -> None:
-        assert True
+        assert NEVER_EVER is true1 ^ true2
+        assert ALWAYS is true1 ^ ~true2
+        assert false2 is true3 ^ true3
+        assert TF_Bool(10.0 == 5.0 + 5.0) is true2 ^ ~ true1
+        assert true0 is ~true0 ^ true0
+        assert false1 is ~true1 ^ ~true1
+        assert false2 is ~true2 ^ false2
+        assert true3 is false3 ^ ~false3
+        assert NEVER_EVER is ~true1^ false2
+        assert NEVER_EVER is false0 ^ false1
+
+        assert true1 is false1 ^ false1 ^ true1 ^ false1 ^ false1
+        assert false2 is false1 ^ false2 ^ ~true1 ^ false1 ^ ~true2
+        assert true3 is false1 ^ false2 ^ ~true1 ^ false1 ^ true2 ^ false1
+        assert false0 is false1 ^ false2 ^ ~true1 ^ false1 ^ true2 ^ true1
+        assert false1 is false1 ^ false1 ^ ~true1 ^ false1 ^ true1 ^ true1
 
     def test_and_not(self) -> None:
-        assert True
+        assert true1 is true1 & true1
+        assert true0 is true2 & true0
+        assert false2 is true2 & ~true2
+        assert false0 is ~true1 & true2
+        assert false0 is ~true1 & ~true2
+        assert true0 is true1 & ~false2
+        assert true1 is true1 & ~false1
+        assert false0 is false2 & ~false1
+        assert false0 is ~true2 & false1
+        assert false1 is false1 & false1
+        assert false2 is false2 & false2
+        assert false0 is false2 & false1
+
+        assert NEVER_EVER is false1 & false2 & true2 & false1 & false1
+        assert ALWAYS is ~false1 & ~false2 & true1 & ~false2 & ~false1
 
     def test_de_morgan(self) -> None:
         for tfb in [true1, false1]:
