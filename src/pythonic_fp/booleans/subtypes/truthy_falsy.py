@@ -45,9 +45,9 @@ class TF_Bool(SBool):
     def __new__(cls, witness: object, flavor: Hashable = NoValue()) -> 'TF_Bool':
         """
 
-        :param witness: determines which subtype, ``T_Bool`` or ``F_Bool`` is returned
-        :param flavor: ignored parameter, only two flavors, one truthy and one falsy
-        :returns: either the singleton truthy or singleton falsy subtypes
+        :param witness: Determines which subtype, ``T_Bool`` or ``F_Bool`` is returned.
+        :param flavor: Ignored parameter, only two flavors, one truthy and one falsy.
+        :returns: either The singleton truthy or singleton falsy subtypes.
 
         """
         if witness:
@@ -98,9 +98,9 @@ class T_Bool(TF_Bool):
     ) -> 'T_Bool':
         """
 
-        :param witness: ignored parameter, a T_Bool is always truthy
-        :param flavor: ignored parameter, only one truthy "flavor"
-        :returns: the truthy ``T_Bool`` singleton instance
+        :param witness: Ignored parameter, a T_Bool is always truthy.
+        :param flavor: Ignored parameter, only one truthy "flavor".
+        :returns: The truthy ``T_Bool`` singleton instance.
 
         """
         if cls._truthy is _novalue:
@@ -123,9 +123,9 @@ class F_Bool(TF_Bool):
     def __new__(cls, witness: object = _novalue, flavor: Hashable = _novalue) -> 'F_Bool':
         """
 
-        :param witness: parameter ignored, an ``F_Bool`` is always falsy
-        :param flavor: parameter ignored, only one falsy "flavor"
-        :returns: the falsy ``F_Bool`` singleton instance
+        :param witness: Parameter ignored, an ``F_Bool`` is always falsy.
+        :param flavor: Parameter ignored, only one falsy "flavor".
+        :returns: The falsy ``F_Bool`` singleton instance.
 
         """
         if cls._falsy is _novalue:
@@ -137,7 +137,7 @@ class F_Bool(TF_Bool):
     def __repr__(self) -> str:
         return 'NEVER'
 
-TF_Boolean = T_Bool | F_Bool | TF_Bool  #: use only as a type, never a constructor
+TF_Boolean = T_Bool | F_Bool | TF_Bool  #: Use only as a type, never a constructor.
 
-ALWAYS: Final[TF_Boolean] = T_Bool()  #: the truthy singleton ``TF_Bool`` subtype
-NEVER: Final[TF_Boolean] = F_Bool()  #: the falsy singleton ``TF_Bool`` subtype
+ALWAYS: Final[TF_Boolean] = T_Bool()  #: The truthy singleton ``TF_Bool`` subtype.
+NEVER: Final[TF_Boolean] = F_Bool()  #: The falsy singleton ``TF_Bool`` subtype.

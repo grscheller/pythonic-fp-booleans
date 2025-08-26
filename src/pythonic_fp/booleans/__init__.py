@@ -28,32 +28,40 @@ Covariant class hierarchy
     digraph Booleans {
         int -> bool;
         int -> SBool;
-        SBool -> FBool;
+        SBool -> FBool(h1);
+        SBool -> FBool(h2);
+        SBool -> FBool(h3);
         SBool -> TF_Bool;
         TF_Bool -> T_Bool;
         TF_Bool -> F_Bool;
     }
 
-Contravariant non-shortcut operators
-------------------------------------
+Contravariant non-shortcut "bitwise" operators
+----------------------------------------------
 
-    +------------+--------+------------+-------------+
-    | Boolean op | symbol | dunder     | Python name |
-    +============+========+============+=============+
-    | not        | ``~``  | __invert__ | bitwise not |
-    +------------+--------+------------+-------------+
-    | and        | ``&``  | __and__    | bitwise and |
-    +------------+--------+------------+-------------+
-    | or         | ``|``  | __or__     | bitwise or  |
-    +------------+--------+------------+-------------+
-    | xor        | ``^``  | __xor__    | bitwise xor |
-    +------------+--------+------------+-------------+
++-------------------+--------+------------+
+| Boolean operation | symbol | dunder     |
++===================+========+============+
+|       not         | ``~``  | __invert__ |
++-------------------+--------+------------+
+|       and         | ``&``  | __and__    |
++-------------------+--------+------------+
+|       or          | ``|``  | __or__     |
++-------------------+--------+------------+
+|       xor         | ``^``  | __xor__    |
++-------------------+--------+------------+
 
-    .. warning::
+These operators are contravariant, that is they will return
+the instance of the latest common ancestor of their arguments.
+More specifically, the instance returned will have the type
+of the least upper bound in the inheritance graph of the classes
+of the two arguments.
 
-       These "bitwise" operators could raise ``TypeError`` exceptions
-       when applied against an ``SBool`` and objects not descended
-       from ``SBool``.
+.. warning::
+
+   These "bitwise" operators could raise ``TypeError`` exceptions
+   when applied against an ``SBool`` and objects not descended
+   from ``SBool``.
 
 Classes
 -------
@@ -61,27 +69,28 @@ Classes
 Class SBool
 ~~~~~~~~~~~
 
-- base of the hierarchy
+Base of the hierarchy.
 
-  - like Python's built-in ``bool``, ``SBool`` is a subclass of ``int``
-  - unlike ``bool``, class ``SBool`` can be further subclassed
+Like Python's built-in ``bool``, ``SBool`` is a subclass of ``int``,
+unlike ``bool``, class ``SBool`` can be further subclassed.
 
 Class FBool
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
 
-- for when you need to deal with different "flavors" of the truth
+For when you need to deal with different "flavors" of the truth.
 
-  - each "flavor" corresponds to a hashable value
-  - ``FBool`` instances are invariant in their flavor
+Each "flavor" corresponds to a hashable value. Instances of ``FBool``
+are invariant in their flavor. Best to think of the "flavor" as an
+index.
 
 Class TF_Bool
 ~~~~~~~~~~~~~
 
-  - ``TF_Bool`` consists of just two disjoint subtypes, each a singleton
+Class ``TF_Bool`` consists of just two disjoint subclasses, each one
+a singleton.
 
-    - class ``T_Bool`` is the  always truthy ``TF_Bool`` subtype
-    - class ``F_Bool`` is the  always falsy ``TF_Bool`` subtype
-
+- class ``T_Bool`` is the  always truthy ``TF_Bool`` subtype
+- class ``F_Bool`` is the  always falsy ``TF_Bool`` subtype
 """
 
 __author__ = 'Geoffrey R. Scheller'

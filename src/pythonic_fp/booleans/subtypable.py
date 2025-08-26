@@ -40,29 +40,9 @@ class SBool(int):
     operator will just return a ``bool``. Use the ``snot`` function
     to return an ``SBool`` or ``SBool`` subclass.
 
-    This type  and its subtypes can also do (non-shortcut) Boolean logic
+    This type and its subtypes can also do (non-shortcut) Boolean logic
     using Python bitwise operators.
-
-    +------------+--------+------------+-------------+
-    | Boolean op | symbol | dunder     | Python name |
-    +============+========+============+=============+
-    | not        | ``~``  | __invert__ | bitwise not |
-    +------------+--------+------------+-------------+
-    | and        | ``&``  | __and__    | bitwise and |
-    +------------+--------+------------+-------------+
-    | or         | ``|``  | __or__     | bitwise or  |
-    +------------+--------+------------+-------------+
-    | xor        | ``^``  | __xor__    | bitwise xor |
-    +------------+--------+------------+-------------+
-
-    These operators are contravariant, that is they will return
-    the instance of the latest common ancestor of the arguments.
-    More specifically, the instance returned will have the type
-    of the least upper bound in the inheritance graph of the classes
-    of the two arguments.
-
     """
-
     _falsy: 'ClassVar[SBool | NoValue]' = _novalue
     _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
 
@@ -75,21 +55,9 @@ class SBool(int):
     def __new__(cls, witness: object) -> 'SBool': ...
 
     def __new__(cls, witness: object = False, flavor: Hashable = _novalue) -> 'SBool':
-        """Create a "subtypable" Boolean-like value.
-
-        - ``witness`` determines whether its "truthy" or "falsy"
-
-          - defaults to falsy if no ``witness`` is provided
-
-        - ``flavor`` is ignored for the ``SBool`` base class
-
-          - there is only one "flavor"
-          - ``flavor`` is to ensures Liskov substitution principle holds
-
-
-        :param witness: determines truthiness of the ``SBool``
-        :returns: the truthy or falsy SBool class instance
-
+        """
+        :param witness: Determines truthiness of the ``SBool``.
+        :returns: The truthy or falsy SBool class instance.
         """
         if witness:
             if cls._truthy is _novalue:
@@ -176,9 +144,8 @@ def snot(sbool: SBool) -> SBool:
         return a ``bool``. There is no ``__not__`` dunder method
         that will change the behavior of ``not``.
 
-    :param sbool: an ``SBool`` or ``SBool`` subtype
-    :returns: the ``SBool`` or ``SBool`` subtype of the opposite truthiness
-
+    :param sbool: An ``SBool`` or ``SBool`` subtype.
+    :returns: The ``SBool`` or ``SBool`` subtype of the opposite truthiness.
     """
     return ~sbool
 

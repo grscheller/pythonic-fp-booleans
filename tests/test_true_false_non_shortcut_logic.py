@@ -13,8 +13,8 @@
 # limitations under the License.
 
 from pythonic_fp.booleans.subtypable import TRUTH, LIE
-from pythonic_fp.booleans.subtypes.true_false import TF_Boolean, TF_Bool, T_Bool, F_Bool
-from pythonic_fp.booleans.subtypes.true_false import ALWAYS, NEVER
+from pythonic_fp.booleans.subtypes.truthy_falsy import TF_Boolean, TF_Bool, T_Bool, F_Bool
+from pythonic_fp.booleans.subtypes.truthy_falsy import ALWAYS, NEVER
 
 false0: TF_Boolean = F_Bool('ignored', 'also ignored')
 false1: TF_Boolean = TF_Bool(1 > 42)

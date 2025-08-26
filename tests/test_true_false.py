@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
-from pythonic_fp.booleans.subtypes.true_false import (
+from pythonic_fp.booleans.subtypes.truthy_falsy import (
     TF_Boolean,
     T_Bool,
     F_Bool,
