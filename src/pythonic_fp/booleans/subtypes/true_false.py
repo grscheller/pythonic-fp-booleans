@@ -26,7 +26,7 @@ __all__ = [
     'T_Bool',
     'F_Bool',
     'ALWAYS',
-    'NEVER_EVER',
+    'NEVER',
     'TF_Boolean',
 ]
 
@@ -57,7 +57,7 @@ class TF_Bool(SBool):
     def __repr__(self) -> str:
         if self:
             return 'ALWAYS'
-        return 'NEVER_EVER'
+        return 'NEVER'
 
     def __invert__(self) -> 'TF_Bool':
         if self:
@@ -135,9 +135,9 @@ class F_Bool(TF_Bool):
         return cast(F_Bool, cls._falsy)
 
     def __repr__(self) -> str:
-        return 'NEVER_EVER'
+        return 'NEVER'
 
 TF_Boolean = T_Bool | F_Bool | TF_Bool  #: use only as a type, never a constructor
 
 ALWAYS: Final[TF_Boolean] = T_Bool()  #: the truthy singleton ``TF_Bool`` subtype
-NEVER_EVER: Final[TF_Boolean] = F_Bool()  #: the falsy singleton ``TF_Bool`` subtype
+NEVER: Final[TF_Boolean] = F_Bool()  #: the falsy singleton ``TF_Bool`` subtype

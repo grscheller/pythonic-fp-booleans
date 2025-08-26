@@ -14,10 +14,11 @@
 
 from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
 from pythonic_fp.booleans.subtypes.true_false import (
+    TF_Boolean,
     T_Bool,
     F_Bool,
     ALWAYS,
-    NEVER_EVER,
+    NEVER,
 )
 
 
@@ -80,8 +81,8 @@ class TestSBoolSubclass:
     def test_isinstance(self) -> None:
         a_bool = False
         my_int = 0
-        myTruth: T_Bool = T_Bool(True)
-        myLie: F_Bool = F_Bool(False)
+        myTruth: TF_Boolean = T_Bool(True)
+        myLie: TF_Boolean = F_Bool(False)
 
         assert isinstance(a_bool, int)
         assert isinstance(a_bool, bool)
@@ -165,19 +166,19 @@ class TestTruthsAndLies:
     def test_truths_and_lies(self) -> None:
         baseT: SBool = SBool('foofoo')
         baseF: SBool = SBool('')
-        derivedT1: T_Bool = T_Bool()
-        derivedF1: F_Bool = F_Bool()
+        derivedT1: TF_Boolean = T_Bool()
+        derivedF1: TF_Boolean = F_Bool()
         derivedT2: SBool = T_Bool()
         derivedF2: SBool = F_Bool()
 
         assert baseT == derivedT1 == derivedT2 == TRUTH == ALWAYS
-        assert baseF == derivedF1 == derivedF2 == LIE == NEVER_EVER
+        assert baseF == derivedF1 == derivedF2 == LIE == NEVER
 
     def test_identities(self) -> None:
         yooT: SBool = ALWAYS
         mooT: SBool = F_Bool()
         mooF: SBool = T_Bool()
-        yooF: SBool = NEVER_EVER
+        yooF: SBool = NEVER
 
         mooT == yooT
         mooF == yooF

@@ -2,7 +2,7 @@ from ..subtypable import SBool
 from collections.abc import Hashable
 from typing import Final, TypeVar
 
-__all__ = ['TF_Boolean', 'TF_Bool', 'T_Bool', 'F_Bool', 'ALWAYS', 'NEVER_EVER']
+__all__ = ['TF_Boolean', 'TF_Bool', 'T_Bool', 'F_Bool', 'ALWAYS', 'NEVER']
 
 I = TypeVar('I', bound=int)
 
@@ -21,4 +21,4 @@ class F_Bool(TF_Bool):
     def __new__(cls, witness: object = ..., flavor: Hashable = ...) -> F_Bool: ...
 TF_Boolean = T_Bool | F_Bool | TF_Bool
 ALWAYS: Final[TF_Boolean]
-NEVER_EVER: Final[TF_Boolean]
+NEVER: Final[TF_Boolean]

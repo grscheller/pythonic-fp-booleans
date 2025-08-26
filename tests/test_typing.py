@@ -14,7 +14,8 @@
 
 from pythonic_fp.booleans.subtypable import SBool, snot, TRUTH, LIE
 from pythonic_fp.booleans.subtypes.flavored import FBool, truthy, falsy
-from pythonic_fp.booleans.subtypes.true_false import TF_Bool, T_Bool, F_Bool, ALWAYS, NEVER_EVER
+from pythonic_fp.booleans.subtypes.true_false import TF_Bool, T_Bool, F_Bool, TF_Boolean
+from pythonic_fp.booleans.subtypes.true_false import ALWAYS, NEVER
 
 class TestSnot():
     def test_sbool(self) -> None:
