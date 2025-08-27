@@ -26,11 +26,12 @@ Covariant class hierarchy
 .. graphviz::
 
     digraph Booleans {
+        bgcolor="deepskyblue";
         int -> bool;
         int -> SBool;
-        SBool -> FBool(h1);
-        SBool -> FBool(h2);
-        SBool -> FBool(h3);
+        SBool -> "FBool(h1)";
+        SBool -> "FBool(h2)";
+        SBool -> "FBool(h3)";
         SBool -> TF_Bool;
         TF_Bool -> T_Bool;
         TF_Bool -> F_Bool;

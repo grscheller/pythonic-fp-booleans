@@ -150,5 +150,5 @@ def snot(sbool: SBool) -> SBool:
     return ~sbool
 
 
-TRUTH: Final[SBool] = SBool(True)  #: the truthy singleton of type ``SBool``
-LIE: Final[SBool] = SBool(False)  #: the falsy singleton of type ``SBool``
+TRUTH: Final[SBool] = SBool(True)  #: The truthy singleton of type ``SBool``.
+LIE: Final[SBool] = SBool(False)  #: The falsy singleton of type ``SBool``.
