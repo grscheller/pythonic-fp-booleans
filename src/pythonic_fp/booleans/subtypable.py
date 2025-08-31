@@ -18,7 +18,7 @@
 import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, Never, overload
-from pythonic_fp.gadgets.lca import latest_common_ancestor
+from pythonic_fp.gadgets.latest_common_ancestor import lca
 from pythonic_fp.sentinels.novalue import NoValue
 
 __all__ = [
@@ -88,7 +88,7 @@ class SBool(int):
 
     def __and__(self, other: int) -> 'SBool | Never':
         try:
-            base_class = latest_common_ancestor(type(self), type(other))
+            base_class = lca(type(self), type(other))
         except TypeError:
             msg = (
                 f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
@@ -104,7 +104,7 @@ class SBool(int):
 
     def __or__(self, other: int) -> 'SBool | Never':
         try:
-            base_class = latest_common_ancestor(type(self), type(other))
+            base_class = lca(type(self), type(other))
         except TypeError:
             msg = (
                 f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
@@ -120,7 +120,7 @@ class SBool(int):
 
     def __xor__(self, other: int) -> 'SBool | Never':
         try:
-            base_class = latest_common_ancestor(type(self), type(other))
+            base_class = lca(type(self), type(other))
         except TypeError:
             msg = (
                 f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
