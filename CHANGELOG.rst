@@ -17,10 +17,17 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
+PyPI v1.1.1 - 2025-09-03
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Only change was to give README.rst a final edit. Missed this on
+the v1.1.0 release.
+
+
 PyPI v1.1.0 - 2025-09-02
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-First PyPI release.
+First PyPI release as pythonic-fp-booleans.
 
 - module booleans.subtypable
 - package booleans.subtypes
