@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable import SBool, snot, TRUTH, LIE
+from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
 
 class TestBooleanBehaviors():
     def test_bool(self) -> None:
@@ -92,11 +92,8 @@ class TestBooleanBehaviors():
         sbool1 is sbool1
         sbool2 is sbool2
         sbool1 is not sbool2
-        sbool1 == snot(sbool2)
-        sbool2 == snot(sbool1)
-        # Why we need snot
-        True is (not LIE)
-        False is (not TRUTH)
+        sbool1 == ~sbool2
+        sbool2 == ~sbool1
 
     def test_arithmetic(self) -> None:
         bt1 = True
@@ -118,10 +115,46 @@ class TestBooleanBehaviors():
         assert isinstance(st1, SBool)
 
         assert bt1 + bt2 + bf1 + bf2 == 2
-        assert bt1 * bt2 == 1
+        assert bf1 * bf2 == 0
         assert bt1 * bf2 == 0
+        assert bt2 * bf1 == 0
+        assert bt1 * bt2 == 1
 
-        assert st1 * st2 == 1
-        assert st1 * sf2 == 0
         assert st1 + st2 + sf1 + sf2 == 2
+        assert sf1 * sf2 == 0
+        assert st1 * sf2 == 0
+        assert st2 * sf1 == 0
+        assert st1 * st2 == 1
 
+        assert 5 + bf1 == 5
+        assert 5 + bt2 == 6
+        assert bf1 + 5 == 5
+        assert bt2 + 5 == 6
+
+        assert 5 + sf1 == 5
+        assert 5 + st2 == 6
+        assert sf1 + 5 == 5
+        assert st2 + 5 == 6
+
+        assert 5 * bf1 == 0
+        assert 5 * bt2 == 5
+        assert bf1 * 5 == 0
+        assert bt2 * 5 == 5
+
+        assert 5 * sf1 == 0
+        assert 5 * st2 == 5
+        assert sf1 * 5 == 0
+        assert st2 * 5 == 5
+
+        assert bf1 * sf1 == 0
+        assert sf1 * bf1 == 0
+        assert bt1 * sf1 == 0
+        assert sf1 * bt2 == 0
+        assert st1 * bt1 == 1
+        assert bt1 * st1 == 1
+        assert bf1 + sf1 == 0
+        assert sf1 + bf1 == 0
+        assert bt1 + sf1 == 1
+        assert sf1 + bt2 == 1
+        assert st1 + bt1 == 2
+        assert bt1 + st1 == 2

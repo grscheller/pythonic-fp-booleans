@@ -90,7 +90,7 @@ class TestIdentiyFBoolEquality():
         sbf_2 != sbt_1
         fbf1_1 != sbt_1
 
-class TestArithmeticOperations():
+class TestBitwiseOperations():
     def test_or_not(self) -> None:
         assert truthy(0) is (fbt0_1 | fbt0_1)
         assert TRUTH is (sbt_1 | fbt0_1)

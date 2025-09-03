@@ -13,7 +13,12 @@
 # limitations under the License.
 
 
-"""Booleans whose "truthy" and "falsy" instances are distinct subtypes."""
+"""
+Truthy-Falsy Booleans
+---------------------
+
+
+Booleans whose "truthy" and "falsy" instances are distinct subtypes."""
 
 import threading
 from collections.abc import Hashable
@@ -34,21 +39,22 @@ _novalue = NoValue()
 
 
 class TF_Bool(SBool):
-    """Subclass of ``SBool`` whose truthy values and falsy values are
+    """
+    Truthy-Falsy Boolean
+    --------------------
+
+    Subclass of ``SBool`` whose truthy values and falsy values are
     different singleton subtypes.
 
     This type can also do (non-shortcut) Boolean logic using Python
     bitwise operators.
-
     """
 
     def __new__(cls, witness: object, flavor: Hashable = NoValue()) -> 'TF_Bool':
         """
-
         :param witness: Determines which subtype, ``T_Bool`` or ``F_Bool`` is returned.
         :param flavor: Ignored parameter, only two flavors, one truthy and one falsy.
         :returns: either The singleton truthy or singleton falsy subtypes.
-
         """
         if witness:
             return T_Bool()
@@ -88,7 +94,12 @@ class TF_Bool(SBool):
 
 @final
 class T_Bool(TF_Bool):
-    """The subtype of ``TF_Bool`` which is always Truthy."""
+    """
+    Truthy TF_Bool
+    --------------
+
+    The subtype of ``TF_Bool`` which is always truthy.
+    """
 
     _truthy: 'ClassVar[T_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
@@ -115,18 +126,23 @@ class T_Bool(TF_Bool):
 
 @final
 class F_Bool(TF_Bool):
-    """The subtype of ``TF_Bool`` which is always Falsy."""
+    """
+    Falsy TF_Bool
+    -------------
+
+    The subtype of ``TF_Bool`` which is always falsy.
+    """
 
     _falsy: 'ClassVar[F_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, witness: object = _novalue, flavor: Hashable = _novalue) -> 'F_Bool':
+    def __new__(
+        cls, witness: object = _novalue, flavor: Hashable = _novalue
+    ) -> 'F_Bool':
         """
-
         :param witness: Parameter ignored, an ``F_Bool`` is always falsy.
         :param flavor: Parameter ignored, only one falsy "flavor".
         :returns: The falsy ``F_Bool`` singleton instance.
-
         """
         if cls._falsy is _novalue:
             with cls._lock:
@@ -136,6 +152,7 @@ class F_Bool(TF_Bool):
 
     def __repr__(self) -> str:
         return 'NEVER'
+
 
 TF_Boolean = T_Bool | F_Bool | TF_Bool  #: Use only as a type, never a constructor.
 

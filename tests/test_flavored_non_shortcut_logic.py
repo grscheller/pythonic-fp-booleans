@@ -110,4 +110,3 @@ class TestBitwiseOperations():
             for sb2 in [truth2, lie2]:
                 ~(sb1 & sb2) is ~sb1 | ~sb2
                 ~(sb1 | sb2) is ~sb1 & ~sb2
-

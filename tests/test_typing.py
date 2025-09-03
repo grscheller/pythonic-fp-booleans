@@ -12,71 +12,87 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable import SBool, snot, TRUTH, LIE
+from pythonic_fp.booleans.subtypable import SBool
 from pythonic_fp.booleans.subtypes.flavored import FBool, truthy, falsy
-from pythonic_fp.booleans.subtypes.truthy_falsy import TF_Bool, T_Bool, F_Bool, TF_Boolean
-from pythonic_fp.booleans.subtypes.truthy_falsy import ALWAYS, NEVER
+from pythonic_fp.booleans.subtypes.truthy_falsy import TF_Bool, T_Bool, F_Bool
 
-class TestSnot():
+
+class TestInvert:
     def test_sbool(self) -> None:
-        assert snot(SBool(True)) is SBool(False)
-        assert snot(SBool(False)) is SBool(True)
+        assert ~SBool(True) is SBool(False)
+        assert ~SBool(False) is SBool(True)
 
     def test_fbool(self) -> None:
-        assert snot(FBool(True, 0)) is FBool(False, 0)
-        assert snot(FBool(True, 0)) is not FBool(False, 1)
-        assert snot(FBool(False, 0)) is FBool(True, 0)
-        assert snot(FBool(False, 0)) is not FBool(True, 1)
+        assert ~FBool(True, 0) is FBool(False, 0)
+        assert ~FBool(True, 0) is not FBool(False, 1)
+        assert ~FBool(False, 0) is FBool(True, 0)
+        assert ~FBool(False, 0) is not FBool(True, 1)
 
-        assert snot(FBool(False, 'foo') & FBool(False, 'foo')) is FBool(True, 'foo')
-        assert snot(FBool(True, 'foo') & FBool(False, 'foo')) is FBool(True, 'foo')
-        assert snot(FBool(False, 'foo') & FBool(True, 'foo')) is FBool(True, 'foo')
-        assert snot(FBool(True, 'foo') & FBool(True, 'foo')) is FBool(False, 'foo')
-        assert snot(FBool(False, 'foo') | FBool(False, 'foo')) is FBool(True, 'foo')
-        assert snot(FBool(True, 'foo') | FBool(False, 'foo')) is FBool(False, 'foo')
-        assert snot(FBool(False, 'foo') | FBool(True, 'foo')) is FBool(False, 'foo')
-        assert snot(FBool(True, 'foo') | FBool(True, 'foo')) is FBool(False, 'foo')
-        assert snot(FBool(False, 'foo') ^ FBool(False, 'foo')) is FBool(True, 'foo')
-        assert snot(FBool(True, 'foo') ^ FBool(False, 'foo')) is FBool(False, 'foo')
-        assert snot(FBool(False, 'foo') ^ FBool(True, 'foo')) is FBool(False, 'foo')
-        assert snot(FBool(True, 'foo') ^ FBool(True, 'foo')) is FBool(True, 'foo')
+        assert ~(FBool(False, 'foo') & FBool(False, 'foo')) is FBool(True, 'foo')
+        assert ~(FBool(True, 'foo') & FBool(False, 'foo')) is FBool(True, 'foo')
+        assert ~(FBool(False, 'foo') & FBool(True, 'foo')) is FBool(True, 'foo')
+        assert ~(FBool(True, 'foo') & FBool(True, 'foo')) is FBool(False, 'foo')
+        assert ~(FBool(False, 'foo') | FBool(False, 'foo')) is FBool(True, 'foo')
+        assert ~(FBool(True, 'foo') | FBool(False, 'foo')) is FBool(False, 'foo')
+        assert ~(FBool(False, 'foo') | FBool(True, 'foo')) is FBool(False, 'foo')
+        assert ~(FBool(True, 'foo') | FBool(True, 'foo')) is FBool(False, 'foo')
+        assert ~(FBool(False, 'foo') ^ FBool(False, 'foo')) is FBool(True, 'foo')
+        assert ~(FBool(True, 'foo') ^ FBool(False, 'foo')) is FBool(False, 'foo')
+        assert ~(FBool(False, 'foo') ^ FBool(True, 'foo')) is FBool(False, 'foo')
+        assert ~(FBool(True, 'foo') ^ FBool(True, 'foo')) is FBool(True, 'foo')
 
-        assert snot(FBool(False, 'foo') & FBool(False, 'bar')) is SBool(True)
-        assert snot(FBool(True, 'foo') & FBool(False, 'bar')) is SBool(True)
-        assert snot(FBool(False, 'foo') & FBool(True, 'bar')) is SBool(True)
-        assert snot(FBool(True, 'foo') & FBool(True, 'bar')) is SBool(False)
-        assert snot(FBool(False, 'foo') | FBool(False, 'bar')) is SBool(True)
-        assert snot(FBool(True, 'foo') | FBool(False, 'bar')) is SBool(False)
-        assert snot(FBool(False, 'foo') | FBool(True, 'bar')) is SBool(False)
-        assert snot(FBool(True, 'foo') | FBool(True, 'bar')) is SBool(False)
-        assert snot(FBool(False, 'foo') ^ FBool(False, 'bar')) is SBool(True)
-        assert snot(FBool(True, 'foo') ^ FBool(False, 'bar')) is SBool(False)
-        assert snot(FBool(False, 'foo') ^ FBool(True, 'bar')) is SBool(False)
-        assert snot(FBool(True, 'foo') ^ FBool(True, 'bar')) is SBool(True)
+        assert ~(FBool(False, 'foo') & FBool(False, 'bar')) is SBool(True)
+        assert ~(FBool(True, 'foo') & FBool(False, 'bar')) is SBool(True)
+        assert ~(FBool(False, 'foo') & FBool(True, 'bar')) is SBool(True)
+        assert ~(FBool(True, 'foo') & FBool(True, 'bar')) is SBool(False)
+        assert ~(FBool(False, 'foo') | FBool(False, 'bar')) is SBool(True)
+        assert ~(FBool(True, 'foo') | FBool(False, 'bar')) is SBool(False)
+        assert ~(FBool(False, 'foo') | FBool(True, 'bar')) is SBool(False)
+        assert ~(FBool(True, 'foo') | FBool(True, 'bar')) is SBool(False)
+        assert ~(FBool(False, 'foo') ^ FBool(False, 'bar')) is SBool(True)
+        assert ~(FBool(True, 'foo') ^ FBool(False, 'bar')) is SBool(False)
+        assert ~(FBool(False, 'foo') ^ FBool(True, 'bar')) is SBool(False)
+        assert ~(FBool(True, 'foo') ^ FBool(True, 'bar')) is SBool(True)
 
-        assert snot(truthy(42)) is falsy(42)
-        assert snot(falsy(42)) is truthy(42)
-        assert snot(truthy(42)) is not falsy(1)
-        assert snot(falsy(42)) is not truthy(1)
+        assert ~(truthy(42)) is falsy(42)
+        assert ~(falsy(42)) is truthy(42)
+        assert ~(truthy(42)) is not falsy(1)
+        assert ~(falsy(42)) is not truthy(1)
 
     def test_truthy_falsy(self) -> None:
-        # Not sure why mypy does not like the first two, snot returns
-        # an SBool and T_Bool and F_Bool are both SBool subtypes.
-        assert snot(T_Bool()) is F_Bool()
-        assert snot(F_Bool()) is T_Bool()
-        assert snot(TF_Bool(True)) is TF_Bool(False)
-        assert snot(TF_Bool(False)) is TF_Bool(True)
+        assert ~(T_Bool()) is F_Bool()
+        assert ~(F_Bool()) is T_Bool()
+        assert ~(TF_Bool(True)) is TF_Bool(False)
+        assert ~(TF_Bool(False)) is TF_Bool(True)
 
     def test_sbool_fbool(self) -> None:
-        assert snot(SBool(False) & FBool(False, 'bar')) is SBool(True)
-        assert snot(FBool(True, 'foo') & SBool(False)) is SBool(True)
-        assert snot(SBool(False) & FBool(True, 'bar')) is SBool(True)
-        assert snot(FBool(True, 'foo') & SBool(True)) is SBool(False)
-        assert snot(SBool(False) | FBool(False, 'bar')) is SBool(True)
-        assert snot(FBool(True, 'foo') | SBool(False)) is SBool(False)
-        assert snot(SBool(False) | FBool(True, 'bar')) is SBool(False)
-        assert snot(FBool(True, 'foo') | SBool(True)) is SBool(False)
-        assert snot(SBool(False) ^ FBool(False, 'bar')) is SBool(True)
-        assert snot(FBool(True, 'foo') ^ SBool(False)) is SBool(False)
-        assert snot(SBool(False) ^ FBool(True, 'bar')) is SBool(False)
-        assert snot(FBool(True, 'foo') ^ SBool(True)) is SBool(True)
+        assert ~(SBool(False) & FBool(False, 'bar')) is SBool(True)
+        assert ~(FBool(True, 'foo') & SBool(False)) is SBool(True)
+        assert ~(SBool(False) & FBool(True, 'bar')) is SBool(True)
+        assert ~(FBool(True, 'foo') & SBool(True)) is SBool(False)
+        assert ~(SBool(False) | FBool(False, 'bar')) is SBool(True)
+        assert ~(FBool(True, 'foo') | SBool(False)) is SBool(False)
+        assert ~(SBool(False) | FBool(True, 'bar')) is SBool(False)
+        assert ~(FBool(True, 'foo') | SBool(True)) is SBool(False)
+        assert ~(SBool(False) ^ FBool(False, 'bar')) is SBool(True)
+        assert ~(FBool(True, 'foo') ^ SBool(False)) is SBool(False)
+        assert ~(SBool(False) ^ FBool(True, 'bar')) is SBool(False)
+        assert ~(FBool(True, 'foo') ^ SBool(True)) is SBool(True)
+
+
+class TestArithmetic:
+    def test_arithmetic(self) -> None:
+        sbt = SBool(1)
+        sbf = SBool(0)
+        fbt1 = FBool(1, 1)
+        fbf1 = FBool(0, 1)
+        fbt2 = FBool(1, 2)
+        fbf2 = FBool(0, 2)
+        tb1 = TF_Bool(1)
+        tb2 = TF_Bool(1)
+        fb1 = TF_Bool(0)
+        fb2 = TF_Bool(0)
+
+        sbt + (fbt1 + tb1) + tb2 == 4
+        sbt + (fbt1 - tb1) + fb2 == 1
+        (sbt + sbf) * (fbt1 + fbf1 + fbt2 + fbf2) * (tb1 + tb2 + fb1 + fb2) == 4

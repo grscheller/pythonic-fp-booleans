@@ -62,7 +62,7 @@ of the two arguments.
 
    These "bitwise" operators could raise ``TypeError`` exceptions
    when applied against an ``SBool`` and objects not descended
-   from ``SBool``.
+   from ``int``.
 
 Classes
 -------

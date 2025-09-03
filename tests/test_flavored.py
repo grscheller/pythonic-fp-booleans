@@ -98,7 +98,7 @@ class TestIdentiyFBoolEquality():
         truthy('foobar') != falsy('foobar')
         truthy('foobar') != falsy('foofoo')
 
-class TestArithmeticOperations():
+class TestBitwiseOperations():
     def test_or_not(self) -> None:
         assert truthy(0) is (t0_1 | t0_1)
         assert truthy(0) is (t0_2 | t0_1)

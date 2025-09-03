@@ -17,16 +17,11 @@
 
 import threading
 from collections.abc import Hashable
-from typing import cast, ClassVar, Final, Never, overload
+from typing import cast, ClassVar, Final, overload
 from pythonic_fp.gadgets.latest_common_ancestor import lca
 from pythonic_fp.sentinels.novalue import NoValue
 
-__all__ = [
-    'SBool',
-    'snot',
-    'TRUTH',
-    'LIE',
-]
+__all__ = ['SBool', 'TRUTH', 'LIE']
 
 _novalue = NoValue()
 
@@ -86,68 +81,62 @@ class SBool(int):
             return type(self)(False)
         return type(self)(True)
 
-    def __and__(self, other: int) -> 'SBool | Never':
+    def __and__(self, other: int) -> int:
         try:
             base_class = lca(type(self), type(other))
         except TypeError:
-            msg = (
-                f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
-            )
-            raise TypeError(msg)
+            if type(other) is bool:
+                base_class = int
+            else:
+                msg = (
+                    f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
+                )
+                raise TypeError(msg)
 
-        if self and other:
-            return SBool(base_class(1))
-        return SBool(base_class(0))
+        if issubclass(base_class, SBool):
+            if self and other:
+                return base_class(1)
+            return base_class(0)
+        else:
+            return int(self) & int(other)
 
-    def __rand__(self, other: int) -> 'SBool | Never':
-        return self.__and__(other)
-
-    def __or__(self, other: int) -> 'SBool | Never':
+    def __or__(self, other: int) -> int:
         try:
             base_class = lca(type(self), type(other))
         except TypeError:
-            msg = (
-                f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
-            )
-            raise TypeError(msg)
+            if type(other) is bool:
+                base_class = int
+            else:
+                msg = (
+                    f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
+                )
+                raise TypeError(msg)
 
-        if self or other:
-            return SBool(base_class(1))
-        return SBool(base_class(0))
+        if issubclass(base_class, SBool):
+            if self or other:
+                return base_class(1)
+            return base_class(0)
+        else:
+            return int(self) | int(other)
 
-    def __ror__(self, other: int) -> 'SBool | Never':
-        return self.__and__(other)
-
-    def __xor__(self, other: int) -> 'SBool | Never':
+    def __xor__(self, other: int) -> int:
         try:
             base_class = lca(type(self), type(other))
         except TypeError:
-            msg = (
-                f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
-            )
-            raise TypeError(msg)
+            if type(other) is bool:
+                base_class = int
+            else:
+                msg = (
+                    f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
+                )
+                raise TypeError(msg)
 
-        if self and not other or other and not self:
-            return SBool(base_class(1))
-        return SBool(base_class(0))
-
-    def __rxor__(self, other: int) -> 'SBool | Never':
-        return self.__and__(other)
-
-
-def snot(sbool: SBool) -> SBool:
-    """Return the ``SBool`` subtype of the opposite truthiness.
-
-    .. note::
-
-        Trying to use the Python ``not`` operator for this will just
-        return a ``bool``. There is no ``__not__`` dunder method
-        that will change the behavior of ``not``.
-
-    :param sbool: An ``SBool`` or ``SBool`` subtype.
-    :returns: The ``SBool`` or ``SBool`` subtype of the opposite truthiness.
-    """
-    return ~sbool
+        if issubclass(base_class, SBool):
+            if self and not other or other and not self:
+                return base_class(1)
+            return base_class(0)
+        else:
+            return int(self) ^ int(other)
 
 
 TRUTH: Final[SBool] = SBool(True)  #: The truthy singleton of type ``SBool``.

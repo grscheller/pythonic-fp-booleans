@@ -30,7 +30,6 @@ Module truthy_falsy
 
   - ``T_Bool`` instances are always truthy
   - ``F_Bool`` instances are always falsy
-
 """
 
 __author__ = 'Geoffrey R. Scheller'

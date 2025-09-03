@@ -13,7 +13,13 @@
 # limitations under the License.
 
 
-"""Flavored Booleans."""
+"""
+Flavored Booleans
+=================
+
+When different flavors of the truth are needed. Each "flavor" is
+"indexed" by a hashable value, not "subtyped" by it.
+"""
 
 import threading
 from collections.abc import Hashable
@@ -25,16 +31,16 @@ __all__ = ['FBool', 'truthy', 'falsy']
 
 @final
 class FBool(SBool):
-    """Flavored Booleans.
+    """
+    Flavored Boolean
+    ----------------
 
-    When you need to deal with different flavors of the truth.
-    Each "flavor" is "indexed" by a hashable value, not "subtyped"
-    by it.
+    When different flavors of the truth are needed. Each "flavor" is
+    "indexed" by a hashable value, not "subtyped" by it.
 
     This type can also do (non-shortcut) Boolean logic using Python
     bitwise operators. Combining ``FBool`` instances of different
     flavors in this way will just result in an ``SBool``.
-
     """
 
     _truthy: 'ClassVar[dict[Hashable, FBool]]' = {}
@@ -43,14 +49,11 @@ class FBool(SBool):
     _falsy: 'ClassVar[dict[Hashable, FBool]]' = {}
     _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(
-        cls, witness: object, flavor: Hashable
-    ) -> 'FBool':
+    def __new__(cls, witness: object, flavor: Hashable) -> 'FBool':
         """
         :param witness: Determines truthiness of the ``FBool`` instance returned.
         :param flavor: The ``flavor`` of ``FBool`` to created.
         :returns: The truthy or falsy ``FBool`` instance of a particular ``flavor``.
-
         """
         if witness:
             if flavor not in cls._truthy:
@@ -107,7 +110,7 @@ class FBool(SBool):
         return self ^ other
 
     def flavor(self) -> Hashable:
-        """
+        """t
         :returns: The flavor of the FBool.
 
         """
@@ -115,21 +118,26 @@ class FBool(SBool):
 
 
 def truthy(flavor: Hashable) -> FBool:
-    """Get the truthy ``FBool`` of a particular ``flavor``.
+    """
+    Get truthy FBool
+    ----------------
+
+    Get the truthy ``FBool`` of a particular ``flavor``.
 
     :param flavor: Hashable value to determine which singleton ``flavor`` to return.
     :returns: The truthy singleton of a particular  ``flavor``.
-
     """
     return FBool(True, flavor)
 
 
-
 def falsy(flavor: Hashable) -> FBool:
-    """Get the falsy ``FBool`` of a particular ``flavor``.
+    """
+    Get falsy FBool
+    ---------------
+
+    Get the falsy ``FBool`` of a particular ``flavor``.
 
     :param flavor: Hashable value to determine which singleton ``flavor`` to return.
     :returns: The falsy singleton of a particular  ``flavor``.
-
     """
     return FBool(False, flavor)

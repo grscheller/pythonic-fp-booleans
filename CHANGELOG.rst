@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-PyPI pythonic-fp.booleans project.
+PyPI pythonic-fp-booleans project.
 
 Semantic Versioning
 -------------------
@@ -17,21 +17,21 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
-1.1.0 - TBD
-~~~~~~~~~~~
+PyPI v1.1.0 - 2025-09-02
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Preparing for first PyPI release.
+First PyPI release.
 
 - module booleans.subtypable
 - package booleans.subtypes
 
   - module booleans.subtypes.flavored
-  - module booleans.subtypes.true_false
+  - module booleans.subtypes.truthy_falsy
 
 Needs
 
--  "pythonic-fp>=1.2.0" for gadgets
--  "pythonic-fp-sentinels>=2.0.0",
+-  "pythonic-fp>=3.0.0" for gadgets
+-  "pythonic-fp-sentinels>=2.1.0",
 
 Created pythonic-fp-boolean GitHub repo - 2025-08-06
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
