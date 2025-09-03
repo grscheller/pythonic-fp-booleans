@@ -5,10 +5,10 @@ PyPI project
 `pythonic-fp-booleans
 <https://pypi.org/project/pythonic-fp-booleans>`_.
 
-Library of simple, but useful, data structures with minimal dependencies.
+Subtypable Boolean like classes.
 
-- single item box
-- function returning iterator of its arguments
+While still compatible with Python shortcut logic, these classes can be non-shortcut logically
+composed with Python’s bitwise operators.
 
 This PyPI project is part of of the grscheller
 `pythonic-fp namespace projects
@@ -19,7 +19,7 @@ Documentation
 
 Documentation for this project is hosted on
 `GitHub Pages
-<https://grscheller.github.io/pythonic-fp/gadgets/development/build/html>`_.
+<https://grscheller.github.io/pythonic-fp/booleans/development/build/html>`_.
 
 Copyright and License
 ---------------------
