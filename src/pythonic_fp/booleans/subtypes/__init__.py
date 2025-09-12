@@ -16,20 +16,38 @@
 Module subtypes
 ===============
 
+Top level modules.
+
 Module flavored
 ---------------
 
-- when different "flavors" of the truth matter
-- the constructor ``FBool(witness: object, flavor: Hashable)`` produces invariant types
+Class FBool
+~~~~~~~~~~~
+
+For when you need to deal with different "flavors" of the truth.
+
+Each "flavor" corresponds to a hashable value. Instances of ``FBool``
+are invariant in their flavor. Best to think of the "flavor" as a
+sort of label, not an index.
 
 Module truthy_falsy
 -------------------
 
-- where truthy and falsy are typeable
-- class ``TF_Bool`` consists of two disjoint subclasses
+Class TF_Bool
+~~~~~~~~~~~~~
 
-  - ``T_Bool`` instances are always truthy
-  - ``F_Bool`` instances are always falsy
+Class whose truthy and falsy instances are typeable.
+
+Class T_Bool
+~~~~~~~~~~~~
+
+The truthy instance of a ``TF_Bool``.
+
+Class F_Bool
+~~~~~~~~~~~~
+
+The falsy instance of a ``TF_Bool``.
+
 """
 
 __author__ = 'Geoffrey R. Scheller'

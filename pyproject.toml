@@ -1,6 +1,6 @@
 [project]
 name = "pythonic-fp-booleans"
-version = "1.1.2"
+version = "1.1.3+"
 readme = "README.rst"
 requires-python = ">=3.13"
 license = { file = "LICENSE" }
@@ -20,7 +20,7 @@ classifiers = [
 ]
 dependencies = [
   "pythonic-fp-gadgets>=3.0.1",
-  "pythonic-fp-sentinels>=2.1.1",
+  "pythonic-fp-sentinels>=2.1.0",
 ]
 dynamic = ["description"]
 

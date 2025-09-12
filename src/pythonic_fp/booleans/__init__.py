@@ -26,7 +26,9 @@ Covariant class hierarchy
 .. graphviz::
 
     digraph Booleans {
-        bgcolor="deepskyblue";
+        bgcolor="#957fb8";
+        node [style=filled, fillcolor="#181616", fontcolor="#dcd7ba"];
+        edge [color="#181616", fontcolor="#dcd7ba"];
         int -> bool;
         int -> SBool;
         SBool -> "FBool(h1)";
@@ -64,8 +66,10 @@ of the two arguments.
    when applied against an ``SBool`` and objects not descended
    from ``int``.
 
-Classes
--------
+Classes & Modules
+-----------------
+
+Top level classes and modules.
 
 Class SBool
 ~~~~~~~~~~~
@@ -75,23 +79,11 @@ Base of the hierarchy.
 Like Python's built-in ``bool``, ``SBool`` is a subclass of ``int``,
 unlike ``bool``, class ``SBool`` can be further subclassed.
 
-Class FBool
-~~~~~~~~~~~
+Module subtypable
+~~~~~~~~~~~~~~~~~
 
-For when you need to deal with different "flavors" of the truth.
+Two examples of ``SBool`` subtypes.
 
-Each "flavor" corresponds to a hashable value. Instances of ``FBool``
-are invariant in their flavor. Best to think of the "flavor" as an
-index.
-
-Class TF_Bool
-~~~~~~~~~~~~~
-
-Class ``TF_Bool`` consists of just two disjoint subclasses, each one
-a singleton.
-
-- class ``T_Bool`` is the  always truthy ``TF_Bool`` subtype
-- class ``F_Bool`` is the  always falsy ``TF_Bool`` subtype
 """
 
 __author__ = 'Geoffrey R. Scheller'
