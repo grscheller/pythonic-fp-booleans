@@ -23,12 +23,12 @@ Decided to flatten directory structure.
 
 - will help keep Sphinx documentation more homogeneous across repos.
 
-PyPI v1.1.3 - 2025-09-03
+PyPI v1.1.3 - 2025-09-09
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Updated docstrings for Sphinx documentation.
 
-PyPI v1.1.2 - 2025-09-03
+PyPI v1.1.2 - 2025-09-09
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Fixed pyproject.toml dependency issues.
