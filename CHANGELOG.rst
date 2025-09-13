@@ -17,6 +17,22 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
+PyPI v2.0.0 - TBD
+
+Decided to flatten directory structure.
+
+- will help keep Sphinx documentation more homogeneous across repos.
+
+PyPI v1.1.3 - 2025-09-03
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Updated docstrings for Sphinx documentation.
+
+PyPI v1.1.2 - 2025-09-03
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixed pyproject.toml dependency issues.
+
 PyPI v1.1.1 - 2025-09-03
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
