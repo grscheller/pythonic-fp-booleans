@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypes.flavored import FBool, truthy, falsy
+from pythonic_fp.booleans.flavored import FBool, truthy, falsy
 from pythonic_fp.booleans.subtypable import TRUTH, LIE
 
 t0_1 = FBool(1 == 1, 0)

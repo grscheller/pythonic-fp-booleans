@@ -66,23 +66,37 @@ of the two arguments.
    when applied against an ``SBool`` and objects not descended
    from ``int``.
 
-Classes & Modules
------------------
+Booleans
+--------
 
-Top level classes and modules.
+The classes making up this hierarchy.
 
-Class SBool
-~~~~~~~~~~~
+Subtypable Bool
+~~~~~~~~~~~~~~~
 
 Base of the hierarchy.
 
 Like Python's built-in ``bool``, ``SBool`` is a subclass of ``int``,
 unlike ``bool``, class ``SBool`` can be further subclassed.
 
-Module subtypable
-~~~~~~~~~~~~~~~~~
+Flavored Bool
+~~~~~~~~~~~~~
 
-Two examples of ``SBool`` subtypes.
+For when you need to deal with different "flavors" of the truth.
+
+Each "flavor" corresponds to a hashable value. Instances of ``FBool``
+are invariant in their flavor. Best to think of the "flavor" as a
+sort of label, not an index.
+
+Truthy-Falsy Bools
+~~~~~~~~~~~~~~~~~~
+
+Class whose truthy and falsy values are distinct subtypes.
+
+- class ``TF_Bool``
+
+  - class ``T_Bool`` is the truthy instance of ``TF_Bool``
+  - class ``F_Bool`` is the falsy instance of ``TF_Bool``
 
 """
 

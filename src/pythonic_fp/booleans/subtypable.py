@@ -32,7 +32,7 @@ class SBool(int):
     Like Python's built in bool, class SBool is a subclass of int.
     Unlike bool, this version can be further subclassed. It can be
     used with Python ``and`` and ``or`` short-cut logic. The ``not``
-    operator will just return a ``bool``. Use the ``snot`` function
+    operator will just return a ``bool``. Use the bitwise ``~`` operator
     to return an ``SBool`` or ``SBool`` subclass.
 
     This type and its subtypes can also do (non-shortcut) Boolean logic

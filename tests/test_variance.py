@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypes.truthy_falsy import TF_Bool, TF_Boolean, T_Bool, F_Bool, ALWAYS, NEVER
-from pythonic_fp.booleans.subtypes.flavored import FBool, truthy, falsy
+from pythonic_fp.booleans.truthy_falsy import TF_Bool, TF_Boolean, T_Bool, F_Bool, ALWAYS, NEVER
+from pythonic_fp.booleans.flavored import FBool, truthy, falsy
 from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
 
 class TestBoolWithInt():

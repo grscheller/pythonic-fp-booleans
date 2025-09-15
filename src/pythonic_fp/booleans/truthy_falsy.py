@@ -24,7 +24,7 @@ import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, final
 from pythonic_fp.sentinels.novalue import NoValue
-from ..subtypable import SBool
+from .subtypable import SBool
 
 __all__ = [
     'TF_Bool',

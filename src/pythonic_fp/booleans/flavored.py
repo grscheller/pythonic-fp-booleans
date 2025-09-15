@@ -24,7 +24,7 @@ When different flavors of the truth are needed. Each "flavor" is
 import threading
 from collections.abc import Hashable
 from typing import ClassVar, final
-from ..subtypable import SBool
+from .subtypable import SBool
 
 __all__ = ['FBool', 'truthy', 'falsy']
 
@@ -42,12 +42,11 @@ class FBool(SBool):
     bitwise operators. Combining ``FBool`` instances of different
     flavors in this way will just result in an ``SBool``.
     """
+    _falsy_dict: 'ClassVar[dict[Hashable, FBool]]' = {}
+    _falsy_dict_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    _truthy: 'ClassVar[dict[Hashable, FBool]]' = {}
-    _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
-
-    _falsy: 'ClassVar[dict[Hashable, FBool]]' = {}
-    _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
+    _truthy_dict: 'ClassVar[dict[Hashable, FBool]]' = {}
+    _truthy_dict_lock: ClassVar[threading.Lock] = threading.Lock()
 
     def __new__(cls, witness: object, flavor: Hashable) -> 'FBool':
         """
@@ -56,17 +55,17 @@ class FBool(SBool):
         :returns: The truthy or falsy ``FBool`` instance of a particular ``flavor``.
         """
         if witness:
-            if flavor not in cls._truthy:
+            if flavor not in cls._truthy_dict:
                 with cls._truthy_lock:
-                    if flavor not in cls._truthy:
-                        cls._truthy[flavor] = super(SBool, cls).__new__(cls, True)
-            return cls._truthy[flavor]
+                    if flavor not in cls._truthy_dict:
+                        cls._truthy_dict[flavor] = super(SBool, cls).__new__(cls, True)
+            return cls._truthy_dict[flavor]
         else:
-            if flavor not in cls._falsy:
-                with cls._falsy_lock:
-                    if flavor not in cls._falsy:
-                        cls._falsy[flavor] = super(SBool, cls).__new__(cls, False)
-            return cls._falsy[flavor]
+            if flavor not in cls._falsy_dict:
+                with cls._falsy_dict_lock:
+                    if flavor not in cls._falsy_dict:
+                        cls._falsy_dict[flavor] = super(SBool, cls).__new__(cls, False)
+            return cls._falsy_dict[flavor]
 
     def __init__(self, witness: object, flavor: Hashable) -> None:
         self._flavor = flavor
