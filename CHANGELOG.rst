@@ -17,31 +17,33 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
-PyPI v2.0.0 - TBD
+PyPI 2.0.0 - TBD
+~~~~~~~~~~~~~~~~
 
-Decided to flatten directory structure.
+- PyPI documentation link now goes to root, not releases
+- decided to flatten directory structure
 
-- will help keep Sphinx documentation more homogeneous across repos.
+  - will help Sphinx docs be more homogeneous across repos
 
-PyPI v1.1.3 - 2025-09-09
-~~~~~~~~~~~~~~~~~~~~~~~~
+PyPI 1.1.3 - 2025-09-09
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Updated docstrings for Sphinx documentation.
 
-PyPI v1.1.2 - 2025-09-09
-~~~~~~~~~~~~~~~~~~~~~~~~
+PyPI 1.1.2 - 2025-09-09
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Fixed pyproject.toml dependency issues.
 
-PyPI v1.1.1 - 2025-09-03
-~~~~~~~~~~~~~~~~~~~~~~~~
+PyPI 1.1.1 - 2025-09-03
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Only change was to give README.rst a final edit. Missed this on
 the v1.1.0 release.
 
 
-PyPI v1.1.0 - 2025-09-02
-~~~~~~~~~~~~~~~~~~~~~~~~
+PyPI 1.1.0 - 2025-09-02
+~~~~~~~~~~~~~~~~~~~~~~~
 
 First PyPI release as pythonic-fp-booleans.
 
@@ -56,7 +58,8 @@ Needs
 -  "pythonic-fp>=3.0.0" for gadgets
 -  "pythonic-fp-sentinels>=2.1.0",
 
-Created pythonic-fp-boolean GitHub repo - 2025-08-06
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Created pythonic-fp-boolean repo - 2025-08-06
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Moved pythonic_fp.singletons.sbool -> pythonic_fp.booleans.sbool
+- created grscheller/pythonic-fp-boolean GitHub repo
+- moved pythonic_fp.singletons.sbool to pythonic_fp.booleans.sbool
