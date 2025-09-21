@@ -109,9 +109,8 @@ class FBool(SBool):
         return self ^ other
 
     def flavor(self) -> Hashable:
-        """t
+        """
         :returns: The flavor of the FBool.
-
         """
         return self._flavor
 

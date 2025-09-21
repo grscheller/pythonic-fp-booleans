@@ -19,7 +19,7 @@ import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, overload
 from pythonic_fp.gadgets.latest_common_ancestor import lca
-from pythonic_fp.sentinels.novalue import NoValue
+from pythonic_fp.gadgets.sentinels.novalue import NoValue
 
 __all__ = ['SBool', 'TRUTH', 'LIE']
 

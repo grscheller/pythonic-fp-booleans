@@ -17,13 +17,13 @@
 Truthy-Falsy Booleans
 ---------------------
 
-
-Booleans whose "truthy" and "falsy" instances are distinct subtypes."""
+Booleans whose "truthy" and "falsy" instances are distinct subtypes.
+"""
 
 import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, final
-from pythonic_fp.sentinels.novalue import NoValue
+from pythonic_fp.gadgets.sentinels.novalue import NoValue
 from .subtypable import SBool
 
 __all__ = [
