@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Subtypable Booleans.
+"""Subtypable Boolean.
 
 Like Python's built in bool, class ``SBool`` is a subclass of int.
 Unlike bool, this version can be further subclassed.
@@ -40,9 +40,9 @@ using Python bitwise operators.
     least upper bound in the inheritance graph of the classes of
     the two arguments.
 
-While compatible with Python ``and``,``or`` short-cut logic. The ``not``
-operator always returns a ``bool``. Use the bitwise ``~`` operator
-to return an opposite ``SBool`` or opposite ``SBool`` subclass.
+While compatible with Python  short-cut logic. Unfortunately, the
+``not`` operator always returns a ``bool``. Use the bitwise ``~``
+operator to return an opposite ``SBool`` or subclass.
 
 .. warning::
 
