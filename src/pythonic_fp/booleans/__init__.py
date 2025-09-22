@@ -17,8 +17,7 @@ Subtypable Boolean like classes
 ===============================
 
 While still compatible with Python shortcut logic, these classes can
-be non-shortcut logically composed with Python's bitwise operators.
-These classes are implemented with the Singleton Pattern.
+also be non-shortcut logically composed with Python's bitwise operators.
 
 Covariant class hierarchy
 -------------------------
@@ -38,66 +37,6 @@ Covariant class hierarchy
         TF_Bool -> T_Bool;
         TF_Bool -> F_Bool;
     }
-
-Contravariant non-shortcut "bitwise" operators
-----------------------------------------------
-
-+-------------------+--------+------------+
-| Boolean operation | symbol | dunder     |
-+===================+========+============+
-|       not         | ``~``  | __invert__ |
-+-------------------+--------+------------+
-|       and         | ``&``  | __and__    |
-+-------------------+--------+------------+
-|       or          | ``|``  | __or__     |
-+-------------------+--------+------------+
-|       xor         | ``^``  | __xor__    |
-+-------------------+--------+------------+
-
-These operators are contravariant, that is they will return
-the instance of the latest common ancestor of their arguments.
-More specifically, the instance returned will have the type
-of the least upper bound in the inheritance graph of the classes
-of the two arguments.
-
-.. warning::
-
-   These "bitwise" operators could raise ``TypeError`` exceptions
-   when applied against an ``SBool`` and objects not descended
-   from ``int``.
-
-Booleans
---------
-
-The classes making up this hierarchy.
-
-Subtypable Bool
-~~~~~~~~~~~~~~~
-
-Base of the hierarchy.
-
-Like Python's built-in ``bool``, ``SBool`` is a subclass of ``int``,
-unlike ``bool``, class ``SBool`` can be further subclassed.
-
-Flavored Bool
-~~~~~~~~~~~~~
-
-For when you need to deal with different "flavors" of the truth.
-
-Each "flavor" corresponds to a hashable value. Instances of ``FBool``
-are invariant in their flavor. Best to think of the "flavor" as a
-sort of label, not an index.
-
-Truthy-Falsy Bools
-~~~~~~~~~~~~~~~~~~
-
-Class whose truthy and falsy values are distinct subtypes.
-
-- class ``TF_Bool``
-
-  - class ``T_Bool`` is the truthy instance of ``TF_Bool``
-  - class ``F_Bool`` is the falsy instance of ``TF_Bool``
-
 """
 
 __author__ = 'Geoffrey R. Scheller'

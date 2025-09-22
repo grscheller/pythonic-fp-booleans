@@ -12,12 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
-Truthy-Falsy Booleans
----------------------
+Truthy-Falsy Boolean
+--------------------
 
-Booleans whose "truthy" and "falsy" instances are distinct subtypes.
+Subclass of ``SBool`` whose truthy values and falsy values are
+different singleton subtypes.
+
+This type can also do (non-shortcut) Boolean logic using Python
+bitwise operators.
+
+Truthy TF_Bool
+~~~~~~~~~~~~~~
+
+The subtype of ``TF_Bool`` which is always truthy.
+
+Falsy TF_Bool
+~~~~~~~~~~~~~
+
+The subtype of ``TF_Bool`` which is always falsy.
 """
 
 import threading
@@ -39,17 +52,6 @@ _novalue = NoValue()
 
 
 class TF_Bool(SBool):
-    """
-    Truthy-Falsy Boolean
-    --------------------
-
-    Subclass of ``SBool`` whose truthy values and falsy values are
-    different singleton subtypes.
-
-    This type can also do (non-shortcut) Boolean logic using Python
-    bitwise operators.
-    """
-
     def __new__(cls, witness: object, flavor: Hashable = NoValue()) -> 'TF_Bool':
         """
         :param witness: Determines which subtype, ``T_Bool`` or ``F_Bool`` is returned.
@@ -94,13 +96,6 @@ class TF_Bool(SBool):
 
 @final
 class T_Bool(TF_Bool):
-    """
-    Truthy TF_Bool
-    --------------
-
-    The subtype of ``TF_Bool`` which is always truthy.
-    """
-
     _truthy: 'ClassVar[T_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
@@ -126,13 +121,6 @@ class T_Bool(TF_Bool):
 
 @final
 class F_Bool(TF_Bool):
-    """
-    Falsy TF_Bool
-    -------------
-
-    The subtype of ``TF_Bool`` which is always falsy.
-    """
-
     _falsy: 'ClassVar[F_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
