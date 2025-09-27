@@ -13,14 +13,8 @@
 # limitations under the License.
 
 """
-Subtypable Boolean like classes
-===============================
-
-While still compatible with Python shortcut logic, these classes can
-also be non-shortcut logically composed with Python's bitwise operators.
-
-Covariant class hierarchy
--------------------------
+Subtypable Boolean Class Hierarchy
+==================================
 
 .. graphviz::
 
@@ -37,6 +31,10 @@ Covariant class hierarchy
         TF_Bool -> T_Bool;
         TF_Bool -> F_Bool;
     }
+
+While still compatible with Python shortcut logic, ``SBool`` and its
+subclasses can be non-shortcut logically composed with Python's bitwise
+operators.
 """
 
 __author__ = 'Geoffrey R. Scheller'

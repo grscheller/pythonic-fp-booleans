@@ -13,22 +13,23 @@
 # limitations under the License.
 
 """
-Truthy-Falsy Boolean
---------------------
+**Class TF_Bool**
 
 Subclass of ``SBool`` whose truthy values and falsy values are
-different singleton subtypes.
+different distinct singleton subtypes.
 
 This type can also do (non-shortcut) Boolean logic using Python
 bitwise operators.
 
-Truthy TF_Bool
-~~~~~~~~~~~~~~
+----
+
+**Class T_Bool**
 
 The subtype of ``TF_Bool`` which is always truthy.
 
-Falsy TF_Bool
-~~~~~~~~~~~~~
+----
+
+**Class F_Bool**
 
 The subtype of ``TF_Bool`` which is always falsy.
 """
@@ -56,7 +57,7 @@ class TF_Bool(SBool):
         """
         :param witness: Determines which subtype, ``T_Bool`` or ``F_Bool`` is returned.
         :param flavor: Ignored parameter, only two flavors, one truthy and one falsy.
-        :returns: either The singleton truthy or singleton falsy subtypes.
+        :returns: Either The singleton truthy or singleton falsy subtypes.
         """
         if witness:
             return T_Bool()

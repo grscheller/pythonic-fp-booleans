@@ -13,25 +13,28 @@
 # limitations under the License.
 
 """
-Flavored Boolean
-----------------
+**Class F_Bool.**
 
-When different flavors of the truth are needed. Each "flavor" of an
-``FBool`` is "indexed" by a hashable value, not "subtyped" by it.
+When different flavors of the truth matter. Each ``FBool`` is
+an ``SBool`` subtype corresponds to a hashable value
+called its flavor.
 
-This type can also do (non-shortcut) Boolean logic using Python
-bitwise operators. Combining ``FBool`` instances of different
-flavors in this way will just result in an ``SBool``.
+.. warning::
+    
+    Combining ``FBool`` instances of different flavors
+    with bitwise operators will just result in an ``SBool``.
 
-Function truthy(flavor: Hashable)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----
 
-Get the truthy ``FBool`` of a particular ``flavor``.
+**Function truthy(flavor: Hashable)**
 
-Function falsy(flavor: Hashable)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Returns the truthy ``FBool`` of a particular ``flavor``.
 
-Get the falsy ``FBool`` of a particular ``flavor``.
+----
+
+**Function falsy(flavor: Hashable)**
+
+Returns the falsy ``FBool`` of a particular ``flavor``.
 """
 
 import threading
@@ -72,7 +75,6 @@ class FBool(SBool):
     def __init__(self, witness: object, flavor: Hashable) -> None:
         self._flavor = flavor
 
-    # override in derived classes
     def __repr__(self) -> str:
         if self:
             return f'FBool(True, {repr(self._flavor)})'

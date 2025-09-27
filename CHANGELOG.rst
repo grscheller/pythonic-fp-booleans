@@ -17,18 +17,29 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
-PyPI 2.0.0 - TBD
-~~~~~~~~~~~~~~~~
+PyPI 2.0.0 - 2025-09-27
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Released to get the next consistent set of Pythonic FP out (v3.2.0) out.
 
 - PyPI documentation link now goes to root, not releases
 - decided to flatten directory structure
 
+  - makes more sense from an end user perspective
   - will help Sphinx docs be more homogeneous across repos
 
-PyPI 1.1.3 - 2025-09-09
-~~~~~~~~~~~~~~~~~~~~~~~
+Warning: API not fully locked down, major version number change may be needed.
 
-Updated docstrings for Sphinx documentation.
+TODO:
+
+- bitwise operators not symmetric when used with ``SBool`` types and ``int`` or ``bool``
+
+  - may need to define reversed bit-wise operators
+
+- ``TS_Boolean`` has a code smell to it
+
+  - may be just a hack to get get around sub-optimal type usage
+  - Using ``TS_Bool`` as a variable type may be enough 
 
 PyPI 1.1.2 - 2025-09-09
 ~~~~~~~~~~~~~~~~~~~~~~~
