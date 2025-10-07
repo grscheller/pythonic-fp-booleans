@@ -35,6 +35,7 @@ Subtypable Boolean Class Hierarchy
 While still compatible with Python shortcut logic, ``SBool`` and its
 subclasses can be non-shortcut logically composed with Python's bitwise
 operators.
+
 """
 
 __author__ = 'Geoffrey R. Scheller'
