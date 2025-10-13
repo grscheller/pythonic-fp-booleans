@@ -56,7 +56,7 @@ operator to return an opposite ``SBool`` class or subclass.
 import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, overload
-from pythonic_fp.gadgets.latest_common_ancestor import lca
+from pythonic_fp.gadgets import first_common_ancestor as fca
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
 
 __all__ = ['SBool', 'TRUTH', 'LIE']
@@ -110,7 +110,7 @@ class SBool(int):
 
     def __and__(self, other: int) -> int:
         try:
-            base_class = lca(type(self), type(other))
+            base_class = fca(type(self), type(other))
         except TypeError:
             if type(other) is bool:
                 base_class = int
@@ -127,7 +127,7 @@ class SBool(int):
 
     def __or__(self, other: int) -> int:
         try:
-            base_class = lca(type(self), type(other))
+            base_class = fca(type(self), type(other))
         except TypeError:
             if type(other) is bool:
                 base_class = int
@@ -144,7 +144,7 @@ class SBool(int):
 
     def __xor__(self, other: int) -> int:
         try:
-            base_class = lca(type(self), type(other))
+            base_class = fca(type(self), type(other))
         except TypeError:
             if type(other) is bool:
                 base_class = int

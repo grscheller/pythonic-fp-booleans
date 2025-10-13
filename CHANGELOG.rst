@@ -17,6 +17,12 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
+PyPI 2.0.1 - TBD
+~~~~~~~~~~~~~~~~
+
+Now requires pythonic-fp-gadgets 4.0.0 to be installed.
+
+
 PyPI 2.0.0 - 2025-09-27
 ~~~~~~~~~~~~~~~~~~~~~~~
 
