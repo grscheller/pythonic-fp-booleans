@@ -7,8 +7,8 @@ PyPI project
 
 Subtypable Boolean like classes.
 
-While still compatible with Python shortcut logic, these classes can be non-shortcut logically
-composed with Python’s bitwise operators.
+While still compatible with Python shortcut logic, these singleton classes
+can be non-shortcut logically composed with Python’s bitwise operators.
 
 Part of the
 `pythonic-fp
@@ -25,5 +25,5 @@ Documentation for this project is hosted on
 Copyright and License
 ---------------------
 
-Copyright (c) 2025 Geoffrey R. Scheller. Licensed under the Apache
+Copyright (c) 2025-2026 Geoffrey R. Scheller. Licensed under the Apache
 License, Version 2.0. See the LICENSE file for details.

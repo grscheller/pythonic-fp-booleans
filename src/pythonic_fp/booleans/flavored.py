@@ -13,28 +13,29 @@
 # limitations under the License.
 
 """
-**Class F_Bool.**
+.. admonition:: Class Favored Booleans: ``F_Bool``.
 
-When different flavors of the truth matter. Each ``FBool`` is
-an ``SBool`` subtype corresponds to a hashable value
-called its flavor.
+    When different flavors of the truth matter. Each ``FBool`` is
+    an ``SBool`` subtype corresponds to a hashable value
+    called its flavor.
 
-.. warning::
-    
-    Combining ``FBool`` instances of different flavors
-    with bitwise operators will just result in an ``SBool``.
-
-----
-
-**Function truthy(flavor: Hashable)**
-
-Returns the truthy ``FBool`` of a particular ``flavor``.
+    .. warning::
+        
+        Combining ``FBool`` instances of different flavors
+        with bitwise operators will just result in an ``SBool``.
 
 ----
 
-**Function falsy(flavor: Hashable)**
+.. admonition:: Function truthy: ``truthy(flavor: Hashable)``.
 
-Returns the falsy ``FBool`` of a particular ``flavor``.
+    Returns the truthy singleton ``FBool`` of a particular ``flavor``.
+
+----
+
+.. admonition:: Function falsy: ``falsy(flavor: Hashable)``.
+
+    Returns the falsy singleton ``FBool`` of a particular ``flavor``.
+
 """
 
 import threading
