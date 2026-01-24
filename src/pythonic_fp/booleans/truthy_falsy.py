@@ -13,25 +13,27 @@
 # limitations under the License.
 
 """
-**Class TF_Bool**
+.. admonition:: Truthy-Falsy Booleans
 
-Subclass of ``SBool`` whose truthy values and falsy values are
-different distinct singleton subtypes.
+    A Boolean implementation whose distinct truthy and falsy
+    values are distinct singleton subclasses, not just
+    distinct singleton values.
 
-This type can also do (non-shortcut) Boolean logic using Python
-bitwise operators.
+    A subtype of ``SBool``.
 
-----
+    .. tip::
 
-**Class T_Bool**
+        Logically combine using Python's bitwise operators.
 
-The subtype of ``TF_Bool`` which is always truthy.
+        .. warning::
 
-----
+            Logically combining using Pythons's shortcut ``and``,
+            ``or``, and ``not`` builtins will just result in a
+            value of type ``bool``.
 
-**Class F_Bool**
+        Otherwise, these datastructures are completely compatible
+        with Python lazy evaluation.
 
-The subtype of ``TF_Bool`` which is always falsy.
 """
 
 import threading
@@ -58,6 +60,7 @@ class TF_Bool(SBool):
         :param witness: Determines which subtype, ``T_Bool`` or ``F_Bool`` is returned.
         :param flavor: Ignored parameter, only two flavors, one truthy and one falsy.
         :returns: Either The singleton truthy or singleton falsy subtypes.
+
         """
         if witness:
             return T_Bool()
@@ -97,6 +100,12 @@ class TF_Bool(SBool):
 
 @final
 class T_Bool(TF_Bool):
+    """
+    .. admonition:: The subtype of ``TF_Bool`` which is always truthy
+
+        A distinct type from F_Bool. A singleton value.
+
+    """
     _truthy: 'ClassVar[T_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
@@ -122,6 +131,12 @@ class T_Bool(TF_Bool):
 
 @final
 class F_Bool(TF_Bool):
+    """
+    .. admonition:: The subtype of ``TF_Bool`` which is always falsy.
+
+        A distinct type from T_Bool. A singleton value.
+
+    """
     _falsy: 'ClassVar[F_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
@@ -132,6 +147,7 @@ class F_Bool(TF_Bool):
         :param witness: Parameter ignored, an ``F_Bool`` is always falsy.
         :param flavor: Parameter ignored, only one falsy "flavor".
         :returns: The falsy ``F_Bool`` singleton instance.
+
         """
         if cls._falsy is _novalue:
             with cls._lock:

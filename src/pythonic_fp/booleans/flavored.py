@@ -13,14 +13,14 @@
 # limitations under the License.
 
 """
-.. admonition:: Class Favored Booleans: ``F_Bool``.
+.. admonition:: Class Favored Booleans
 
     When different flavors of the truth matter. Each ``FBool`` is
     an ``SBool`` subtype corresponds to a hashable value
     called its flavor.
 
     .. warning::
-        
+
         Combining ``FBool`` instances of different flavors
         with bitwise operators will just result in an ``SBool``.
 
@@ -59,10 +59,11 @@ class FBool(SBool):
         :param witness: Determines truthiness of the ``FBool`` instance returned.
         :param flavor: The ``flavor`` of ``FBool`` to created.
         :returns: The truthy or falsy ``FBool`` instance of a particular ``flavor``.
+
         """
         if witness:
             if flavor not in cls._truthy_dict:
-                with cls._truthy_lock:
+                with cls._truthy_dict_lock:
                     if flavor not in cls._truthy_dict:
                         cls._truthy_dict[flavor] = super(SBool, cls).__new__(cls, True)
             return cls._truthy_dict[flavor]
@@ -116,6 +117,7 @@ class FBool(SBool):
     def flavor(self) -> Hashable:
         """
         :returns: The flavor of the FBool.
+
         """
         return self._flavor
 
@@ -124,6 +126,7 @@ def truthy(flavor: Hashable) -> FBool:
     """
     :param flavor: Hashable value to determine which singleton ``flavor`` to return.
     :returns: The truthy singleton of a particular ``flavor``.
+
     """
     return FBool(True, flavor)
 
@@ -132,5 +135,6 @@ def falsy(flavor: Hashable) -> FBool:
     """
     :param flavor: Hashable value to determine which singleton ``flavor`` to return.
     :returns: The falsy singleton of a particular ``flavor``.
+
     """
     return FBool(False, flavor)
