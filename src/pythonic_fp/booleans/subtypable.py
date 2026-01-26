@@ -13,25 +13,31 @@
 # limitations under the License.
 
 """
-**Subtypable Boolean.**
+.. admonition:: Subtypable Boolean
 
-Like Python's built in bool, class ``SBool`` is a subclass of int.
-Unlike bool, this version can be further subclassed.
+    Like Python's built in bool, class ``SBool`` is a subclass of int.
+    Unlike bool, this version can be further subclassed.
 
-This type and its subtypes can also do (non-shortcut) Boolean logic
-using Python bitwise operators.
+    This type and its subtypes can also do (non-shortcut) Boolean logic
+    using Python bitwise operators.
 
-+-------------------+--------+------------+
-| Boolean operation | symbol | dunder     |
-+===================+========+============+
-|       not         | ``~``  | __invert__ |
-+-------------------+--------+------------+
-|       and         | ``&``  | __and__    |
-+-------------------+--------+------------+
-|       or          | ``|``  | __or__     |
-+-------------------+--------+------------+
-|       xor         | ``^``  | __xor__    |
-+-------------------+--------+------------+
+    +-------------------+--------+------------+
+    | Boolean operation | symbol | dunder     |
+    +===================+========+============+
+    |       not         | ``~``  | __invert__ |
+    +-------------------+--------+------------+
+    |       and         | ``&``  | __and__    |
+    +-------------------+--------+------------+
+    |       or          | ``|``  | __or__     |
+    +-------------------+--------+------------+
+    |       xor         | ``^``  | __xor__    |
+    +-------------------+--------+------------+
+
+
+    While compatible with Python  short-cut logic. Unfortunately,
+    the ``not`` operator always returns a ``bool``. Use the
+    bitwise ``~`` operator to return an opposite ``SBool``
+    class or subclass.
 
 .. note::
 
@@ -40,10 +46,6 @@ using Python bitwise operators.
     specifically, the instance returned will have the type of the
     least upper bound in the inheritance graph of the classes of
     the two arguments.
-
-While compatible with Python  short-cut logic. Unfortunately, the
-``not`` operator always returns a ``bool``. Use the bitwise ``~``
-operator to return an opposite ``SBool`` class or subclass.
 
 .. warning::
 
