@@ -1,13 +1,13 @@
-pythonic-fp-circulararray
--------------------------
+pythonic-fp-booleans
+--------------------
 
 Project
-`pythonic-fp-circulararray <https://pypi.org/project/pythonic-fp-circulararray/>`_
+`pythonic-fp-booleans <https://pypi.org/project/pythonic-fp-booleans/>`_
 one of the
 `Pythonic FP <https://grscheller.github.io/pythonic-fp/>`_
 PyPI projects.
 
-**Proposed PyPI 6.0.3 release**
+**Proposed PyPI 3.0.1 release**
 
 .. toctree::
     :caption: Overview
