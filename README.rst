@@ -12,7 +12,7 @@ can be non-shortcut logically composed with Python’s bitwise operators.
 
 Part of the
 `pythonic-fp
-<https://grscheller.github.io/pythonic-fp>`_
+<https://grscheller.github.io/pythonic-fp/homepage/html/>`_
 PyPI projects.
 
 Documentation
