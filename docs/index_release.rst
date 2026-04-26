@@ -1,5 +1,5 @@
 pythonic-fp-booleans
---------------------
+====================
 
 Project
 `pythonic-fp-booleans <https://pypi.org/project/pythonic-fp-booleans/>`_

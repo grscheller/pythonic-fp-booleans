@@ -17,31 +17,53 @@ TEMPLATEDIR   = source/_templates
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
 
-Makefile:
+setup_init: Makefile
 	mkdir -p $(STATICDIR) $(TEMPLATEDIR)
 
-# Build development labeled html docs.
-devel: Makefile
+setup_devel: setup_init
 	rm -rf "$(BUILDDIR)"/development
-	rm -f "$(SOURCEDIR)"/index.rst "$(SOURCEDIR)"/conf.py
 	cp index_devel.rst "$(SOURCEDIR)"/index.rst
 	cp conf_devel.py "$(SOURCEDIR)"/conf.py
+
+setup_release: setup_init
+	rm -rf "$(BUILDDIR)"/release
+	cp index_release.rst "$(SOURCEDIR)"/index.rst
+	cp conf_release.py "$(SOURCEDIR)"/conf.py
+
+setup_custom: setup_init
+	rm -rf "$(BUILDDIR)"/custom
+	cp index_custom.rst "$(SOURCEDIR)"/index.rst
+	cp conf_custom.py "$(SOURCEDIR)"/conf.py
+
+clean_source: Makefile
+	@rm -f "$(SOURCEDIR)"/conf.py "$(SOURCEDIR)"/index.rst
+
+clean_devel: clean_source
+	@rm -rf "$(BUILDDIR)"/development
+
+clean_release: clean_source
+	@rm -rf "$(BUILDDIR)"/release
+
+clean_custom: clean_source
+	@rm -rf "$(BUILDDIR)"/custom
+
+clean: clean_devel clean_release clean_custom
+	@echo Removed all doc build artifacts.
+
+.PHONY: help Makefile
+.PHONY: setup_init setup_devel setup_release
+.PHONY: devel release
+.PHONY: clean_source clean_devel clean_release clean
+
+# Build development labeled html docs.
+devel: setup_devel
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)"/development $(SPHINXOPTS)
 
 # Build release labeled html docs.
-release: Makefile
-	rm -rf "$(BUILDDIR)"/release
-	rm -f "$(SOURCEDIR)"/index.rst "$(SOURCEDIR)"/conf.py
-	cp index_release.rst "$(SOURCEDIR)"/index.rst
-	cp conf_release.py "$(SOURCEDIR)"/conf.py
+release: setup_release
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)"/release $(SPHINXOPTS)
 
-.PHONY: help Makefile devel release
-
-# Catch-all target: route all unknown targets to Sphinx, build development docs
-%: Makefile
-	rm -rf "$(BUILDDIR)"/development
-	rm -f "$(SOURCEDIR)"/index.rst "$(SOURCEDIR)"/conf.py
-	cp index_devel.rst "$(SOURCEDIR)"/index.rst
-	cp conf_devel.py "$(SOURCEDIR)"/conf.py
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)"/development $(SPHINXOPTS)
+# Catch-all target: route all unknown targets to Sphinx and save to $(BUILDDIR)/custom.
+# Use conf_custom.py and index_custom.html to configure.
+%: Makefile setup_custom
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)"/custom $(SPHINXOPTS)

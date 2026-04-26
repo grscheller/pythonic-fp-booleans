@@ -23,16 +23,19 @@
 
     .. tip::
 
-        Logically combine using Python's bitwise operators.
+        Logically combine these using Python's bitwise operators.
 
-        .. warning::
+    .. warning::
 
-            Logically combining using Pythons's shortcut ``and``,
-            ``or``, and ``not`` builtins will just result in a
-            value of type ``bool``.
+        Although these datastructures are completely compatible
+        with Python shortcut evaluation, care needs to be taken when
+        using them with the ``and``, ``or``, and ``not`` builtins.
 
-        Otherwise, these datastructures are completely compatible
-        with Python lazy evaluation.
+        For example, ``~ALWAYS is NEVER`` but ``not ALWAYS is False``
+        because ``ALWAYS`` is truthy.
+
+        Similarly, ``(ALWAYS and False) is False`` while
+        ``(ALWAYS or False) is ALWAYS``.
 
 """
 
