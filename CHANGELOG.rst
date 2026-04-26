@@ -17,6 +17,11 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
+PyPI 3.0.2 - 2025-04-25
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Corrected locations of project links.
+
 PyPI 3.0.1 - 2025-12-02
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -25,6 +30,9 @@ building the current release documentation and the latest development
 documentation on GitHub for display on the project's GitHub Pages.
 
 Substantial documentation improvements.
+
+PyPI 3.0.4 - 2025-12-02
+~~~~~~~~~~~~~~~~~~~~~~~
 
 PyPI 3.0.0 - 2025-12-02
 ~~~~~~~~~~~~~~~~~~~~~~~

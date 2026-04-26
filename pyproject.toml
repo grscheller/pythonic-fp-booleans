@@ -1,6 +1,6 @@
 [project]
 name = "pythonic-fp-booleans"
-version = "3.0.1"
+version = "3.0.2"
 readme = "README.rst"
 requires-python = ">=3.13"
 license = { file = "LICENSE" }
@@ -25,8 +25,8 @@ dynamic = ["description"]
 
 [project.urls]
 Changelog = "https://github.com/grscheller/pythonic-fp-booleans/blob/main/CHANGELOG.rst"
-Documentation = "https://grscheller.github.io/pythonic-fp/booleans/development/build/html/"
-Homepage = "https://grscheller.github.io/pythonic-fp/homepage/build/html/"
+Documentation = "https://grscheller.github.io/pythonic-fp-booleans/"
+Homepage = "https://grscheller.github.io/pythonic-fp/homepage/html/"
 Source = "https://github.com/grscheller/pythonic-fp-booleans"
 
 [project.optional-dependencies]
