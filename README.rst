@@ -20,7 +20,7 @@ Documentation
 
 Documentation for this project is hosted on
 `GitHub Pages
-<https://grscheller.github.io/pythonic-fp/booleans>`_.
+<https://grscheller.github.io/pythonic-fp-booleans>`_.
 
 Copyright and License
 ---------------------
