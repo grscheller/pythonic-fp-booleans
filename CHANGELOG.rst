@@ -17,7 +17,16 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
-PyPI 2.2.0 - 2025-12-02
+PyPI 3.0.1 - 2025-12-02
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The pythonic-fp-booleans GitHub repo now will be automatically
+building the current release documentation and the latest development
+documentation on GitHub for display on the project's GitHub Pages.
+
+Substantial documentation improvements.
+
+PyPI 3.0.0 - 2025-12-02
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Docstring updates.
