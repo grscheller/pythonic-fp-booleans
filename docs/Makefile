@@ -17,25 +17,22 @@ TEMPLATEDIR   = source/_templates
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
 
-setup_init: Makefile
-	mkdir -p $(STATICDIR) $(TEMPLATEDIR)
-
-setup_devel: setup_init
+setup_devel:
 	rm -rf "$(BUILDDIR)"/development
 	cp index_devel.rst "$(SOURCEDIR)"/index.rst
 	cp conf_devel.py "$(SOURCEDIR)"/conf.py
 
-setup_release: setup_init
+setup_release:
 	rm -rf "$(BUILDDIR)"/release
 	cp index_release.rst "$(SOURCEDIR)"/index.rst
 	cp conf_release.py "$(SOURCEDIR)"/conf.py
 
-setup_custom: setup_init
+setup_custom:
 	rm -rf "$(BUILDDIR)"/custom
 	cp index_custom.rst "$(SOURCEDIR)"/index.rst
 	cp conf_custom.py "$(SOURCEDIR)"/conf.py
 
-clean_source: Makefile
+clean_source:
 	@rm -f "$(SOURCEDIR)"/conf.py "$(SOURCEDIR)"/index.rst
 
 clean_devel: clean_source
@@ -51,16 +48,16 @@ clean: clean_devel clean_release clean_custom
 	@echo Removed all doc build artifacts.
 
 .PHONY: help Makefile
-.PHONY: setup_init setup_devel setup_release
+.PHONY: setup_devel setup_release setup_custom
 .PHONY: devel release
-.PHONY: clean_source clean_devel clean_release clean
+.PHONY: clean_source clean_devel clean_release clean_custom clean
 
 # Build development labeled html docs.
-devel: setup_devel
+devel: Makefile setup_devel
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)"/development $(SPHINXOPTS)
 
 # Build release labeled html docs.
-release: setup_release
+release: Makefile setup_release
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)"/release $(SPHINXOPTS)
 
 # Catch-all target: route all unknown targets to Sphinx and save to $(BUILDDIR)/custom.

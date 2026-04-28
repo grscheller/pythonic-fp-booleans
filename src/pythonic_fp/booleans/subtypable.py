@@ -15,8 +15,8 @@
 """
 .. admonition:: Subtypable Boolean
 
-    Like Python's built in bool, class ``SBool`` is a subclass of int.
-    Unlike bool, this version can be further subclassed.
+    Like Python's built in bool, class ``SBool`` is a singleton subclass
+    of int. Unlike bool, this version can be further subclassed.
 
     This type and its subtypes can also do (non-shortcut) Boolean logic
     using Python bitwise operators.

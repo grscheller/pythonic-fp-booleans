@@ -12,15 +12,15 @@ can be non-shortcut logically composed with Python’s bitwise operators.
 
 Part of the
 `pythonic-fp
-<https://grscheller.github.io/pythonic-fp/homepage/html/>`_
+<https://grscheller.github.io/pythonic-fp/>`_
 PyPI projects.
 
 Documentation
 -------------
 
-Documentation for this project is hosted on
+Documentation and other links for this project are hosted on
 `GitHub Pages
-<https://grscheller.github.io/pythonic-fp-booleans/development/html/>`_.
+<https://grscheller.github.io/pythonic-fp/projects/booleans.html>`_.
 
 Copyright and License
 ---------------------

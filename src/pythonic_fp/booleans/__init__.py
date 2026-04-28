@@ -13,8 +13,8 @@
 # limitations under the License.
 
 """
-Subtypable Boolean Class Hierarchy
-----------------------------------
+Subtypable Booleans
+-------------------
 
 .. graphviz::
 
@@ -32,9 +32,12 @@ Subtypable Boolean Class Hierarchy
         TF_Bool -> F_Bool;
     }
 
-While still compatible with Python shortcut logic, ``SBool`` and its
-subclasses can be non-shortcut logically composed with Python's bitwise
-operators.
+.. admonition:: Comparison to the bool builtin
+
+    Like ``bool``, ``SBool`` and its subclasses are threadsafe singletons.
+
+    While still compatible with Python shortcut logic, these can be
+    non-shortcut logically composed with Python's bitwise operators.
 
 """
 
