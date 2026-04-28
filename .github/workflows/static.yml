@@ -34,14 +34,14 @@ jobs:
           pip install -r docs/requirements.txt
           sudo apt-get install -y graphviz
 
-      - name: Build release docs
+      - name: Build Release Docs
         run: |
           pip install pythonic-fp-booleans
           cp docs/index_release.rst docs/source/index.rst
           cp docs/conf_release.py docs/source/conf.py
           sphinx-build -M html docs/source docs/build/release
 
-      - name: Build development docs
+      - name: Build Development Docs
         run: |
           pip install -e .
           cp docs/index_devel.rst docs/source/index.rst
