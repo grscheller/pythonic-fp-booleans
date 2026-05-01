@@ -14,7 +14,7 @@ num_args = len(args)
 if num_args == 4:
     build_type, release_version, devel_version, custom_version = args
 elif num_args == 1:
-    build_type = args[1]
+    build_type = args[0]
 else:
     sys.exit('Error: gen_conf.py takes either 1 or 4 arguments')
 

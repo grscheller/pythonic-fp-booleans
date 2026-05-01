@@ -13,16 +13,18 @@
 # limitations under the License.
 
 """
-Subtypable Booleans
--------------------
+Booleans
+--------
 
-.. admonition:: Comparison to the bool builtin
+.. admonition:: Subtypable/subtyped Boolean like classes
 
-    Like Python'd builtin  ``bool``, ``SBool`` and its subclasses
-    are threadsafe singletons.
+    - Like Python's builtin  ``bool``, ``SBool`` and its subclasses
+      are threadsafe singletons.
+    - While still compatible with Python shortcut logic, these can be
+      non-shortcut logically composed with Python's bitwise operators.
 
-    While still compatible with Python shortcut logic, these can be
-    non-shortcut logically composed with Python's bitwise operators.
+Boolean type hierarchy
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. graphviz::
 

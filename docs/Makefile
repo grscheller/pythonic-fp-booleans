@@ -49,8 +49,8 @@ setup_custom: clean_custom
 	@./gen_conf.py custom $(VERSIONS) > "$(SOURCEDIR)"/conf.py
 
 setup_redo: clean_custom
-	@echo Redoing custom build with possibly reeditted conf.py
-	@./gen_conf.py redo $(VERSIONS) > "$(SOURCEDIR)"/conf.py
+	@echo Redoing custom build with a possibly reeditted conf.py
+	@./gen_conf.py redo
 
 # Build development labeled html docs.
 devel: Makefile setup_devel
