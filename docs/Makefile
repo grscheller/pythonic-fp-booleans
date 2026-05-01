@@ -1,10 +1,12 @@
 # Makefile for Sphinx documentation
-#
-# Important Note: "make devel" and "make release" will just
-# use the first pythonic_fp.circulararray package found.
 
-# You can set these variables from the command line, and also
-# from the environment for the first two.
+# Last and future releases
+#  - former needs to agree with PyPI
+#  - later needs to agree with pyproject.toml
+PYPI_RELEASE_VERSION ?= 3.0.2
+PYPI_DEVEL_VERSION ?= 3.0.3
+PYPI_CUSTOM_VERSION ?= 0.0.0
+
 SPHINXOPTS ?=
 SPHINXBUILD ?= sphinx-build
 SOURCEDIR = source
@@ -12,10 +14,6 @@ BUILDDIR = build
 
 STATICDIR = source/_static
 TEMPLATEDIR = source/_templates
-
-PYPI_RELEASE_VERSION ?= 3.0.2
-PYPI_DEVEL_VERSION ?= 3.0.3
-PYPI_CUSTOM_VERSION ?= 0.0.0
 VERSIONS = $(PYPI_RELEASE_VERSION) $(PYPI_DEVEL_VERSION) $(PYPI_CUSTOM_VERSION)
 
 
