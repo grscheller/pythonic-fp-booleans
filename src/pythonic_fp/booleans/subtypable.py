@@ -12,49 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-.. admonition:: Subtypable Boolean
-
-    Like Python's built in bool, class ``SBool`` is a singleton subclass
-    of int. Unlike bool, this version can be further subclassed.
-
-    This type and its subtypes can also do (non-shortcut) Boolean logic
-    using Python bitwise operators.
-
-    +-------------------+--------+------------+
-    | Boolean operation | symbol | dunder     |
-    +===================+========+============+
-    |       not         | ``~``  | __invert__ |
-    +-------------------+--------+------------+
-    |       and         | ``&``  | __and__    |
-    +-------------------+--------+------------+
-    |       or          | ``|``  | __or__     |
-    +-------------------+--------+------------+
-    |       xor         | ``^``  | __xor__    |
-    +-------------------+--------+------------+
-
-
-    While compatible with Python  short-cut logic. Unfortunately,
-    the ``not`` operator always returns a ``bool``. Use the
-    bitwise ``~`` operator to return an opposite ``SBool``
-    class or subclass.
-
-.. note::
-
-    These operators are contravariant, that is they will return the
-    instance of the latest common ancestor of their arguments. More
-    specifically, the instance returned will have the type of the
-    least upper bound in the inheritance graph of the classes of
-    the two arguments.
-
-.. warning::
-
-   The "bitwise" operators can raise ``TypeError`` exceptions
-   when applied against an ``SBool`` and objects not descended
-   from ``int``.
-
-"""
-
 import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, overload
@@ -67,6 +24,49 @@ _novalue = NoValue()
 
 
 class SBool(int):
+    """
+    .. admonition:: Subtypable Boolean
+
+        Like Python's built in bool, class ``SBool`` is a singleton subclass
+        of int. Unlike bool, this version can be further subclassed.
+
+        This type and its subtypes can also do (non-shortcut) Boolean logic
+        using Python bitwise operators.
+
+        +-------------------+--------+------------+
+        | Boolean operation | symbol | dunder     |
+        +===================+========+============+
+        |       not         | ``~``  | __invert__ |
+        +-------------------+--------+------------+
+        |       and         | ``&``  | __and__    |
+        +-------------------+--------+------------+
+        |       or          | ``|``  | __or__     |
+        +-------------------+--------+------------+
+        |       xor         | ``^``  | __xor__    |
+        +-------------------+--------+------------+
+
+
+        While compatible with Python  short-cut logic. Unfortunately,
+        the ``not`` operator always returns a ``bool``. Use the
+        bitwise ``~`` operator to return an opposite ``SBool``
+        class or subclass.
+
+        .. note::
+
+            These operators are contravariant, that is they will return the
+            instance of the latest common ancestor of their arguments. More
+            specifically, the instance returned will have the type of the
+            least upper bound in the inheritance graph of the classes of
+            the two arguments.
+
+        .. warning::
+
+            The "bitwise" operators can raise ``TypeError`` exceptions
+            when applied against an ``SBool`` and objects not descended
+            from ``int``.
+
+    """
+
     _falsy: 'ClassVar[SBool | NoValue]' = _novalue
     _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
 
@@ -162,5 +162,8 @@ class SBool(int):
             return int(self) ^ int(other)
 
 
-TRUTH: Final[SBool] = SBool(True)  #: The truthy singleton of type ``SBool``.
-LIE: Final[SBool] = SBool(False)  #: The falsy singleton of type ``SBool``.
+TRUTH: Final[SBool] = SBool(True)
+"""The truthy singleton of type ``SBool``."""
+
+LIE: Final[SBool] = SBool(False)
+"""The falsy singleton of type ``SBool``."""

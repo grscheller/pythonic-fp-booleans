@@ -12,33 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-.. admonition:: Truthy-Falsy Booleans
-
-    A Boolean implementation whose distinct truthy and falsy
-    values are distinct singleton subclasses, not just
-    distinct singleton values.
-
-    A subtype of ``SBool``.
-
-    .. tip::
-
-        Logically combine these using Python's bitwise operators.
-
-    .. warning::
-
-        Although these datastructures are completely compatible
-        with Python shortcut evaluation, care needs to be taken when
-        using them with the ``and``, ``or``, and ``not`` builtins.
-
-        For example, ``~ALWAYS is NEVER`` but ``not ALWAYS is False``
-        because ``ALWAYS`` is truthy.
-
-        Similarly, ``(ALWAYS and False) is False`` while
-        ``(ALWAYS or False) is ALWAYS``.
-
-"""
-
 import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, final
@@ -58,6 +31,33 @@ _novalue = NoValue()
 
 
 class TF_Bool(SBool):
+    """
+    .. admonition:: Truthy-Falsy Booleans
+
+        A Boolean implementation whose distinct truthy and falsy
+        values are distinct singleton subclasses, not just
+        distinct singleton values.
+
+        A subtype of ``SBool``.
+
+        .. tip::
+
+            Logically combine these using Python's bitwise operators.
+
+        .. warning::
+
+            Although these datastructures are completely compatible
+            with Python shortcut evaluation, care needs to be taken when
+            using them with the ``and``, ``or``, and ``not`` builtins.
+
+            For example, ``~ALWAYS is NEVER`` but ``not ALWAYS is False``
+            because ``ALWAYS`` is truthy.
+
+            Similarly, ``(ALWAYS and False) is False`` while
+            ``(ALWAYS or False) is ALWAYS``.
+
+    """
+
     def __new__(cls, witness: object, flavor: Hashable = NoValue()) -> 'TF_Bool':
         """
         :param witness: Determines which subtype, ``T_Bool`` or ``F_Bool`` is returned.
@@ -104,9 +104,9 @@ class TF_Bool(SBool):
 @final
 class T_Bool(TF_Bool):
     """
-    .. admonition:: The subtype of ``TF_Bool`` which is always truthy
+    .. admonition:: The subtype of TF_Bool which is always truthy
 
-        A distinct type from F_Bool. A singleton value.
+        A distinct type from ``F_Bool``. A singleton value.
 
     """
     _truthy: 'ClassVar[T_Bool | NoValue]' = _novalue
@@ -135,9 +135,9 @@ class T_Bool(TF_Bool):
 @final
 class F_Bool(TF_Bool):
     """
-    .. admonition:: The subtype of ``TF_Bool`` which is always falsy.
+    .. admonition:: The subtype of TF_Bool which is always falsy.
 
-        A distinct type from T_Bool. A singleton value.
+        A distinct type from ``T_Bool``. A singleton value.
 
     """
     _falsy: 'ClassVar[F_Bool | NoValue]' = _novalue
@@ -162,7 +162,11 @@ class F_Bool(TF_Bool):
         return 'NEVER'
 
 
-TF_Boolean = T_Bool | F_Bool | TF_Bool  #: Use only as a type, never a constructor.
+TF_Boolean = T_Bool | F_Bool | TF_Bool
+"""Use this Union type only as a type, never a constructor."""
 
-ALWAYS: Final[TF_Boolean] = T_Bool()  #: The truthy singleton ``TF_Bool`` subtype.
-NEVER: Final[TF_Boolean] = F_Bool()  #: The falsy singleton ``TF_Bool`` subtype.
+ALWAYS: Final[TF_Boolean] = T_Bool()
+"""The truthy singleton for the ``TF_Bool`` subtype."""
+
+NEVER: Final[TF_Boolean] = F_Bool()
+"""The falsy singleton for the ``TF_Bool`` subtype."""

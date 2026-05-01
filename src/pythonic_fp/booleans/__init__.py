@@ -14,7 +14,7 @@
 
 """
 Booleans
---------
+========
 
 .. admonition:: Subtypable/subtyped Boolean like classes
 
@@ -22,25 +22,6 @@ Booleans
       are threadsafe singletons.
     - While still compatible with Python shortcut logic, these can be
       non-shortcut logically composed with Python's bitwise operators.
-
-Boolean type hierarchy
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. graphviz::
-
-    digraph Booleans {
-        bgcolor="#957fb8";
-        node [style=filled, fillcolor="#181616", fontcolor="#dcd7ba"];
-        edge [color="#181616", fontcolor="#dcd7ba"];
-        int -> bool;
-        int -> SBool;
-        SBool -> "FBool(h1)";
-        SBool -> "FBool(h2)";
-        SBool -> "FBool(h3)";
-        SBool -> TF_Bool;
-        TF_Bool -> T_Bool;
-        TF_Bool -> F_Bool;
-    }
 
 """
 
