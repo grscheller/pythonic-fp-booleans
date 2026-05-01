@@ -1,5 +1,5 @@
-Subtypable Booleans
--------------------
+Booleans
+========
 
 .. toctree::
     :caption: Subtypable Boolean
@@ -8,7 +8,7 @@ Subtypable Booleans
     subtypable
 
 .. toctree::
-    :caption: Subtypable Boolean examples
+    :caption: Subtyped Boolean examples
     :maxdepth: 1
 
     flavored

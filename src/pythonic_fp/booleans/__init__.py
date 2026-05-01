@@ -16,6 +16,14 @@
 Subtypable Booleans
 -------------------
 
+.. admonition:: Comparison to the bool builtin
+
+    Like Python'd builtin  ``bool``, ``SBool`` and its subclasses
+    are threadsafe singletons.
+
+    While still compatible with Python shortcut logic, these can be
+    non-shortcut logically composed with Python's bitwise operators.
+
 .. graphviz::
 
     digraph Booleans {
@@ -31,13 +39,6 @@ Subtypable Booleans
         TF_Bool -> T_Bool;
         TF_Bool -> F_Bool;
     }
-
-.. admonition:: Comparison to the bool builtin
-
-    Like ``bool``, ``SBool`` and its subclasses are threadsafe singletons.
-
-    While still compatible with Python shortcut logic, these can be
-    non-shortcut logically composed with Python's bitwise operators.
 
 """
 
