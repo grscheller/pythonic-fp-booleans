@@ -30,8 +30,8 @@ dynamic = ["description"]
 
 [project.urls]
 Changelog = "https://github.com/grscheller/pythonic-fp-booleans/blob/main/CHANGELOG.rst"
-Documentation = "https://grscheller.github.io/pythonic-fp-booleans/"
-Homepage = "https://grscheller.github.io/pythonic-fp/homepage/html/"
+Documentation = "https://grscheller.github.io/pythonic-fp/projects/booleans.html"
+Homepage = "https://grscheller.github.io/pythonic-fp/"
 Source = "https://github.com/grscheller/pythonic-fp-booleans"
 
 [project.optional-dependencies]
