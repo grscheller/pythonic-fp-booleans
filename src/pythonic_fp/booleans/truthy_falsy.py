@@ -163,10 +163,25 @@ class F_Bool(TF_Bool):
 
 
 TF_Boolean = T_Bool | F_Bool | TF_Bool
-"""Use this Union type only as a type, never a constructor."""
+"""
+.. admonition:: TF_Boolean
+
+    Use this Union only as a type, never a constructor.
+
+"""
 
 ALWAYS: Final[TF_Boolean] = T_Bool()
-"""The truthy singleton for the ``TF_Bool`` subtype."""
+"""
+.. admonition:: ALWAYS
+
+    The truthy singleton for the ``TF_Bool`` subtype.
+
+"""
 
 NEVER: Final[TF_Boolean] = F_Bool()
-"""The falsy singleton for the ``TF_Bool`` subtype."""
+"""
+.. admonition:: Never
+
+    The falsy singleton for the ``TF_Bool`` subtype.
+
+"""

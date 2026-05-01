@@ -163,7 +163,17 @@ class SBool(int):
 
 
 TRUTH: Final[SBool] = SBool(True)
-"""The truthy singleton of type ``SBool``."""
+"""
+.. admonition:: TRUTH
+
+    The truthy singleton of type ``SBool``.
+
+"""
 
 LIE: Final[SBool] = SBool(False)
-"""The falsy singleton of type ``SBool``."""
+"""
+.. admonition:: LIE
+
+    The falsy singleton of type ``SBool``.
+
+"""
