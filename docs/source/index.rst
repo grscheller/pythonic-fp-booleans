@@ -2,7 +2,7 @@ pythonic-fp-booleans
 ====================
 
 Project
-`pythonic-fp-booleans <https://pypi.org/project/pythonic-fp-booleans/>`_
+`Pythonic FP - Booleans <https://pypi.org/project/pythonic-fp-booleans/>`_
 one of the
 `Pythonic FP <https://grscheller.github.io/pythonic-fp/>`_
 PyPI projects.
