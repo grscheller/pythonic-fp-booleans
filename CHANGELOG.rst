@@ -17,10 +17,18 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
-PyPI 3.0.2 - 2025-04-25
+Development Status Reappraisal - 2026-05-05
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Maintainer appraises the Development Status for
+pythonic-fp-booleans to be ``"4 - Beta"``.
+
+PyPI 3.0.2 - 2026-04-25
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Corrected locations of project links.
+Corrected locations of project links. Changes will not
+fully be in effect until the next release of each
+Pythonic FP project to PyPI.
 
 PyPI 3.0.1 - 2025-12-02
 ~~~~~~~~~~~~~~~~~~~~~~~
