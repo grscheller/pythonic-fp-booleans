@@ -112,9 +112,7 @@ class T_Bool(TF_Bool):
     _truthy: 'ClassVar[T_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(
-        cls, witness: object = _novalue, flavor: Hashable = _novalue
-    ) -> 'T_Bool':
+    def __new__(cls, witness: object = _novalue) -> 'T_Bool':
         """
 
         :param witness: Ignored parameter, a T_Bool is always truthy.
@@ -143,9 +141,7 @@ class F_Bool(TF_Bool):
     _falsy: 'ClassVar[F_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(
-        cls, witness: object = _novalue, flavor: Hashable = _novalue
-    ) -> 'F_Bool':
+    def __new__(cls, witness: object = _novalue) -> 'F_Bool':
         """
         :param witness: Parameter ignored, an ``F_Bool`` is always falsy.
         :param flavor: Parameter ignored, only one falsy "flavor".

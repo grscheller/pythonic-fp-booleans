@@ -16,9 +16,9 @@ Description
         edge [color="#181616", fontcolor="#dcd7ba"];
         int -> bool;
         int -> SBool;
-        SBool -> "FBool(h1)";
-        SBool -> "FBool(h2)";
-        SBool -> "FBool(h3)";
+        SBool -> "FBool[H1]";
+        SBool -> "FBool[H2]";
+        SBool -> "FBool[H3]";
         SBool -> TF_Bool;
         TF_Bool -> T_Bool;
         TF_Bool -> F_Bool;

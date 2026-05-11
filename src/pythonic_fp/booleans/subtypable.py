@@ -28,9 +28,9 @@ class SBool(int):
     .. admonition:: Subtypable Boolean
 
         Like Python's built in bool, class ``SBool`` is a singleton subclass
-        of int. Unlike bool, this version can be further subclassed.
+        of int. Unlike bool, it can be further subclassed.
 
-        This type and its subtypes can also do (non-shortcut) Boolean logic
+        ``SBool`` and its subtypes can also do (non-shortcut) Boolean logic
         using Python bitwise operators.
 
         +-------------------+--------+------------+
@@ -46,24 +46,27 @@ class SBool(int):
         +-------------------+--------+------------+
 
 
-        While compatible with Python  short-cut logic. Unfortunately,
-        the ``not`` operator always returns a ``bool``. Use the
-        bitwise ``~`` operator to return an opposite ``SBool``
-        class or subclass.
+        While compatible with Python  short-cut logic, , the ``not``
+        operator unfortunately always returns a ``bool``.
+
+        .. tip::
+
+            Use the bitwise ``~`` operator to return
+            an opposite ``SBool`` instance or subclass instance.
 
         .. note::
 
-            These operators are contravariant, that is they will return the
-            instance of the latest common ancestor of their arguments. More
-            specifically, the instance returned will have the type of the
-            least upper bound in the inheritance graph of the classes of
-            the two arguments.
+            These operators are contravariant, that is they will return
+            the instance of the latest common ancestor of their
+            arguments. More specifically, the instance returned will
+            have the type of the least upper bound in the inheritance
+            graph of the classes of the two arguments.
 
-        .. warning::
+            .. warning::
 
-            The "bitwise" operators can raise ``TypeError`` exceptions
-            when applied against an ``SBool`` and objects not descended
-            from ``int``.
+                The "bitwise" operators can raise ``TypeError``
+                exceptions when applied against an ``SBool`` and
+                objects not descended from ``int``.
 
     """
 
@@ -78,10 +81,17 @@ class SBool(int):
     @overload
     def __new__(cls, witness: object) -> 'SBool': ...
 
-    def __new__(cls, witness: object = False, flavor: Hashable = _novalue) -> 'SBool':
+    def __new__(
+        cls,
+        witness: object = False,
+        flavor: Hashable | NoValue = _novalue,
+    ) -> 'SBool':
         """
-        :param witness: Determines truthiness of the ``SBool``.
-        :returns: The truthy or falsy SBool class instance.
+        .. admonition:: new
+
+            :param witness: Determines truthiness of the ``SBool``.
+            :returns: The truthy or falsy SBool class instance.
+
         """
         if witness:
             if cls._truthy is _novalue:
@@ -96,11 +106,33 @@ class SBool(int):
                         cls._falsy = super().__new__(cls, 0)
             return cast(SBool, cls._falsy)
 
-    def __init__(self, witness: object = False, flavor: Hashable = _novalue) -> None:
-        self._flavor = flavor
+    @overload
+    def __init__(self) -> None: ...
+    @overload
+    def __init__(self, witness: object) -> None: ...
+
+    def __init__(
+        self,
+        witness: object = False,
+        flavor: Hashable | NoValue = _novalue,
+    ) -> None:
+        """
+        .. admonition:: initialize
+
+            :param witness: Determines the truthiness of the ``Sbool``.
+        """
+        self._flavor = _novalue
 
     # override in derived classes
     def __repr__(self) -> str:
+        """
+        .. admonition:: repr string
+
+            Either 'TRUTH' or 'LIE' for each type of singleton.
+
+            :returns: A string to reproduce the ``SBool``singleton,
+
+        """
         if self:
             return 'TRUTH'
         return 'LIE'

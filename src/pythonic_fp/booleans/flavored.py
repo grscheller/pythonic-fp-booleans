@@ -26,13 +26,13 @@ class FBool(SBool):
     .. admonition:: Favored Booleans
 
         When different flavors of the truth matter. Each ``FBool`` is
-        an ``SBool`` subtype corresponds to a hashable value
-        called its flavor.
+        an ``SBool`` subtype corresponding to a hashable ``flavor``.
 
         .. warning::
 
-            Combining ``FBool`` instances of different flavors
-            with bitwise operators will just result in an ``SBool``.
+            Combining ``FBool`` instances of different flavors with
+            bitwise operators will result in a value of the ``SBool``
+            super type.
 
     """
 
@@ -44,9 +44,15 @@ class FBool(SBool):
 
     def __new__(cls, witness: object, flavor: Hashable) -> 'FBool':
         """
-        :param witness: Determines truthiness of the ``FBool`` instance returned.
-        :param flavor: The ``flavor`` of ``FBool`` to created.
-        :returns: The truthy or falsy ``FBool`` instance of a particular ``flavor``.
+        .. admonition:: new
+
+            Traditional singleton pattern but with a classvar ``dict``
+            to store the for truthy or falsy singleton for each
+            hashable flavor.
+
+            :param witness: Determines truthiness of the ``FBool`` instance returned.
+            :param flavor: The ``flavor`` of ``FBool`` to created.
+            :returns: The truthy or falsy ``FBool`` instance of a particular ``flavor``.
 
         """
         if witness:
@@ -63,6 +69,16 @@ class FBool(SBool):
             return cls._falsy_dict[flavor]
 
     def __init__(self, witness: object, flavor: Hashable) -> None:
+        """
+        .. admonition:: initialize
+
+            Let the flavored boolean know its flavor.
+
+            :param witness: Determines truthiness of the ``FBool`` instance returned.
+            :param flavor: The ``flavor`` of ``FBool`` to created.
+            :returns: The truthy or falsy ``FBool`` instance of a particular ``flavor``.
+
+        """
         self._flavor = flavor
 
     def __repr__(self) -> str:
@@ -108,7 +124,7 @@ class FBool(SBool):
 
             Get the ``flavor`` of the ``FBool``, a hashable value.
 
-        :returns: The ``flavor``.
+            :returns: The ``flavor``.
 
         """
         return self._flavor
@@ -116,12 +132,13 @@ class FBool(SBool):
 
 def truthy(flavor: Hashable) -> FBool:
     """
-    .. admonition:: Function truthy: ``truthy(flavor: Hashable)``.
+    .. admonition:: function truthy
 
         Returns the truthy singleton ``FBool`` of a particular ``flavor``.
 
-    :param flavor: Hashable value to determine which singleton ``flavor`` to return.
-    :returns: The truthy singleton of a particular ``flavor``.
+        :param flavor: Hashable value to determine which
+                       singleton ``flavor`` to return.
+        :returns: The truthy singleton of a particular ``flavor``.
 
     """
     return FBool(True, flavor)
@@ -129,12 +146,13 @@ def truthy(flavor: Hashable) -> FBool:
 
 def falsy(flavor: Hashable) -> FBool:
     """
-    .. admonition:: Function falsy: ``falsy(flavor: Hashable)``.
+    .. admonition:: Function falsy
 
         Returns the falsy singleton ``FBool`` of a particular ``flavor``.
 
-    :param flavor: Hashable value to determine which singleton ``flavor`` to return.
-    :returns: The falsy singleton of a particular ``flavor``.
+        :param flavor: Hashable value to determine which
+                       singleton ``flavor`` to return.
+        :returns: The falsy singleton of a particular ``flavor``.
 
     """
     return FBool(False, flavor)
