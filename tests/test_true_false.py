@@ -14,7 +14,7 @@
 
 from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
 from pythonic_fp.booleans.truthy_falsy import (
-    TF_Boolean,
+    TF_Bool,
     T_Bool,
     F_Bool,
     ALWAYS,
@@ -81,8 +81,8 @@ class TestSBoolSubclass:
     def test_isinstance(self) -> None:
         a_bool = False
         my_int = 0
-        myTruth: TF_Boolean = T_Bool(True)
-        myLie: TF_Boolean = F_Bool(False)
+        myTruth: TF_Bool = T_Bool(True)
+        myLie: TF_Bool = F_Bool(False)
 
         assert isinstance(a_bool, int)
         assert isinstance(a_bool, bool)
@@ -166,8 +166,8 @@ class TestTruthsAndLies:
     def test_truths_and_lies(self) -> None:
         baseT: SBool = SBool('foofoo')
         baseF: SBool = SBool('')
-        derivedT1: TF_Boolean = T_Bool()
-        derivedF1: TF_Boolean = F_Bool()
+        derivedT1: TF_Bool = T_Bool()
+        derivedF1: TF_Bool = F_Bool()
         derivedT2: SBool = T_Bool()
         derivedF2: SBool = F_Bool()
 

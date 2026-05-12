@@ -13,17 +13,17 @@
 # limitations under the License.
 
 from pythonic_fp.booleans.subtypable import TRUTH, LIE
-from pythonic_fp.booleans.truthy_falsy import TF_Boolean, TF_Bool, T_Bool, F_Bool
+from pythonic_fp.booleans.truthy_falsy import TF_Bool, T_Bool, F_Bool
 from pythonic_fp.booleans.truthy_falsy import ALWAYS, NEVER
 
-false0: TF_Boolean = F_Bool('ignored')
-false1: TF_Boolean = TF_Bool(1 > 42)
-false2: TF_Boolean = F_Bool()
-false3: TF_Boolean = TF_Bool('')
-true0: TF_Boolean = T_Bool('')
-true1: TF_Boolean = TF_Bool(1 < 42)
-true2: TF_Boolean = T_Bool()
-true3: TF_Boolean = TF_Bool('foobar')
+false0: TF_Bool = F_Bool('ignored')
+false1: TF_Bool = TF_Bool(1 > 42)
+false2: TF_Bool = F_Bool()
+false3: TF_Bool = TF_Bool('')
+true0: TF_Bool = T_Bool('')
+true1: TF_Bool = TF_Bool(1 < 42)
+true2: TF_Bool = T_Bool()
+true3: TF_Bool = TF_Bool('foobar')
 
 
 class TestConfirmTruthiness():

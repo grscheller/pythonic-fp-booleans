@@ -14,13 +14,11 @@
 
 import threading
 from collections.abc import Hashable
-from typing import cast, ClassVar, Final, overload
+from typing import cast, ClassVar, Final, overload, Self
 from pythonic_fp.gadgets import first_common_ancestor as fca
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
 
 __all__ = ['SBool', 'TRUTH', 'LIE']
-
-_novalue = NoValue()
 
 
 class SBool(int):
@@ -44,7 +42,6 @@ class SBool(int):
         +-------------------+--------+------------+
         |       xor         | ``^``  | __xor__    |
         +-------------------+--------+------------+
-
 
         While compatible with Python  short-cut logic, , the ``not``
         operator unfortunately always returns a ``bool``.
@@ -70,77 +67,67 @@ class SBool(int):
 
     """
 
-    _falsy: 'ClassVar[SBool | NoValue]' = _novalue
+    _falsy: 'ClassVar[SBool | NoValue]' = NoValue()
     _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    _truthy: 'ClassVar[SBool | NoValue]' = _novalue
+    _truthy: 'ClassVar[SBool | NoValue]' = NoValue()
     _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
 
     @overload
-    def __new__(cls) -> 'SBool': ...
-    @overload
     def __new__(cls, witness: object) -> 'SBool': ...
+    @overload
+    def __new__(cls, witness: object, flavor: Hashable | NoValue = NoValue()) -> 'SBool': ...
 
     def __new__(
         cls,
-        witness: object = False,
-        flavor: Hashable | NoValue = _novalue,
+        witness: object,
+        flavor: Hashable | NoValue = NoValue(),
     ) -> 'SBool':
         """
         .. admonition:: new
 
             :param witness: Determines truthiness of the ``SBool``.
+            :param flavor: Ignored 
             :returns: The truthy or falsy SBool class instance.
 
         """
+        novalue = NoValue()
         if witness:
-            if cls._truthy is _novalue:
+            if cls._truthy is novalue:
                 with cls._truthy_lock:
-                    if cls._truthy is _novalue:
+                    if cls._truthy is novalue:
                         cls._truthy = super().__new__(cls, 1)
             return cast(SBool, cls._truthy)
         else:
-            if cls._falsy is _novalue:
+            if cls._falsy is novalue:
                 with cls._falsy_lock:
-                    if cls._falsy is _novalue:
+                    if cls._falsy is novalue:
                         cls._falsy = super().__new__(cls, 0)
             return cast(SBool, cls._falsy)
 
     @overload
-    def __init__(self) -> None: ...
-    @overload
     def __init__(self, witness: object) -> None: ...
+    @overload
+    def __init__(self, witness: object, flavor: Hashable) -> None: ...
 
     def __init__(
         self,
         witness: object = False,
-        flavor: Hashable | NoValue = _novalue,
+        flavor: Hashable | NoValue = NoValue(),
     ) -> None:
         """
-        .. admonition:: initialize
+        .. admonition:: init
 
-            :param witness: Determines the truthiness of the ``Sbool``.
+            :param witness: Determines the truthiness of the ``SBool``.
+            :param flavor: Ignored by ``SBool``,
+                           for Liskov Substitution Principle.
         """
-        self._flavor = _novalue
+        self._flavor: Hashable | NoValue = NoValue()
 
-    # override in derived classes
-    def __repr__(self) -> str:
-        """
-        .. admonition:: repr string
-
-            Either 'TRUTH' or 'LIE' for each type of singleton.
-
-            :returns: A string to reproduce the ``SBool``singleton,
-
-        """
-        if self:
-            return 'TRUTH'
-        return 'LIE'
-
-    def __invert__(self) -> 'SBool':
+    def __invert__(self) -> Self:
         if self:
             return type(self)(False)
-        return type(self)(True)
+        return type(self)(True, self._flavor)
 
     def __and__(self, other: int) -> int:
         try:
@@ -154,8 +141,8 @@ class SBool(int):
 
         if issubclass(base_class, SBool):
             if self and other:
-                return base_class(1)
-            return base_class(0)
+                return base_class(True, self._flavor)
+            return base_class(False, self._flavor)
         else:
             return int(self) & int(other)
 
@@ -171,8 +158,8 @@ class SBool(int):
 
         if issubclass(base_class, SBool):
             if self or other:
-                return base_class(1)
-            return base_class(0)
+                return base_class(True, self._flavor)
+            return base_class(False, self._flavor)
         else:
             return int(self) | int(other)
 
@@ -188,17 +175,47 @@ class SBool(int):
 
         if issubclass(base_class, SBool):
             if self and not other or other and not self:
-                return base_class(1)
-            return base_class(0)
+                return base_class(True, self._flavor)
+            return base_class(False, self._flavor)
         else:
             return int(self) ^ int(other)
+
+    # override in derived classes
+    def __repr__(self) -> str:
+        """
+        .. admonition:: repr string
+
+            - 'SBool(True)' if truthy
+            - 'SBool(False)' if falsy
+
+            :returns: A string to reproduce the ``SBool``.
+
+        """
+        if self:
+            return 'SBool(True)'
+        return 'SBool(False)'
+
+    # override in derived classes
+    def __str__(self) -> str:
+        """
+        .. admonition:: user string
+
+            - 'TRUTH' if truthy
+            - 'LIE' if falsy
+
+            :returns: A string meaningful to an end user.
+
+        """
+        if self:
+            return 'TRUTH'
+        return 'LIE'
 
 
 TRUTH: Final[SBool] = SBool(True)
 """
 .. admonition:: TRUTH
 
-    The truthy singleton of type ``SBool``.
+    :var TRUTH: The truthy singleton of type ``SBool``.
 
 """
 
@@ -206,6 +223,6 @@ LIE: Final[SBool] = SBool(False)
 """
 .. admonition:: LIE
 
-    The falsy singleton of type ``SBool``.
+    :var LIE: The falsy singleton of type ``SBool``.
 
 """
