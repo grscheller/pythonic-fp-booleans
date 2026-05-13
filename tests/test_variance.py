@@ -151,37 +151,38 @@ class TestSBoolWithBool():
         assert True ^ LIE == 1
         assert False ^ LIE == 0
 
-class TestFBoolWithTFBool:
-    fbt1 = FBool(1, 1)
-    fbt2 = FBool(1, 2)
-    fbf1 = FBool(0, 1)
-    fbf2 = FBool(0, 2)
-    t_b1 = TF_Bool(1)
-    t_b2 = TF_Bool(42)
-    f_b1 = TF_Bool(0)
-    f_b2 = TF_Bool('')
+class TestFBoolWithTFBool():
+    def test_fbool_with_tfbool(self) -> None:
+        fbt1 = FBool(1, 1)
+        fbt2 = FBool(1, 2)
+        fbf1 = FBool(0, 1)
+        fbf2 = FBool(0, 2)
+        t_b1 = TF_Bool(1)
+        t_b2 = TF_Bool(42)
+        f_b1 = TF_Bool(0)
+        f_b2 = TF_Bool('')
 
-    assert t_b1 is t_b2
-    assert f_b1 is f_b2
+        assert t_b1 is t_b2
+        assert f_b1 is f_b2
 
-    assert fbt1 + fbt2 + fbf1 + fbf2 + t_b1 + t_b2 + f_b1 + f_b2 == 4
-    assert fbt1 | fbf1 is truthy(1)
-    assert fbt2 | fbt2 is truthy(2)
-    assert fbt2 | fbf1 is TRUTH
-    assert t_b1 | f_b2 is ALWAYS
-    assert f_b1 | f_b2 is NEVER
-    assert t_b1 | fbf2 is TRUTH
+        assert fbt1 + fbt2 + fbf1 + fbf2 + t_b1 + t_b2 + f_b1 + f_b2 == 4
+        assert fbt1 | fbf1 is truthy(1)
+        assert fbt2 | fbt2 is truthy(2)
+        assert fbt2 | fbf1 is TRUTH
+        assert t_b1 | f_b2 is ALWAYS
+        assert f_b1 | f_b2 is NEVER
+        assert t_b1 | fbf2 is TRUTH
 
-    assert fbt1 & fbf1 is falsy(1)
-    assert fbt2 & fbt2 is truthy(2)
-    assert fbt2 & fbf1 is LIE
-    assert t_b1 & f_b2 is NEVER
-    assert f_b1 & f_b2 is NEVER
-    assert t_b1 & fbf2 is LIE
+        assert fbt1 & fbf1 is falsy(1)
+        assert fbt2 & fbt2 is truthy(2)
+        assert fbt2 & fbf1 is LIE
+        assert t_b1 & f_b2 is NEVER
+        assert f_b1 & f_b2 is NEVER
+        assert t_b1 & fbf2 is LIE
 
-    assert fbt1 ^ fbf1 is truthy(1)
-    assert fbt2 ^ fbt2 is falsy(2)
-    assert fbt2 ^ fbf1 is TRUTH
-    assert t_b1 ^ f_b2 is ALWAYS
-    assert f_b1 ^ f_b2 is NEVER
-    assert t_b1 ^ fbf2 is TRUTH
+        assert fbt1 ^ fbf1 is truthy(1)
+        assert fbt2 ^ fbt2 is falsy(2)
+        assert fbt2 ^ fbf1 is TRUTH
+        assert t_b1 ^ f_b2 is ALWAYS
+        assert f_b1 ^ f_b2 is NEVER
+        assert t_b1 ^ fbf2 is TRUTH

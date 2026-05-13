@@ -126,7 +126,7 @@ class SBool(int):
 
     def __invert__(self) -> Self:
         if self:
-            return type(self)(False)
+            return type(self)(False, self._flavor)
         return type(self)(True, self._flavor)
 
     def __and__(self, other: int) -> int:
@@ -146,6 +146,9 @@ class SBool(int):
         else:
             return int(self) & int(other)
 
+    def __rand__(self, other: int) -> int:
+        return self & other
+
     def __or__(self, other: int) -> int:
         try:
             base_class = fca(type(self), type(other))
@@ -163,6 +166,9 @@ class SBool(int):
         else:
             return int(self) | int(other)
 
+    def __ror__(self, other: int) -> int:
+        return self | other
+
     def __xor__(self, other: int) -> int:
         try:
             base_class = fca(type(self), type(other))
@@ -179,6 +185,9 @@ class SBool(int):
             return base_class(False, self._flavor)
         else:
             return int(self) ^ int(other)
+
+    def __rxor__(self, other: int) -> int:
+        return self ^ other
 
     # override in derived classes
     def __repr__(self) -> str:

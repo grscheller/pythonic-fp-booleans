@@ -86,38 +86,6 @@ class FBool(SBool):
             return f'FBool(True, {repr(self._flavor)})'
         return f'FBool(False, {repr(self._flavor)})'
 
-    def __invert__(self) -> 'FBool':
-        if self:
-            return FBool(False, self._flavor)
-        return FBool(True, self._flavor)
-
-    def __and__(self, other: int) -> SBool:
-        if isinstance(other, FBool):
-            if self._flavor == other._flavor:
-                return FBool(self and other, self._flavor)
-        return SBool(self and other)
-
-    def __rand__(self, other: int) -> SBool:
-        return self & other
-
-    def __or__(self, other: int) -> SBool:
-        if isinstance(other, FBool):
-            if self._flavor == other._flavor:
-                return FBool(self or other, self._flavor)
-        return SBool(self or other)
-
-    def __ror__(self, other: int) -> SBool:
-        return self | other
-
-    def __xor__(self, other: int) -> SBool:
-        if isinstance(other, FBool):
-            if self._flavor == other._flavor:
-                return FBool(not (self and other) and (self or other), self._flavor)
-        return SBool(not (self and other) and (self or other))
-
-    def __rxor__(self, other: int) -> SBool:
-        return self ^ other
-
     def flavor(self) -> Hashable:
         """
         .. admonition:: flavor
