@@ -113,10 +113,11 @@ class T_Bool(TF_Bool):
 
     def __new__(cls, witness: object = _novalue, flavor: Hashable | NoValue = _novalue) -> 'T_Bool':
         """
+        .. admonition:: new
 
-        :param witness: Ignored parameter, a T_Bool is always truthy.
-        :param flavor: Ignored parameter, only one truthy "flavor".
-        :returns: The truthy ``T_Bool`` singleton instance.
+            :param witness: Ignored parameter, a T_Bool is always truthy.
+            :param flavor: Ignored parameter, only one truthy "flavor".
+            :returns: The truthy ``T_Bool`` singleton instance.
 
         """
         if cls._truthy is _novalue:
@@ -140,9 +141,11 @@ class F_Bool(TF_Bool):
 
     def __new__(cls, witness: object = _novalue, flavor: Hashable | NoValue = _novalue) -> 'F_Bool':
         """
-        :param witness: Parameter ignored, an ``F_Bool`` is always falsy.
-        :param flavor: Parameter ignored, only one falsy "flavor".
-        :returns: The falsy ``F_Bool`` singleton instance.
+        .. admonition:: new
+
+            :param witness: Parameter ignored, an ``F_Bool`` is always falsy.
+            :param flavor: Parameter ignored, only one falsy "flavor".
+            :returns: The falsy ``F_Bool`` singleton instance.
 
         """
         if cls._falsy is _novalue:
