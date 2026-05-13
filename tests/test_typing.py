@@ -60,7 +60,7 @@ class TestInvert:
         assert ~(falsy(42)) is not truthy(1)
 
     def test_truthy_falsy(self) -> None:
-        assert ~(T_Bool()) is F_Bool()
+        assert (~T_Bool()) is F_Bool()
         assert ~(F_Bool()) is T_Bool()
         assert ~(TF_Bool(True)) is TF_Bool(False)
         assert ~(TF_Bool(False)) is TF_Bool(True)

@@ -15,6 +15,7 @@
 import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, overload, Self
+from types import NotImplementedType
 from pythonic_fp.gadgets import first_common_ancestor as fca
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
 
@@ -74,9 +75,9 @@ class SBool(int):
     _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
 
     @overload
-    def __new__(cls, witness: object) -> 'SBool': ...
+    def __new__(cls, witness: object) -> Self: ...
     @overload
-    def __new__(cls, witness: object, flavor: Hashable | NoValue = NoValue()) -> 'SBool': ...
+    def __new__(cls, witness: object, flavor: Hashable | NoValue = NoValue()) -> Self: ...
 
     def __new__(
         cls,
@@ -124,12 +125,15 @@ class SBool(int):
         """
         self._flavor: Hashable | NoValue = NoValue()
 
-    def __invert__(self) -> Self:
+    def __invert__(self) -> int:
         if self:
             return type(self)(False, self._flavor)
         return type(self)(True, self._flavor)
 
     def __and__(self, other: int) -> int:
+        if not isinstance(other, type(self)):
+            return NotImplemented
+
         try:
             base_class = fca(type(self), type(other))
         except TypeError:
@@ -140,14 +144,16 @@ class SBool(int):
                 raise TypeError(msg)
 
         if issubclass(base_class, SBool):
+            if self._flavor == other._flavor:
+                flavor = self._flavor
+            else:
+                flavor = NoValue()
+
             if self and other:
-                return base_class(True, self._flavor)
-            return base_class(False, self._flavor)
+                return base_class(True, flavor)
+            return base_class(False, flavor)
         else:
             return int(self) & int(other)
-
-    def __rand__(self, other: int) -> int:
-        return self & other
 
     def __or__(self, other: int) -> int:
         try:
@@ -160,14 +166,16 @@ class SBool(int):
                 raise TypeError(msg)
 
         if issubclass(base_class, SBool):
+            if self._flavor == cast(SBool, other)._flavor:
+                flavor = self._flavor
+            else:
+                flavor = NoValue()
+
             if self or other:
-                return base_class(True, self._flavor)
-            return base_class(False, self._flavor)
+                return base_class(True, flavor)
+            return base_class(False, flavor)
         else:
             return int(self) | int(other)
-
-    def __ror__(self, other: int) -> int:
-        return self | other
 
     def __xor__(self, other: int) -> int:
         try:
@@ -180,11 +188,22 @@ class SBool(int):
                 raise TypeError(msg)
 
         if issubclass(base_class, SBool):
+            if self._flavor == cast(SBool, other)._flavor:
+                flavor = self._flavor
+            else:
+                flavor = NoValue()
+
             if self and not other or other and not self:
-                return base_class(True, self._flavor)
-            return base_class(False, self._flavor)
+                return base_class(True, flavor)
+            return base_class(False, flavor)
         else:
             return int(self) ^ int(other)
+
+    def __rand__(self, other: int) -> int:
+        return self & other
+
+    def __ror__(self, other: int) -> int:
+        return self | other
 
     def __rxor__(self, other: int) -> int:
         return self ^ other

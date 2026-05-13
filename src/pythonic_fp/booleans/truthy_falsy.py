@@ -14,7 +14,7 @@
 
 import threading
 from collections.abc import Hashable
-from typing import cast, ClassVar, Final, final
+from typing import cast, ClassVar, Final, Self
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
 from .subtypable import SBool
 
@@ -57,7 +57,7 @@ class TF_Bool(SBool):
 
     """
 
-    def __new__(cls, witness: object, flavor: Hashable = NoValue()) -> 'TF_Bool':
+    def __new__(cls, witness: object, flavor: Hashable = NoValue()) -> Self:
         """
         .. admonition:: new
 
@@ -67,8 +67,13 @@ class TF_Bool(SBool):
 
         """
         if witness:
-            return T_Bool()
-        return F_Bool()
+            return cast(Self, T_Bool())
+        return cast(Self, F_Bool())
+
+    def __invert__(self) -> TF_Bool:
+        if self:
+            return F_Bool()
+        return T_Bool()
 
     def __repr__(self) -> str:
         """
@@ -99,7 +104,6 @@ class TF_Bool(SBool):
         return 'NEVER'
 
 
-@final
 class T_Bool(TF_Bool):
     """
     .. admonition:: Truthy TF_Bool subclass
@@ -111,7 +115,7 @@ class T_Bool(TF_Bool):
     _truthy: 'ClassVar[T_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, witness: object = _novalue, flavor: Hashable | NoValue = _novalue) -> 'T_Bool':
+    def __new__(cls, witness: object = _novalue, flavor: Hashable | NoValue = _novalue) -> Self:
         """
         .. admonition:: new
 
@@ -123,11 +127,36 @@ class T_Bool(TF_Bool):
         if cls._truthy is _novalue:
             with cls._lock:
                 if cls._truthy is _novalue:
-                    cls._truthy = super(SBool, cls).__new__(cls, True)
-        return cast(T_Bool, cls._truthy)
+                    cls._truthy = super(SBool, cls).__new__(cls, 1)
+        return cast(Self, cls._truthy)
+
+    def __and__(self, other: int) -> int:
+        if issubclass(type(other), TF_Bool):
+            return other
+        return super().__and__(other)
+
+    def __or__(self, other: int) -> int:
+        if issubclass(type(other), TF_Bool):
+            return self
+        return super().__and__(other)
+
+    def __xor__(self, other: int) -> int:
+        if issubclass(type(other), TF_Bool):
+            if other:
+                return ~self
+            return self
+        return super().__and__(other)
+
+    def __rand__(self, other: int) -> int:
+        return self | other
+
+    def __ror__(self, other: int) -> int:
+        return self | other
+
+    def __rxor__(self, other: int) -> int:
+        return self ^ other
 
 
-@final
 class F_Bool(TF_Bool):
     """
     .. admonition:: Falsy TF_Bool subclass
@@ -139,7 +168,7 @@ class F_Bool(TF_Bool):
     _falsy: 'ClassVar[F_Bool | NoValue]' = _novalue
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, witness: object = _novalue, flavor: Hashable | NoValue = _novalue) -> 'F_Bool':
+    def __new__(cls, witness: object = _novalue, flavor: Hashable | NoValue = _novalue) -> Self:
         """
         .. admonition:: new
 
@@ -151,8 +180,34 @@ class F_Bool(TF_Bool):
         if cls._falsy is _novalue:
             with cls._lock:
                 if cls._falsy is _novalue:
-                    cls._falsy = super(SBool, cls).__new__(cls, False)
-        return cast(F_Bool, cls._falsy)
+                    cls._falsy = super(SBool, cls).__new__(cls, 0)
+        return cast(Self, cls._falsy)
+
+    def __and__(self, other: int) -> int:
+        if issubclass(type(other), TF_Bool):
+            return self
+        return super().__and__(other)
+
+    def __or__(self, other: int) -> int:
+        if issubclass(type(other), TF_Bool):
+            return other
+        return super().__and__(other)
+
+    def __xor__(self, other: int) -> int:
+        if issubclass(type(other), TF_Bool):
+            if other:
+                return other
+            return self
+        return super().__and__(other)
+
+    def __rand__(self, other: int) -> int:
+        return self | other
+
+    def __ror__(self, other: int) -> int:
+        return self | other
+
+    def __rxor__(self, other: int) -> int:
+        return self ^ other
 
 
 ALWAYS: Final[TF_Bool] = T_Bool()

@@ -14,7 +14,7 @@
 
 import threading
 from collections.abc import Hashable
-from typing import ClassVar, final
+from typing import ClassVar, final, Self
 from .subtypable import SBool
 
 __all__ = ['FBool', 'truthy', 'falsy']
@@ -42,11 +42,11 @@ class FBool(SBool):
     _truthy_dict: 'ClassVar[dict[Hashable, FBool]]' = {}
     _truthy_dict_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, witness: object, flavor: Hashable) -> 'FBool':
+    def __new__(cls, witness: object, flavor: Hashable) -> Self:
         """
         .. admonition:: new
 
-            Traditional singleton pattern but with a classvar ``dict``
+            Traditional singleton pattern but with a ClassVar ``dict``
             to store the for truthy or falsy singleton for each
             hashable flavor.
 
@@ -59,13 +59,13 @@ class FBool(SBool):
             if flavor not in cls._truthy_dict:
                 with cls._truthy_dict_lock:
                     if flavor not in cls._truthy_dict:
-                        cls._truthy_dict[flavor] = super(SBool, cls).__new__(cls, True)
+                        cls._truthy_dict[flavor] = super(SBool, cls).__new__(cls, 1)
             return cls._truthy_dict[flavor]
         else:
             if flavor not in cls._falsy_dict:
                 with cls._falsy_dict_lock:
                     if flavor not in cls._falsy_dict:
-                        cls._falsy_dict[flavor] = super(SBool, cls).__new__(cls, False)
+                        cls._falsy_dict[flavor] = super(SBool, cls).__new__(cls, 0)
             return cls._falsy_dict[flavor]
 
     def __init__(self, witness: object, flavor: Hashable) -> None:
@@ -76,10 +76,13 @@ class FBool(SBool):
 
             :param witness: Determines truthiness of the ``FBool`` instance returned.
             :param flavor: The ``flavor`` of ``FBool`` to created.
+            :type flavor: ``H: Hashable``
             :returns: The truthy or falsy ``FBool`` instance of a particular ``flavor``.
 
         """
-        self._flavor = flavor
+        if not hasattr(self, '_flavor'):
+            print('FLAVORED!')
+            self._flavor = flavor
 
     def __repr__(self) -> str:
         if self:
