@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Geoffrey R. Scheller
+# Copyright 2023-2026 Geoffrey R. Scheller
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ __all__ = [
     'NEVER',
 ]
 
-_novalue = NoValue()
-
 
 class TF_Bool(SBool):
     """
@@ -37,7 +35,7 @@ class TF_Bool(SBool):
         values are distinct singleton subclasses, not just
         distinct singleton values.
 
-        A subtype of ``SBool``.
+        A subtype of SBool.
 
         .. tip::
 
@@ -47,7 +45,7 @@ class TF_Bool(SBool):
 
             Although these datastructures are completely compatible
             with Python shortcut evaluation, care needs to be taken when
-            using them with the ``and``, ``or``, and ``not`` builtins.
+            using them with the "and", "or", and "not" builtins.
 
             For example, ``~ALWAYS is NEVER`` but ``not ALWAYS is False``
             because ``ALWAYS`` is truthy.
@@ -57,11 +55,15 @@ class TF_Bool(SBool):
 
     """
 
-    def __new__(cls, witness: object, flavor: Hashable = NoValue()) -> Self:
+    def __new__(
+        cls,
+        witness: object,
+        flavor: Hashable = NoValue(),
+    ) -> Self:
         """
         .. admonition:: new
 
-            :param witness: Determines which subtype, ``T_Bool`` or ``F_Bool`` to return.
+            :param witness: Determines which subtype, T_Bool or F_Bool to return.
             :param flavor: Ignored parameter, only two flavors, one truthy and one falsy.
             :returns: The singleton truthy or singleton falsy instances.
 
@@ -82,7 +84,7 @@ class TF_Bool(SBool):
             - if truthy return 'TF_Bool(True)'
             - if falsy return 'TF_Bool(False)'
 
-            :returns: A string to reproduce the ``TF_Bool``.
+            :returns: A string to reproduce the TF_Bool.
 
         """
         if self:
@@ -108,78 +110,77 @@ class T_Bool(TF_Bool):
     """
     .. admonition:: Truthy TF_Bool subclass
 
-         Type of the truthy singleton ``TS_Bool`` instance.
-         A distinct type from ``F_Bool``.
+         Type of the truthy singleton TS_Bool instance.
+         A distinct type from F_Bool.
 
     """
-    _truthy: 'ClassVar[T_Bool | NoValue]' = _novalue
+    _truthy: 'ClassVar[T_Bool | NoValue]' = NoValue()
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, witness: object = _novalue, flavor: Hashable | NoValue = _novalue) -> Self:
+    def __new__(
+        cls,
+        witness: object = NoValue(),
+        flavor: Hashable | NoValue = NoValue(),
+    ) -> Self:
         """
         .. admonition:: new
 
             :param witness: Ignored parameter, a T_Bool is always truthy.
             :param flavor: Ignored parameter, only one truthy "flavor".
-            :returns: The truthy ``T_Bool`` singleton instance.
+            :returns: The truthy T_Bool singleton instance.
 
         """
-        if cls._truthy is _novalue:
+        if cls._truthy is NoValue():
             with cls._lock:
-                if cls._truthy is _novalue:
+                if cls._truthy is NoValue():
                     cls._truthy = super(SBool, cls).__new__(cls, 1)
         return cast(Self, cls._truthy)
 
     def __and__(self, other: int) -> int:
-        if issubclass(type(other), TF_Bool):
+        if isinstance(other, TF_Bool):
             return other
-        return other.__and__(self)
+        return super().__and__(other)
 
     def __or__(self, other: int) -> int:
-        if issubclass(type(other), TF_Bool):
+        if isinstance(other, TF_Bool):
             return self
-        return other.__or__(self)
+        return super().__or__(other)
 
     def __xor__(self, other: int) -> int:
-        if issubclass(type(other), TF_Bool):
+        if isinstance(other, TF_Bool):
             if other:
                 return ~self
             return self
-        return other.__xor__(self)
-
-    def __rand__(self, other: int) -> int:
-        return self | other
-
-    def __ror__(self, other: int) -> int:
-        return self | other
-
-    def __rxor__(self, other: int) -> int:
-        return self ^ other
+        return super().__xor__(other)
 
 
 class F_Bool(TF_Bool):
     """
     .. admonition:: Falsy TF_Bool subclass
 
-         Type of the falsy singleton ``TS_Bool`` instance.
-         A distinct type from ``T_Bool``.
+         Type of the falsy singleton TS_Bool instance.
+         A distinct type from T_Bool.
 
     """
-    _falsy: 'ClassVar[F_Bool | NoValue]' = _novalue
+    _falsy: 'ClassVar[F_Bool | NoValue]' = NoValue()
     _lock: ClassVar[threading.Lock] = threading.Lock()
 
-    def __new__(cls, witness: object = _novalue, flavor: Hashable | NoValue = _novalue) -> Self:
+    def __new__(
+        cls,
+        witness: object = NoValue(),
+        flavor: Hashable | NoValue = NoValue(),
+    ) -> Self:
         """
         .. admonition:: new
 
-            :param witness: Parameter ignored, an ``F_Bool`` is always falsy.
+            :param witness: Parameter ignored, an F_Bool is always falsy.
             :param flavor: Parameter ignored, only one falsy "flavor".
-            :returns: The falsy ``F_Bool`` singleton instance.
+            :returns: The falsy F_Bool singleton instance.
 
         """
-        if cls._falsy is _novalue:
+        if cls._falsy is NoValue():
             with cls._lock:
-                if cls._falsy is _novalue:
+                if cls._falsy is NoValue():
                     cls._falsy = super(SBool, cls).__new__(cls, 0)
         return cast(Self, cls._falsy)
 
@@ -191,30 +192,21 @@ class F_Bool(TF_Bool):
     def __or__(self, other: int) -> int:
         if issubclass(type(other), TF_Bool):
             return other
-        return super().__and__(other)
+        return super().__or__(other)
 
     def __xor__(self, other: int) -> int:
         if issubclass(type(other), TF_Bool):
             if other:
                 return other
             return self
-        return super().__and__(other)
-
-    def __rand__(self, other: int) -> int:
-        return self | other
-
-    def __ror__(self, other: int) -> int:
-        return self | other
-
-    def __rxor__(self, other: int) -> int:
-        return self ^ other
+        return super().__xor__(other)
 
 
 ALWAYS: Final[TF_Bool] = T_Bool()
 """
 .. admonition:: ALWAYS
 
-    :var ALWAYS: The truthy singleton ``TF_Bool`` subtyped instance.
+    :var ALWAYS: The truthy singleton TF_Bool subtyped instance.
 
 """
 
@@ -222,6 +214,6 @@ NEVER: Final[TF_Bool] = F_Bool()
 """
 .. admonition:: Never
 
-    :var NEVER: The falsy singleton ``TF_Bool`` subtyped instance.
+    :var NEVER: The falsy singleton TF_Bool subtyped instance.
 
 """

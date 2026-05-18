@@ -36,10 +36,10 @@ class SBool(int):
 
     .. admonition:: Subtypable Boolean
 
-        Like Python's built in bool, class ``SBool`` is a singleton subclass
+        Like Python's built in bool, class SBool is a singleton subclass
         of int. Unlike bool, it can be further subclassed.
 
-        ``SBool`` and its subtypes can also do (non-shortcut) Boolean logic
+        SBool and its subtypes can also do (non-shortcut) Boolean logic
         using Python bitwise operators.
 
         +-------------------+--------+------------+
@@ -54,13 +54,13 @@ class SBool(int):
         |       xor         | ``^``  | __xor__    |
         +-------------------+--------+------------+
 
-        While compatible with Python  short-cut logic, , the ``not``
-        operator unfortunately always returns a ``bool``.
+        While compatible with Python  short-cut logic, , the not
+        operator unfortunately always returns a bool.
 
         .. tip::
 
-            Use the bitwise ``~`` operator to return
-            an opposite ``SBool`` instance or subclass instance.
+            Use the bitwise ~ operator to return an opposite SBool
+            instance or subclass instance.
 
         .. note::
 
@@ -72,9 +72,9 @@ class SBool(int):
 
             .. warning::
 
-                The "bitwise" operators can raise ``TypeError``
-                exceptions when applied against an ``SBool`` and
-                objects not descended from ``int``.
+                The "bitwise" operators can raise TypeError
+                exceptions when applied against an SBool and
+                objects not descended from int.
 
     """
 
@@ -97,22 +97,21 @@ class SBool(int):
         """
         .. admonition:: new
 
-            :param witness: Determines truthiness of the ``SBool``.
+            :param witness: Determines truthiness of the SBool.
             :param flavor: Ignored 
             :returns: The truthy or falsy SBool class instance.
 
         """
-        novalue = NoValue()
         if witness:
-            if cls._truthy is novalue:
+            if cls._truthy is NoValue():
                 with cls._truthy_lock:
-                    if cls._truthy is novalue:
+                    if cls._truthy is NoValue():
                         cls._truthy = super().__new__(cls, 1)
             return cast(SBool, cls._truthy)
         else:
-            if cls._falsy is novalue:
+            if cls._falsy is NoValue():
                 with cls._falsy_lock:
-                    if cls._falsy is novalue:
+                    if cls._falsy is NoValue():
                         cls._falsy = super().__new__(cls, 0)
             return cast(SBool, cls._falsy)
 
@@ -129,8 +128,8 @@ class SBool(int):
         """
         .. admonition:: init
 
-            :param witness: Determines the truthiness of the ``SBool``.
-            :param flavor: Ignored by ``SBool``, here only for
+            :param witness: Determines the truthiness of the SBool.
+            :param flavor: Ignored by SBool, here only for support the
                            Liskov Substitution Principle.
         """
         self._flavor: Hashable | NoValue = NoValue()
@@ -141,9 +140,6 @@ class SBool(int):
         return type(self)(True, self._flavor)
 
     def __and__(self, other: int) -> int:
-        if not (isinstance(other, int) or isinstance(other, bool)):
-            return NotImplemented
-
         try:
             base_class = fca(type(self), type(other))
         except TypeError:
@@ -209,15 +205,6 @@ class SBool(int):
         else:
             return int(self) ^ int(other)
 
-    def __rand__(self, other: int) -> int:
-        return self & other
-
-    def __ror__(self, other: int) -> int:
-        return self | other
-
-    def __rxor__(self, other: int) -> int:
-        return self ^ other
-
     # override in derived classes
     def __repr__(self) -> str:
         """
@@ -226,7 +213,7 @@ class SBool(int):
             - 'SBool(True)' if truthy
             - 'SBool(False)' if falsy
 
-            :returns: A string to reproduce the ``SBool``.
+            :returns: A string to reproduce the SBool.
 
         """
         if self:
@@ -253,7 +240,7 @@ TRUTH: Final[SBool] = SBool(True)
 """
 .. admonition:: TRUTH
 
-    :var TRUTH: The truthy singleton of type ``SBool``.
+    :var TRUTH: The truthy singleton of type SBool.
 
 """
 
@@ -261,6 +248,6 @@ LIE: Final[SBool] = SBool(False)
 """
 .. admonition:: LIE
 
-    :var LIE: The falsy singleton of type ``SBool``.
+    :var LIE: The falsy singleton of type SBool.
 
 """

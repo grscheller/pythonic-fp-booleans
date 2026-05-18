@@ -54,12 +54,14 @@ class TestIdentiyFBoolEquality():
         t1_2 is not falsy(0)
         t1_2 is not falsy(1)
 
-        truthy('foobar') is truthy('foobar')
-        truthy('foobar') is not truthy('foofoo')
-        falsy('foobar') is falsy('foobar')
-        falsy('foobar') is not falsy('foofoo')
-        truthy('foobar') is not falsy('foobar')
-        truthy('foobar') is not falsy('foofoo')
+        truthy('foo') is truthy('foo')
+        falsy('foo') is falsy('foo')
+        truthy('foo') is not truthy('bar')
+        falsy('foo') is not falsy('bar')
+        truthy('foo') is not falsy('foo')
+        truthy('bar') is not falsy('bar')
+        truthy('foo') is not falsy('bar')
+        truthy('bar') is not falsy('foo')
 
     def test_equality_fbool(self) -> None:
         # based on truthiness
@@ -91,10 +93,10 @@ class TestIdentiyFBoolEquality():
         f1_2 != t0_2
         f1_1 != t0_2
 
-        truthy('foobar') == truthy('foobar')
-        truthy('foobar') == truthy('foofoo')
-        falsy('foobar') == falsy('foobar')
-        falsy('foobar') == falsy('foofoo')
+        truthy('foo') == truthy('foo')
+        truthy('foo') == truthy('bar')
+        falsy('foo') == falsy('foo')
+        falsy('foo') == falsy('bar')
         truthy('foobar') != falsy('foobar')
         truthy('foobar') != falsy('foofoo')
 
@@ -102,19 +104,15 @@ class TestBitwiseOperations():
     def test_or_not(self) -> None:
         assert truthy(0) is (t0_1 | t0_1)
         assert truthy(0) is (t0_2 | t0_1)
-        assert TRUTH is (t0_1 | t1_1)
 
     def test_xor_not(self) -> None:
         assert falsy(0) is (t0_1 ^ t0_2)
         assert truthy(0) is (t0_1 ^ f0_2)
         assert truthy(0) is (f0_1 ^ ~f0_2)
 
-        assert LIE is (t0_1 ^ t1_2)
         assert truthy(0) is (t0_1 ^ f0_2)
         assert falsy(0) is (f0_1 ^ f0_2)
         assert truthy(0) == (~f0_1 ^ f0_2)
-        assert TRUTH == (~f0_1 ^ f1_2)
-        assert LIE == (f1_1 ^ f0_2)
 
     def test_not(self) -> None:
         assert truthy(0) is (t0_1 & t0_2)
@@ -142,26 +140,18 @@ class TestBitwiseOperations():
         assert falsy(1) is ~(t1_1 ^ f1_2)
         assert falsy(1) is (f1_1 ^ f1_2)
 
-        assert TRUTH is (t0_1 & t1_2)
-        assert LIE is (t0_1 & ~t1_2)
-        assert LIE is (~t0_1 & t1_2)
-        assert LIE is (~t0_1 & ~t1_2)
-        assert TRUTH is ~(~t0_1 & ~t1_2)
-        assert TRUTH is ~(~t1_1 & f0_2)
-        assert LIE is (f1_1 & f0_2)
-
     def test_de_morgan(self) -> None:
         for fb1 in [truthy(0), falsy(0)]:
             for fb2 in [truthy(0), falsy(0)]:
                 ~(fb1 & fb2) is (~fb1 | ~fb2)
                 ~(fb1 | fb2) is (~fb1 & ~fb2)
 
-        for fb1 in [truthy(0), falsy(0)]:
-            for fb2 in [truthy(0), falsy(0)]:
+        for fb1 in [truthy(1), falsy(1)]:
+            for fb2 in [truthy(1), falsy(1)]:
                 ~(fb1 & fb2) == (~fb1 | ~fb2)
                 ~(fb1 | fb2) == (~fb1 & ~fb2)
 
-        for fb1 in [truthy(0), falsy(1)]:
-            for fb2 in [truthy(2), falsy(3)]:
+        for fb1 in [truthy(()), falsy(())]:
+            for fb2 in [truthy(()), falsy(())]:
                 ~(fb1 & fb2) == (~fb1 | ~fb2)
                 ~(fb1 | fb2) == (~fb1 & ~fb2)

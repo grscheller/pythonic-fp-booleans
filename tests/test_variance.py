@@ -166,6 +166,7 @@ class TestFBoolWithTFBool():
         assert f_b1 is f_b2
 
         assert fbt1 + fbt2 + fbf1 + fbf2 + t_b1 + t_b2 + f_b1 + f_b2 == 4
+        assert fbt1 + t_b2 + fbf1 + fbf2 + t_b1 + f_b1 + fbt2 + f_b2 == 4
         assert fbt1 | fbf1 is truthy(1)
         assert fbt2 | fbt2 is truthy(2)
         try:
@@ -174,9 +175,12 @@ class TestFBoolWithTFBool():
             assert str(err) == 'Error: diffent flavored booleans compared with | operator'
         else:
             assert False
+        assert t_b1 | t_b2 is ALWAYS
         assert t_b1 | f_b2 is ALWAYS
         assert f_b1 | f_b2 is NEVER
+        assert repr(fbf2 | t_b1) == 'SBool(True)'
         assert fbf2 | t_b1 is TRUTH
+        assert repr(t_b1 | fbf2) == 'SBool(True)'
         assert t_b1 | fbf2 is TRUTH
         assert f_b1 | fbf2 is LIE
         assert fbf2 | f_b1 is LIE

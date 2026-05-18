@@ -17,6 +17,29 @@ See `Semantic Versioning 2.0.0 <https://semver.org>`_.
 Releases and Important Milestones
 ---------------------------------
 
+PyPI 4.0.0 - 2026-05-18
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Revamped pythonic-fp-booleans implementation.
+
+- API changes due to flavored booleans being made runtime "invariant"
+
+  - removed dunders methods __rand__, __ror__, __rxor__ from all classes
+  - flavored booleans bitwise operators now throw ValueError for different flavors
+
+    - pushing Python's type system a bit
+
+      - invariant, contravariant, covariant apply to operator arguments
+      - not to the class itself
+
+        - it should, but it does not
+        - the class is a "namespace" not the first argument to an operator
+
+  - if I were to do this over again I'd
+
+    - define class functions (contravariant args, covariant return values) which dunders would call
+    - make SBool a "true Boolean" not a subtype of "int"
+
 Development Status Reappraisal - 2026-05-05
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -38,9 +61,6 @@ building the current release documentation and the latest development
 documentation on GitHub for display on the project's GitHub Pages.
 
 Substantial documentation improvements.
-
-PyPI 3.0.4 - 2025-12-02
-~~~~~~~~~~~~~~~~~~~~~~~
 
 PyPI 3.0.0 - 2025-12-02
 ~~~~~~~~~~~~~~~~~~~~~~~
