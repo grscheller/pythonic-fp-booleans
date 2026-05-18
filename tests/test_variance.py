@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Geoffrey R. Scheller
+# Copyright 2023-2026 Geoffrey R. Scheller
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -168,21 +168,45 @@ class TestFBoolWithTFBool():
         assert fbt1 + fbt2 + fbf1 + fbf2 + t_b1 + t_b2 + f_b1 + f_b2 == 4
         assert fbt1 | fbf1 is truthy(1)
         assert fbt2 | fbt2 is truthy(2)
-        assert fbt2 | fbf1 is TRUTH
+        try:
+            fbt2 | fbf1
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+        else:
+            assert False
         assert t_b1 | f_b2 is ALWAYS
         assert f_b1 | f_b2 is NEVER
+        assert fbf2 | t_b1 is TRUTH
         assert t_b1 | fbf2 is TRUTH
+        assert f_b1 | fbf2 is LIE
+        assert fbf2 | f_b1 is LIE
 
         assert fbt1 & fbf1 is falsy(1)
         assert fbt2 & fbt2 is truthy(2)
-        assert fbt2 & fbf1 is LIE
+        try:
+            fbt2 & fbf1
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with & operator'
+        else:
+            assert False
+        assert t_b1 & t_b2 is ALWAYS
         assert t_b1 & f_b2 is NEVER
         assert f_b1 & f_b2 is NEVER
         assert t_b1 & fbf2 is LIE
+        assert fbf2 & t_b1 is LIE
+        assert fbf1 & t_b2 is LIE
+        assert t_b2 & fbf1 is LIE
+        assert t_b2 & fbt1 is TRUTH
 
         assert fbt1 ^ fbf1 is truthy(1)
         assert fbt2 ^ fbt2 is falsy(2)
-        assert fbt2 ^ fbf1 is TRUTH
+        try:
+            fbt2 ^ fbf1
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+        else:
+            assert False
         assert t_b1 ^ f_b2 is ALWAYS
         assert f_b1 ^ f_b2 is NEVER
         assert t_b1 ^ fbf2 is TRUTH
+        assert fbf2 ^ t_b1 is TRUTH

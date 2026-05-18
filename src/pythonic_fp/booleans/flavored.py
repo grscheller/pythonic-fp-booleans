@@ -30,9 +30,9 @@ class FBool(SBool):
 
         .. warning::
 
-            Combining ``FBool`` instances of different flavors with
-            bitwise operators will result in a value of the ``SBool``
-            super type.
+            Combining FBool instances of different flavors with
+            bitwise operators will result in a runtime ValueError
+            exception.
 
     """
 
@@ -46,7 +46,7 @@ class FBool(SBool):
         """
         .. admonition:: new
 
-            Traditional singleton pattern but with a ClassVar ``dict``
+            Traditional singleton pattern but with a ClassVar dict
             to store the for truthy or falsy singleton for each
             hashable flavor.
 
@@ -78,16 +78,80 @@ class FBool(SBool):
             :param flavor: The ``flavor`` of ``FBool`` to created.
             :type flavor: ``H: Hashable``
             :returns: The truthy or falsy ``FBool`` instance of a particular ``flavor``.
+            :raises ValueError: If different flavors compared with bitwise operators.
 
         """
         if not hasattr(self, '_flavor'):
-            print('FLAVORED!')
             self._flavor = flavor
 
+    def __and__(self, other: int) -> int:
+        if type(other) is type(self):
+            if other.flavor() != self._flavor:
+                msg = 'Error: diffent flavored booleans compared with & operator'
+                raise ValueError(msg)
+            if self and other:
+                return FBool(1, self._flavor)
+            else:
+                return FBool(0, self._flavor)
+        return super().__and__(other)
+
+    def __or__(self, other: int) -> int:
+        if type(other) is type(self):
+            if other.flavor() != self.flavor():
+                msg = 'Error: diffent flavored booleans compared with | operator'
+                raise ValueError(msg)
+            if self or other:
+                return FBool(1, self._flavor)
+            else:
+                return FBool(0, self._flavor)
+        return super().__or__(other)
+
+    def __xor__(self, other: int) -> int:
+        if type(other) is type(self):
+            if other.flavor() != self._flavor:
+                msg = 'Error: diffent flavored booleans compared with ^ operator'
+                raise ValueError(msg)
+            if (self or other) and not (self and other):
+                return FBool(1, self._flavor)
+            else:
+                return FBool(0, self._flavor)
+        return super().__xor__(other)
+
     def __repr__(self) -> str:
+        """
+        .. admonition:: repr string
+
+            Create strings of the form
+
+            - `FBool(True, repr_flavor)'
+            - `FBool(False, repr_flavor)'
+
+            Where repr_flavor = repr(self.flavor())
+
+            :returns: A String to reproduce the flavored boolean.
+
+        """
         if self:
             return f'FBool(True, {repr(self._flavor)})'
         return f'FBool(False, {repr(self._flavor)})'
+
+    def __str__(self) -> str:
+        """
+        .. admonition:: user string
+
+            Create strings of the form
+
+            - `FBool(True, str_flavor)'
+            - `FBool(False, str_flavor)'
+
+            Where str_flavor = str(self.flavor())
+
+            :returns: A String to meaningful to an end user.
+
+        """
+        if self:
+            return f'FBool(True, {str(self._flavor)})'
+        return f'FBool(False, {str(self._flavor)})'
 
     def flavor(self) -> Hashable:
         """

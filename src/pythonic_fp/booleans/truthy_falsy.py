@@ -79,15 +79,15 @@ class TF_Bool(SBool):
         """
         .. admonition:: repr string
 
-            - if truthy return 'TS_Bool(True)'
-            - if falsy return 'TS_Bool(False)'
+            - if truthy return 'TF_Bool(True)'
+            - if falsy return 'TF_Bool(False)'
 
-            :returns: A string to reproduce the ``TS_Bool``.
+            :returns: A string to reproduce the ``TF_Bool``.
 
         """
         if self:
-            return 'TS_Bool(True)'
-        return 'TS_Bool(False)'
+            return 'TF_Bool(True)'
+        return 'TF_Bool(False)'
 
     def __str__(self) -> str:
         """
@@ -133,19 +133,19 @@ class T_Bool(TF_Bool):
     def __and__(self, other: int) -> int:
         if issubclass(type(other), TF_Bool):
             return other
-        return super().__and__(other)
+        return other.__and__(self)
 
     def __or__(self, other: int) -> int:
         if issubclass(type(other), TF_Bool):
             return self
-        return super().__and__(other)
+        return other.__or__(self)
 
     def __xor__(self, other: int) -> int:
         if issubclass(type(other), TF_Bool):
             if other:
                 return ~self
             return self
-        return super().__and__(other)
+        return other.__xor__(self)
 
     def __rand__(self, other: int) -> int:
         return self | other

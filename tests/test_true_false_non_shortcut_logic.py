@@ -93,6 +93,20 @@ class TestBitwiseOperations():
         assert TRUTH == false2 | ~false3
         assert ALWAYS is false2 | ~false3
 
+        assert TRUTH is TRUTH | true1
+        assert TRUTH is LIE | true1
+        assert LIE is LIE | false1
+        assert LIE is false1 | LIE
+        assert LIE is LIE | false1
+        assert TRUTH is false1 | TRUTH
+        assert TRUTH is TRUTH | false1
+
+        assert repr(false1 | true1) == 'TF_Bool(True)'
+        assert repr(false1 | true1 | TRUTH) == 'SBool(True)'
+        assert repr(TRUTH | false1) == 'SBool(True)'
+        assert repr(false1 | true1 | TRUTH | false1) == 'SBool(True)'
+        assert repr(false1 | true1 | TRUTH | false1 | false2) == 'SBool(True)'
+        assert str(false1 | true1 | TRUTH | false1 | false2) == 'TRUTH'
         assert TRUTH is false1 | true1 | TRUTH | false1 | false2
         assert true1 is false1 | true1 | true1 | false1 | false3
         assert TRUTH is false3 | true1 | true2 | LIE | false2
@@ -134,6 +148,14 @@ class TestBitwiseOperations():
 
         assert NEVER is false1 & false2 & true2 & false1 & false1
         assert ALWAYS is ~false1 & ~false2 & true1 & ~false2 & ~false1
+
+        assert TRUTH is TRUTH & true1
+        assert LIE is LIE & true1
+        assert LIE is LIE & false1
+        assert LIE is false1 & LIE
+        assert LIE is LIE & false1
+        assert LIE is false1 & TRUTH
+        assert LIE is TRUTH & false1
 
     def test_de_morgan(self) -> None:
         for tfb in [true1, false1]:

@@ -15,7 +15,6 @@
 import threading
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, overload, Self
-from types import NotImplementedType
 from pythonic_fp.gadgets import first_common_ancestor as fca
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
 
@@ -24,6 +23,17 @@ __all__ = ['SBool', 'TRUTH', 'LIE']
 
 class SBool(int):
     """
+    .. depricated:: 3.1.0
+
+        Will re-architecture the entire pythonic-fp-booleans effort for
+        the PyPI version 4.0.0 release.
+
+        Going forward, subtypable Booleans will no longer be a subclass
+        of int. The maintainer has found this approach is a maintenance
+        burden. Maintainer also feels the current version is somewhat
+        "unpythonic" in the typing sophistication it requires for
+        end user code to leverage the project.
+
     .. admonition:: Subtypable Boolean
 
         Like Python's built in bool, class ``SBool`` is a singleton subclass
@@ -120,8 +130,8 @@ class SBool(int):
         .. admonition:: init
 
             :param witness: Determines the truthiness of the ``SBool``.
-            :param flavor: Ignored by ``SBool``,
-                           for Liskov Substitution Principle.
+            :param flavor: Ignored by ``SBool``, here only for
+                           Liskov Substitution Principle.
         """
         self._flavor: Hashable | NoValue = NoValue()
 
@@ -131,7 +141,7 @@ class SBool(int):
         return type(self)(True, self._flavor)
 
     def __and__(self, other: int) -> int:
-        if not isinstance(other, type(self)):
+        if not (isinstance(other, int) or isinstance(other, bool)):
             return NotImplemented
 
         try:
@@ -144,7 +154,7 @@ class SBool(int):
                 raise TypeError(msg)
 
         if issubclass(base_class, SBool):
-            if self._flavor == other._flavor:
+            if self._flavor == cast(SBool, other)._flavor:
                 flavor = self._flavor
             else:
                 flavor = NoValue()

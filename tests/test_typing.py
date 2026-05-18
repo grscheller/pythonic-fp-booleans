@@ -41,29 +41,98 @@ class TestInvert:
         assert ~(FBool(False, 'foo') ^ FBool(True, 'foo')) is FBool(False, 'foo')
         assert ~(FBool(True, 'foo') ^ FBool(True, 'foo')) is FBool(True, 'foo')
 
-        assert ~(FBool(False, 'foo') & FBool(False, 'bar')) is SBool(True)
-        assert ~(FBool(True, 'foo') & FBool(False, 'bar')) is SBool(True)
-        assert ~(FBool(False, 'foo') & FBool(True, 'bar')) is SBool(True)
-        assert ~(FBool(True, 'foo') & FBool(True, 'bar')) is SBool(False)
-        assert ~(FBool(False, 'foo') | FBool(False, 'bar')) is SBool(True)
-        assert ~(FBool(True, 'foo') | FBool(False, 'bar')) is SBool(False)
-        assert ~(FBool(False, 'foo') | FBool(True, 'bar')) is SBool(False)
-        assert ~(FBool(True, 'foo') | FBool(True, 'bar')) is SBool(False)
-        assert ~(FBool(False, 'foo') ^ FBool(False, 'bar')) is SBool(True)
-        assert ~(FBool(True, 'foo') ^ FBool(False, 'bar')) is SBool(False)
-        assert ~(FBool(False, 'foo') ^ FBool(True, 'bar')) is SBool(False)
-        assert ~(FBool(True, 'foo') ^ FBool(True, 'bar')) is SBool(True)
+        try:
+            ~(FBool(False, 'foo') & FBool(False, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with & operator'
+        else:
+            assert False
 
-        assert ~(truthy(42)) is falsy(42)
-        assert ~(falsy(42)) is truthy(42)
-        assert ~(truthy(42)) is not falsy(1)
-        assert ~(falsy(42)) is not truthy(1)
+        try:
+            ~(FBool(True, 'foo') & FBool(False, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with & operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(False, 'foo') & FBool(True, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with & operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(True, 'foo') & FBool(True, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with & operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(False, 'foo') | FBool(False, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(True, 'foo') | FBool(False, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(False, 'foo') | FBool(True, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(True, 'foo') | FBool(True, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(False, 'foo') ^ FBool(False, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(True, 'foo') ^ FBool(False, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(False, 'foo') ^ FBool(True, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+        else:
+            assert False
+
+        try:
+            ~(FBool(True, 'foo') ^ FBool(True, 'bar'))
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+
+        assert ~truthy(42) is falsy(42)
+        assert ~falsy(42) is truthy(42)
+        assert ~truthy(42) is not falsy(1)
+        assert ~falsy(42) is not truthy(1)
 
     def test_truthy_falsy(self) -> None:
-        assert (~T_Bool()) is F_Bool()
-        assert ~(F_Bool()) is T_Bool()
-        assert ~(TF_Bool(True)) is TF_Bool(False)
-        assert ~(TF_Bool(False)) is TF_Bool(True)
+        assert ~T_Bool() is F_Bool()
+        assert ~F_Bool() is T_Bool()
+        assert ~TF_Bool(True) is TF_Bool(False)
+        assert ~TF_Bool(False) is TF_Bool(True)
 
     def test_sbool_fbool(self) -> None:
         assert ~(SBool(False) & FBool(False, 'bar')) is SBool(True)

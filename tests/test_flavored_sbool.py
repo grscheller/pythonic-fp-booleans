@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Geoffrey R. Scheller
+# Copyright 2023-2026 Geoffrey R. Scheller
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,7 +94,12 @@ class TestBitwiseOperations():
     def test_or_not(self) -> None:
         assert truthy(0) is (fbt0_1 | fbt0_1)
         assert TRUTH is (sbt_1 | fbt0_1)
-        assert TRUTH is (fbt0_1 | fbt1_1)
+        try:
+            fbt0_1 | fbt1_1
+        except ValueError as err:
+            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+        else:
+            assert False
 
     def test_xor_not(self) -> None:
         assert LIE is (fbt0_1 ^ sbt_1)
