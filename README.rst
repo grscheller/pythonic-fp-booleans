@@ -7,8 +7,10 @@ PyPI project
 
 Subtypable Boolean like classes.
 
-While still compatible with Python shortcut logic, these singleton classes
-can be non-shortcut logically composed with Python’s bitwise operators.
+While still compatible with Python shortcut logic, these singleton
+classes can be non-shortcut logically composed with Python’s bitwise
+operators. Unlike Python booleans which bitwise compose as integers,
+these compose as true Booleans in a contravariant way.
 
 Part of the
 `pythonic-fp
