@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pythonic-fp-booleans"
-version = "4.0.1"
+version = "4.1.0"
 readme = "README.rst"
 requires-python = ">=3.13"
 authors = [
@@ -29,8 +29,7 @@ dependencies = [
 description = "True Booleans."
 
 [project.urls]
-Changelog = "https://github.com/grscheller/pythonic-fp-booleans/blob/main/CHANGELOG.rst"
-Documentation = "https://grscheller.github.io/pythonic-fp/projects/booleans.html"
+Changelog = "https://github.com/grscheller/pythonic-fp-booleans/blob/main/CHANGELOG.md"
 Homepage = "https://grscheller.github.io/pythonic-fp/"
 Source = "https://github.com/grscheller/pythonic-fp-booleans"
 
