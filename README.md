@@ -4,7 +4,6 @@ Subtypable Boolean like classes.
 
 PyPI project
 [pythonic-fp-booleans](https://pypi.org/project/pythonic-fp-booleans).
-
 Part of the
 [pythonic-fp](https://grscheller.github.io/pythonic-fp/)
 PyPI projects.
