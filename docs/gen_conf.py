@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # Generate conf.py Sphinx configuration executable
 
-import sys
 import os
+import sys
 
 project_prefix = 'Pythonic FP'
 pypi_prefix = 'pythonic-fp'

@@ -5,6 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "pythonic-fp-booleans"
 version = "4.1.0"
+description = "True Booleans which are subtypable."
 readme = "README.md"
 requires-python = ">=3.13"
 authors = [
@@ -26,20 +27,37 @@ classifiers = [
 dependencies = [
   "pythonic-fp-gadgets>=4.0.2",
 ]
-description = "True Booleans."
 
 [project.urls]
 Changelog = "https://github.com/grscheller/pythonic-fp-booleans/blob/main/CHANGELOG.md"
 Homepage = "https://grscheller.github.io/pythonic-fp/"
 Source = "https://github.com/grscheller/pythonic-fp-booleans"
 
-[project.optional-dependencies]
+[dependency-groups]
+docs = [
+  "furo>=2025.12.19",
+  "sphinx>=9.1",
+]
+pub = [
+  "flit",
+]
 test = [
   "pytest>=8.4.1",
 ]
 
+[tool.flit.sdist]
+exclude = [
+  "docs/",
+  "tests/",
+]
+
 [tool.flit.module]
 name = "pythonic_fp.booleans"
+
+[tool.pytest]
+addopts = ["-ra"]
+consider_namespace_packages = true
+testpaths = ["tests/"]
 
 [tool.mypy]
 explicit_package_bases = true
@@ -49,13 +67,11 @@ warn_redundant_casts = true
 warn_return_any = true
 warn_unused_configs = true
 
-[tool.pytest]
-addopts = ["-ra"]
-consider_namespace_packages = true
-testpaths = ["tests/"]
-
 [tool.ruff]
 target-version = "py314"
+
+[tool.ruff.lint]
+ignore = ["RUF022", "E741"]
 
 [tool.ruff.lint.flake8-quotes]
 docstring-quotes = "double"
@@ -65,7 +81,6 @@ docstring-quotes = "double"
   "E731",
   "C901",
 ]
-"**/*.py" = ["E741"]
 
 [tool.ruff.format]
 quote-style = "single"

@@ -13,27 +13,19 @@
 # limitations under the License.
 
 import threading
+
 from collections.abc import Hashable
 from typing import cast, ClassVar, Final, overload, Self
+
 from pythonic_fp.gadgets import first_common_ancestor as fca
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
 
 __all__ = ['SBool', 'TRUTH', 'LIE']
 
+no_value = NoValue()
 
 class SBool(int):
     """
-    .. depricated:: 3.1.0
-
-        Will re-architecture the entire pythonic-fp-booleans effort for
-        the PyPI version 4.0.0 release.
-
-        Going forward, subtypable Booleans will no longer be a subclass
-        of int. The maintainer has found this approach is a maintenance
-        burden. Maintainer also feels the current version is somewhat
-        "unpythonic" in the typing sophistication it requires for
-        end user code to leverage the project.
-
     .. admonition:: Subtypable Boolean
 
         Like Python's built in bool, class SBool is a singleton subclass
@@ -78,27 +70,29 @@ class SBool(int):
 
     """
 
-    _falsy: 'ClassVar[SBool | NoValue]' = NoValue()
+    _falsy: ClassVar[SBool | NoValue] = NoValue()
     _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
 
-    _truthy: 'ClassVar[SBool | NoValue]' = NoValue()
+    _truthy: ClassVar[SBool | NoValue] = NoValue()
     _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
 
     @overload
     def __new__(cls, witness: object) -> Self: ...
     @overload
-    def __new__(cls, witness: object, flavor: Hashable | NoValue = NoValue()) -> Self: ...
+    def __new__(
+        cls, witness: object, flavor: Hashable | NoValue = no_value
+    ) -> Self: ...
 
     def __new__(
         cls,
         witness: object,
-        flavor: Hashable | NoValue = NoValue(),
-    ) -> 'SBool':
+        flavor: Hashable | NoValue = no_value,
+    ) -> Self:
         """
         .. admonition:: new
 
             :param witness: Determines truthiness of the SBool.
-            :param flavor: Ignored 
+            :param flavor: Ignored
             :returns: The truthy or falsy SBool class instance.
 
         """
@@ -107,13 +101,13 @@ class SBool(int):
                 with cls._truthy_lock:
                     if cls._truthy is NoValue():
                         cls._truthy = super().__new__(cls, 1)
-            return cast(SBool, cls._truthy)
+            return cast(Self, cls._truthy)
         else:
             if cls._falsy is NoValue():
                 with cls._falsy_lock:
                     if cls._falsy is NoValue():
                         cls._falsy = super().__new__(cls, 0)
-            return cast(SBool, cls._falsy)
+            return cast(Self, cls._falsy)
 
     @overload
     def __init__(self, witness: object) -> None: ...
@@ -123,7 +117,7 @@ class SBool(int):
     def __init__(
         self,
         witness: object = False,
-        flavor: Hashable | NoValue = NoValue(),
+        flavor: Hashable | NoValue = no_value,
     ) -> None:
         """
         .. admonition:: init
