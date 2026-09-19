@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import threading
 from collections.abc import Hashable
-from typing import cast, ClassVar, Final, Self
+from threading import Lock
+from typing import ClassVar, Final, Self, cast
+
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
+
 from .subtypable import SBool
 
 __all__ = [
@@ -55,10 +57,12 @@ class TF_Bool(SBool):
 
     """
 
+    no_value = NoValue()
+
     def __new__(
         cls,
         witness: object,
-        flavor: Hashable = NoValue(),
+        flavor: Hashable = no_value,
     ) -> Self:
         """
         .. admonition:: new
@@ -114,13 +118,16 @@ class T_Bool(TF_Bool):
          A distinct type from F_Bool.
 
     """
-    _truthy: 'ClassVar[T_Bool | NoValue]' = NoValue()
-    _lock: ClassVar[threading.Lock] = threading.Lock()
+
+    no_value = NoValue()
+
+    _truthy: ClassVar[T_Bool | NoValue] = no_value
+    _lock: ClassVar[Lock] = Lock()
 
     def __new__(
         cls,
-        witness: object = NoValue(),
-        flavor: Hashable | NoValue = NoValue(),
+        witness: object = no_value,
+        flavor: Hashable | NoValue = no_value,
     ) -> Self:
         """
         .. admonition:: new
@@ -130,9 +137,9 @@ class T_Bool(TF_Bool):
             :returns: The truthy T_Bool singleton instance.
 
         """
-        if cls._truthy is NoValue():
+        if cls._truthy is (no_value := NoValue()):
             with cls._lock:
-                if cls._truthy is NoValue():
+                if cls._truthy is no_value:
                     cls._truthy = super(SBool, cls).__new__(cls, 1)
         return cast(Self, cls._truthy)
 
@@ -162,13 +169,16 @@ class F_Bool(TF_Bool):
          A distinct type from T_Bool.
 
     """
-    _falsy: 'ClassVar[F_Bool | NoValue]' = NoValue()
-    _lock: ClassVar[threading.Lock] = threading.Lock()
+
+    no_value = NoValue()
+
+    _falsy: ClassVar[F_Bool | NoValue] = no_value
+    _lock: ClassVar[Lock] = Lock()
 
     def __new__(
         cls,
         witness: object = NoValue(),
-        flavor: Hashable | NoValue = NoValue(),
+        flavor: Hashable | NoValue = no_value,
     ) -> Self:
         """
         .. admonition:: new
@@ -178,9 +188,9 @@ class F_Bool(TF_Bool):
             :returns: The falsy F_Bool singleton instance.
 
         """
-        if cls._falsy is NoValue():
+        if cls._falsy is (no_value := NoValue()):
             with cls._lock:
-                if cls._falsy is NoValue():
+                if cls._falsy is no_value:
                     cls._falsy = super(SBool, cls).__new__(cls, 0)
         return cast(Self, cls._falsy)
 

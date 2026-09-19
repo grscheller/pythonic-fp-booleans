@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import threading
-
 from collections.abc import Hashable
-from typing import cast, ClassVar, Final, overload, Self
+from threading import Lock
+from typing import ClassVar, Final, Self, cast, overload
 
 from pythonic_fp.gadgets import first_common_ancestor as fca
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
@@ -28,23 +27,23 @@ class SBool(int):
     """
     .. admonition:: Subtypable Boolean
 
-        Like Python's built in bool, class SBool is a singleton subclass
-        of int. Unlike bool, it can be further subclassed.
+        Like Python's built in ``bool``, class ``SBool`` is a singleton
+        subclass of ``int``. Unlike ``bool``, it can be further subclassed.
 
-        SBool and its subtypes can also do (non-shortcut) Boolean logic
+        ``SBool`` and its subtypes can also do (non-shortcut) Boolean logic
         using Python bitwise operators.
 
-        +-------------------+--------+------------+
-        | Boolean operation | symbol | dunder     |
-        +===================+========+============+
-        |       not         | ``~``  | __invert__ |
-        +-------------------+--------+------------+
-        |       and         | ``&``  | __and__    |
-        +-------------------+--------+------------+
-        |       or          | ``|``  | __or__     |
-        +-------------------+--------+------------+
-        |       xor         | ``^``  | __xor__    |
-        +-------------------+--------+------------+
+        +-------------------+--------+----------------+
+        | Boolean operation | symbol | dunder         |
+        +===================+========+================+
+        |       not         | ``~``  | ``__invert__`` |
+        +-------------------+--------+----------------+
+        |       and         | ``&``  | ``__and__``    |
+        +-------------------+--------+----------------+
+        |       or          | ``|``  | ``__or__``     |
+        +-------------------+--------+----------------+
+        |       xor         | ``^``  | ``__xor__``    |
+        +-------------------+--------+----------------+
 
         While compatible with Python  short-cut logic, , the not
         operator unfortunately always returns a bool.
@@ -71,10 +70,10 @@ class SBool(int):
     """
 
     _falsy: ClassVar[SBool | NoValue] = NoValue()
-    _falsy_lock: ClassVar[threading.Lock] = threading.Lock()
+    _falsy_lock: ClassVar[Lock] = Lock()
 
     _truthy: ClassVar[SBool | NoValue] = NoValue()
-    _truthy_lock: ClassVar[threading.Lock] = threading.Lock()
+    _truthy_lock: ClassVar[Lock] = Lock()
 
     @overload
     def __new__(cls, witness: object) -> Self: ...
@@ -91,9 +90,9 @@ class SBool(int):
         """
         .. admonition:: new
 
-            :param witness: Determines truthiness of the SBool.
+            :param witness: Determines truthiness of the ``SBool``.
             :param flavor: Ignored
-            :returns: The truthy or falsy SBool class instance.
+            :returns: The truthy or falsy ``SBool`` class instance.
 
         """
         if witness:
@@ -122,9 +121,9 @@ class SBool(int):
         """
         .. admonition:: init
 
-            :param witness: Determines the truthiness of the SBool.
-            :param flavor: Ignored by SBool, here only for support the
-                           Liskov Substitution Principle.
+            :param witness: Determines the truthiness of the ``SBool``.
+            :param flavor: Ignored by ``SBool``, here only to support
+                           the Liskov Substitution Principle.
         """
         self._flavor: Hashable | NoValue = NoValue()
 
@@ -207,7 +206,7 @@ class SBool(int):
             - 'SBool(True)' if truthy
             - 'SBool(False)' if falsy
 
-            :returns: A string to reproduce the SBool.
+            :returns: A string to reproduce the ``SBool``.
 
         """
         if self:
@@ -234,7 +233,7 @@ TRUTH: Final[SBool] = SBool(True)
 """
 .. admonition:: TRUTH
 
-    :var TRUTH: The truthy singleton of type SBool.
+    :var TRUTH: The truthy singleton of type ``SBool``.
 
 """
 

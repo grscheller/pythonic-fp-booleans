@@ -6,7 +6,8 @@ Description
     :ignore-module-all:
     :no-index:
 
-**Boolean type hierarchy**
+Boolean type hierarchy
+----------------------
 
 .. graphviz::
 

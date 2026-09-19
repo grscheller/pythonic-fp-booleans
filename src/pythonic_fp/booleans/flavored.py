@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Geoffrey R. Scheller
+# Copyright 2023-2026 Geoffrey R. Scheller
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,9 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import threading
 from collections.abc import Hashable
-from typing import ClassVar, final, Self
+from threading import Lock
+from typing import ClassVar, Self, final
+
 from .subtypable import SBool
 
 __all__ = ['FBool', 'truthy', 'falsy']
@@ -25,8 +26,8 @@ class FBool(SBool):
     """
     .. admonition:: Favored Booleans
 
-        When different flavors of the truth matter. Each FBool is
-        an SBool subtype corresponding to a hashable flavor.
+        When different flavors of the truth matter. Each ``FBool`` is
+        an ``SBool`` subtype corresponding to a hashable flavor.
 
         .. warning::
 
@@ -36,11 +37,11 @@ class FBool(SBool):
 
     """
 
-    _falsy_dict: 'ClassVar[dict[Hashable, FBool]]' = {}
-    _falsy_dict_lock: ClassVar[threading.Lock] = threading.Lock()
+    _falsy_dict: ClassVar[dict[Hashable, FBool]] = {}
+    _falsy_dict_lock: ClassVar[Lock] = Lock()
 
-    _truthy_dict: 'ClassVar[dict[Hashable, FBool]]' = {}
-    _truthy_dict_lock: ClassVar[threading.Lock] = threading.Lock()
+    _truthy_dict: ClassVar[dict[Hashable, FBool]] = {}
+    _truthy_dict_lock: ClassVar[Lock] = Lock()
 
     def __new__(cls, witness: object, flavor: Hashable) -> Self:
         """
@@ -123,17 +124,17 @@ class FBool(SBool):
 
             Create strings of the form
 
-            - `FBool(True, repr_flavor)'
-            - `FBool(False, repr_flavor)'
+            - ``FBool(True, repr_flavor)``
+            - ``FBool(False, repr_flavor)``
 
-            Where repr_flavor = repr(self.flavor())
+            Where ``repr_flavor = repr(self.flavor())``
 
             :returns: A String to reproduce the flavored boolean.
 
         """
         if self:
-            return f'FBool(True, {repr(self._flavor)})'
-        return f'FBool(False, {repr(self._flavor)})'
+            return f'FBool(True, {self._flavor!r})'
+        return f'FBool(False, {self._flavor!r})'
 
     def __str__(self) -> str:
         """
@@ -141,23 +142,23 @@ class FBool(SBool):
 
             Create strings of the form
 
-            - `FBool(True, str_flavor)'
-            - `FBool(False, str_flavor)'
+            - ``FBool(True, str_flavor)``
+            - ``FBool(False, str_flavor)``
 
-            Where str_flavor = str(self.flavor())
+            Where ``str_flavor = str(self.flavor())``
 
-            :returns: A String to meaningful to an end user.
+            :returns: A String meaningful to an end user.
 
         """
         if self:
-            return f'FBool(True, {str(self._flavor)})'
-        return f'FBool(False, {str(self._flavor)})'
+            return f'FBool(True, {self._flavor!s})'
+        return f'FBool(False, {self._flavor!s})'
 
     def flavor(self) -> Hashable:
         """
         .. admonition:: flavor
 
-            Get the flavor of the FBool, a hashable value.
+            Get the flavor of the ``FBool``, a hashable value.
 
             :returns: The flavor.
 
@@ -169,7 +170,7 @@ def truthy(flavor: Hashable) -> FBool:
     """
     .. admonition:: function truthy
 
-        Returns the truthy singleton FBool of a particular flavor.
+        Returns the truthy singleton ``FBool`` of a particular flavor.
 
         :param flavor: Hashable value to determine which
                        singleton flavor to return.
@@ -183,7 +184,7 @@ def falsy(flavor: Hashable) -> FBool:
     """
     .. admonition:: Function falsy
 
-        Returns the falsy singleton FBool of a particular flavor.
+        Returns the falsy singleton ``FBool`` of a particular flavor.
 
         :param flavor: Hashable value to determine which
                        singleton flavor to return.

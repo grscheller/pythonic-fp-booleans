@@ -20,11 +20,9 @@ PyPI projects.
 
     description
     usage
-    releases
-    changelog
 
 .. toctree::
     :caption: API Documentation
-    :maxdepth: 1
+    :maxdepth: 2
 
     api/index
