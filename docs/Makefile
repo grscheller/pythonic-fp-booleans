@@ -5,8 +5,8 @@
 #  - later needs to agree with pyproject.toml
 PROJECT_NAME = Booleans
 PYPI_NAME = booleans
-RELEASE_VERSION = 4.0.0
-DEVEL_VERSION = 4.1.0
+RELEASE_VERSION = 4.1.0
+DEVEL_VERSION = 4.1.1
 CUSTOM_VERSION = 0.0.0
 
 SPHINXOPTS ?=

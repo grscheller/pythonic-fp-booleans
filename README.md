@@ -8,10 +8,7 @@ Part of the
 [pythonic-fp](https://grscheller.github.io/pythonic-fp/)
 PyPI projects.
 
-## Documentation
-
-Documentation and other links for this project are hosted on
-[GitHub Pages](https://grscheller.github.io/pythonic-fp/projects/booleans.html).
+## Description
 
 While still compatible with Python shortcut logic, these singleton
 classes can be non-shortcut logically composed with Python’s bitwise

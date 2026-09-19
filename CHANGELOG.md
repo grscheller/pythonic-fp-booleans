@@ -14,6 +14,13 @@ See [Semantic Versioning 2.0.0](https://semver.org>).
 
 ## Releases and Important Milestones
 
+### PyPI Release v4.1.1 - 2026-05-19
+
+Start of an effort to standardize the pythonic-fp and the :boring-math
+documentation. This first step has brought pythonic-fp-booleans in
+sync with boring-math-number-theory. Then pythonic-fp-booleans will be
+used as an exemplar for the rest of the pythonic-fp projects.
+
 ### PyPI 4.0.0 - 2026-05-18
 
 Revamped pythonic-fp-booleans implementation.
