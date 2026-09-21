@@ -5,8 +5,9 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "pythonic-fp-booleans"
 version = "4.1.1"
+description = "True Booleans which are subtypable."
 readme = "README.md"
-requires-python = ">=3.12"  # syntactic floor: known to SyntaxError below this
+requires-python = ">=3.13"  # syntactic floor: known to SyntaxError below this
 authors = [
   { name = "Geoffrey R. Scheller", email = "geoffrey@scheller.com" },
 ]
@@ -20,13 +21,12 @@ classifiers = [
   "Intended Audience :: Developers",
   "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.14",  # only versions which have past pytest
+  "Programming Language :: Python :: 3.14",  # tested: pytest test suite successful
   "Typing :: Typed",
 ]
 dependencies = [
   "pythonic-fp-gadgets>=4.0.2",
 ]
-description = "True Booleans which are subtypable."
 
 [project.urls]
 Changelog = "https://github.com/grscheller/pythonic-fp-booleans/blob/main/CHANGELOG.md"
@@ -55,6 +55,11 @@ exclude = [
   "tests/",
 ]
 
+[tool.pytest]
+addopts = ["-ra"]
+consider_namespace_packages = true
+testpaths = ["tests/"]
+
 [tool.mypy]
 explicit_package_bases = true
 local_partial_types = true
@@ -62,11 +67,6 @@ namespace_packages = true
 warn_redundant_casts = true
 warn_return_any = true
 warn_unused_configs = true
-
-[tool.pytest]
-addopts = ["-ra"]
-consider_namespace_packages = true
-testpaths = ["tests/"]
 
 [tool.ruff]
 target-version = "py314"
