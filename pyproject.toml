@@ -4,10 +4,10 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pythonic-fp-booleans"
-version = "4.1.1"
+version = "4.2.0"
 description = "True Booleans which are subtypable."
 readme = "README.md"
-requires-python = ">=3.13"  # syntactic floor: known to SyntaxError below this
+requires-python = ">=3.12"  # syntactic floor: known to SyntaxError below 3.12
 authors = [
   { name = "Geoffrey R. Scheller", email = "geoffrey@scheller.com" },
 ]
