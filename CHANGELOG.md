@@ -14,6 +14,11 @@ See [Semantic Versioning 2.0.0](https://semver.org>).
 
 ## Releases and Important Milestones
 
+### PyPI release 4.2.0 - 2026-09-24
+
+First release done with uv dependency resolution. Devel version
+tentatively 4.2.1 (updated after PyPI release).
+
 ### PyPI Release v4.1.1 - 2026-05-19
 
 Start of an effort to standardize the pythonic-fp and the :boring-math
