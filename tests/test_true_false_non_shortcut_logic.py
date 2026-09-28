@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable import TRUTH, LIE
-from pythonic_fp.booleans.truthy_falsy import TF_Bool, T_Bool, F_Bool
-from pythonic_fp.booleans.truthy_falsy import ALWAYS, NEVER
+from pythonic_fp.booleans.subtypable import LIE, TRUTH
+from pythonic_fp.booleans.truthy_falsy import ALWAYS, NEVER, F_Bool, T_Bool, TF_Bool
 
-class TestBitwiseOperations():
+
+class TestBitwiseOperations:
     def test_identity(self) -> None:
         assert TF_Bool(0) is F_Bool()
         assert TF_Bool(1) is T_Bool()
@@ -26,12 +26,12 @@ class TestBitwiseOperations():
         assert TF_Bool('') is ~T_Bool()
         assert TF_Bool('') is TF_Bool(0)
 
-        assert bool(1 == 1) == TF_Bool(42)      # type: ignore
-        assert bool(1 == 1) is not TF_Bool(42)  # type: ignore
-        assert bool(1 == 0) == ~T_Bool()        # type: ignore
-        assert bool(1 == 0) == F_Bool()         # type: ignore
-        assert bool(1 == 0) is not F_Bool()     # type: ignore
-        assert bool(1 == 0) is not ~T_Bool()    # type: ignore
+        assert bool(1 == 1 + 0) == TF_Bool(42)  # type: ignore
+        assert bool(1 == 1 * 1) is not TF_Bool(42)  # type: ignore
+        assert bool(1 == 1 - 1) == ~T_Bool()  # type: ignore
+        assert bool(1 == 0 + 0) == F_Bool()  # type: ignore
+        assert bool(1 == 0 + 0) is not F_Bool()  # type: ignore
+        assert bool(1 == 0 + 0) is not ~T_Bool()  # type: ignore
         assert TRUTH == ~LIE
         assert LIE == ~TRUTH
         assert TRUTH == ALWAYS
@@ -117,5 +117,5 @@ class TestBitwiseOperations():
     def test_de_morgan(self) -> None:
         for tfb in [NEVER, ALWAYS]:
             for tf2 in [NEVER, ALWAYS]:
-                ~(tfb & tf2) is ~tfb | ~tf2
-                ~(tfb | tf2) is ~tfb & ~tf2
+                assert ~(tfb & tf2) is ~tfb | ~tf2
+                assert ~(tfb | tf2) is ~tfb & ~tf2

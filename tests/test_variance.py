@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.truthy_falsy import TF_Bool, T_Bool, F_Bool, ALWAYS, NEVER
-from pythonic_fp.booleans.flavored import FBool, truthy, falsy
-from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
+from pythonic_fp.booleans.flavored import FBool, falsy, truthy
+from pythonic_fp.booleans.subtypable import LIE, TRUTH, SBool
+from pythonic_fp.booleans.truthy_falsy import ALWAYS, NEVER, F_Bool, T_Bool, TF_Bool
 
-class TestBoolWithInt():
+
+class TestBoolWithInt:
     def test_int_bitwise(self) -> None:
         assert 11 & 6 == 2
         assert 11 | 6 == 15
@@ -63,11 +64,12 @@ class TestBoolWithInt():
         assert (True ^ False) is True
         assert (False ^ False) is False
 
-        assert True is not False
-        assert False is not True
+        foo = True
+        bar = False
+        assert type(foo) is type(bar)
 
 
-class TestSBoolWithInt():
+class TestSBoolWithInt:
     def test_sbool_int(self) -> None:
         assert TRUTH | 2 == 3
         assert 12 & LIE == 0
@@ -123,7 +125,7 @@ class TestSBoolWithInt():
         assert ~LIE is TRUTH
 
 
-class TestSBoolWithBool():
+class TestSBoolWithBool:
     def test_sbool_int(self) -> None:
         assert TRUTH & True == 1
         assert TRUTH & False == 0
@@ -151,16 +153,16 @@ class TestSBoolWithBool():
         assert True ^ LIE == 1
         assert False ^ LIE == 0
 
-class TestFBoolWithTFBool():
+class TestFBoolWithTFBool:
     def test_fbool_with_tfbool(self) -> None:
         fbt1 = FBool(1, 1)
         fbt2 = FBool(1, 2)
         fbf1 = FBool(0, 1)
         fbf2 = FBool(0, 2)
         t_b1 = TF_Bool(1)
-        t_b2 = TF_Bool(42)
+        t_b2 = T_Bool()
         f_b1 = TF_Bool(0)
-        f_b2 = TF_Bool('')
+        f_b2 = F_Bool()
 
         assert t_b1 is t_b2
         assert f_b1 is f_b2
@@ -201,6 +203,8 @@ class TestFBoolWithTFBool():
         assert fbf1 & t_b2 is LIE
         assert t_b2 & fbf1 is LIE
         assert t_b2 & fbt1 is TRUTH
+        assert t_b2 & fbf1 is SBool(False)
+        assert t_b2 & fbt1 is SBool(True)
 
         assert fbt1 ^ fbf1 is truthy(1)
         assert fbt2 ^ fbt2 is falsy(2)

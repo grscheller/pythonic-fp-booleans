@@ -12,23 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
+from pythonic_fp.booleans.subtypable import LIE, TRUTH, SBool
 
-truth1 = SBool(1 == 1)
-truth2 = SBool(42 == 42)
+truth1 = SBool(1 == 1 + 0)
+truth2 = SBool(42 == 40 + 2)
 truth3 = SBool(42)
 
-lie1 = SBool(1 == 1+1)
-lie2 = SBool(42 != 42)
+lie1 = SBool(1 == 1 + 1)
+lie2 = SBool(42 != 21 * 2)
 lie3 = SBool(0)
 
-class TestBitwiseOperations():
+
+class TestBitwiseOperations:
     def test_or_not(self) -> None:
         assert TRUTH == truth1 | truth2
         assert TRUTH is truth2 | truth3
-        assert TRUTH is truth2 | ~ truth3
+        assert TRUTH is truth2 | ~truth3
         assert TRUTH is ~truth1 | truth3
-        assert LIE is ~ truth1 | ~truth3
+        assert LIE is ~truth1 | ~truth3
         assert LIE is ~truth1 | lie2
         assert TRUTH is lie2 | ~lie3
         assert LIE is ~truth2 | lie1
@@ -36,35 +37,35 @@ class TestBitwiseOperations():
 
         assert TRUTH is lie1 | lie2 | truth3 | lie1 | lie3
         assert TRUTH == lie1 | lie2 | truth3 | lie1 | lie3
-        assert LIE is lie1|lie2|~truth1|lie1|~truth3
-        assert LIE == lie1|lie2|~truth1|lie1|~truth3
+        assert LIE is lie1 | lie2 | ~truth1 | lie1 | ~truth3
+        assert LIE == lie1 | lie2 | ~truth1 | lie1 | ~truth3
 
     def test_xor_not(self) -> None:
         assert LIE == truth1 ^ truth2
-        assert LIE is truth2^truth3
-        assert TRUTH is truth2 ^ ~ truth3
+        assert LIE is truth2 ^ truth3
+        assert TRUTH is truth2 ^ ~truth3
         assert TRUTH is ~truth1 ^ truth3
-        assert LIE is ~ truth1 ^ ~truth3
+        assert LIE is ~truth1 ^ ~truth3
         assert LIE is ~truth1 ^ lie2
-        assert TRUTH is lie2 ^~lie3
+        assert TRUTH is lie2 ^ ~lie3
         assert LIE is ~truth2 ^ lie1
         assert LIE == ~truth2 ^ lie1
         assert LIE is lie2 ^ lie1
         assert LIE == lie2 ^ lie1
 
         assert TRUTH is lie1 ^ lie2 ^ truth3 ^ lie1 ^ lie3
-        assert LIE is lie1^lie2^~truth1^lie1^~truth3
-        assert TRUTH is lie1^lie2^~truth1^lie1^truth3^lie3
-        assert LIE is lie1^lie2^~truth1^lie1^truth3^truth2
+        assert LIE is lie1 ^ lie2 ^ ~truth1 ^ lie1 ^ ~truth3
+        assert TRUTH is lie1 ^ lie2 ^ ~truth1 ^ lie1 ^ truth3 ^ lie3
+        assert LIE is lie1 ^ lie2 ^ ~truth1 ^ lie1 ^ truth3 ^ truth2
 
     def test_and_not(self) -> None:
         assert TRUTH is truth1 & truth2
-        assert TRUTH is truth2&truth3
+        assert TRUTH is truth2 & truth3
         assert LIE is truth2 & ~truth3
         assert LIE is ~truth1 & truth3
-        assert LIE is ~truth1&~truth3
-        assert TRUTH is truth1 &~lie2
-        assert LIE is lie2&~lie3
+        assert LIE is ~truth1 & ~truth3
+        assert TRUTH is truth1 & ~lie2
+        assert LIE is lie2 & ~lie3
         assert LIE is ~truth2 & lie1
         assert LIE is lie2 & lie1
 
@@ -76,8 +77,8 @@ class TestBitwiseOperations():
     def test_de_morgan(self) -> None:
         for sb1 in [truth1, lie1]:
             for sb2 in [truth2, lie2]:
-                ~(sb1 & sb2) is ~sb1 | ~sb2
-                ~(sb1 | sb2) is ~sb1 & ~sb2
+                assert ~(sb1 & sb2) is ~sb1 | ~sb2
+                assert ~(sb1 | sb2) is ~sb1 & ~sb2
 
     def test_arbitrary_combo(self) -> None:
         assert TRUTH is lie1 & (lie2 | truth3) | ~lie3 & truth2 | lie2 & ~truth1

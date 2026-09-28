@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from pythonic_fp.booleans.flavored import FBool, falsy, truthy
 from pythonic_fp.booleans.subtypable import SBool
-from pythonic_fp.booleans.flavored import FBool, truthy, falsy
-from pythonic_fp.booleans.truthy_falsy import TF_Bool, T_Bool, F_Bool
+from pythonic_fp.booleans.truthy_falsy import F_Bool, T_Bool, TF_Bool
 
 
 class TestInvert:
@@ -162,6 +162,6 @@ class TestArithmetic:
         fb1 = TF_Bool(0)
         fb2 = TF_Bool(0)
 
-        sbt + (fbt1 + tb1) + tb2 == 4
-        sbt + (fbt1 - tb1) + fb2 == 1
-        (sbt + sbf) * (fbt1 + fbf1 + fbt2 + fbf2) * (tb1 + tb2 + fb1 + fb2) == 4
+        assert sbt + (fbt1 + tb1) + tb2 == 4
+        assert sbt + (fbt1 - tb1) + fb2 == 1
+        assert (sbt + sbf) * (fbt1 + fbf1 + fbt2 + fbf2) * (tb1 + tb2 + fb1 + fb2) == 4

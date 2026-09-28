@@ -12,9 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
+from pythonic_fp.booleans.subtypable import LIE, TRUTH, SBool
 
-class TestBooleanBehaviors():
+
+class TestBooleanBehaviors:
     def test_bool(self) -> None:
         # First make sure we understand what bool does
         bool_t1 = True
@@ -47,13 +48,15 @@ class TestBooleanBehaviors():
         tup = (bool1 and (foo, 42) or bool2 and (foo, foo, 42)) or ()
         assert tup == (1, 42)
 
-        bool1 = True
-        bool2 = False
-        bool1 is bool1
-        bool2 is bool2
-        bool1 is not bool2
-        bool1 == (not bool2)
-        bool2 == (not bool1)
+        boolT1 = True
+        boolT2 = True
+        boolF1 = False
+        boolF2 = False
+        assert boolT1 is boolT2
+        assert boolF1 is boolF2
+        assert boolT1 is not boolF2
+        assert boolT1 == (not boolF1)
+        assert boolT2 == (not boolF2)
 
     def test_sbool(self) -> None:
         # Next make sure that SBool does the same
@@ -87,13 +90,16 @@ class TestBooleanBehaviors():
         tup = (sbool1 and (foo, 42) or sbool2 and (foo, foo, 42)) or ()
         assert tup == (1, 42)
 
-        sbool1 = TRUTH
-        sbool2 = LIE
-        sbool1 is sbool1
-        sbool2 is sbool2
-        sbool1 is not sbool2
-        sbool1 == ~sbool2
-        sbool2 == ~sbool1
+        sboolT1 = TRUTH
+        sboolT2 = TRUTH
+        sboolF1 = LIE
+        sboolF2 = LIE
+        assert sboolT1 is sboolT2
+        assert sboolT2 is not sboolF2
+        assert sboolF1 is sboolF2
+        assert sboolT1 is not sboolF2
+        assert sboolF1 == ~sboolT2
+        assert sboolF2 == ~sboolT1
 
     def test_arithmetic(self) -> None:
         bt1 = True

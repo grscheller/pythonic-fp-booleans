@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable import TRUTH, LIE
-from pythonic_fp.booleans.flavored import FBool, truthy, falsy
+from pythonic_fp.booleans.flavored import FBool, falsy, truthy
+from pythonic_fp.booleans.subtypable import LIE, TRUTH
 
 
-class TestBitwiseOperations():
+class TestBitwiseOperations:
     def test_identity(self) -> None:
         assert truthy(0) is truthy(0)
         assert truthy(0) is ~falsy(0)
@@ -31,10 +31,10 @@ class TestBitwiseOperations():
         assert FBool('foo', 'bar') is truthy('bar')
         assert FBool('', 'bar') is falsy('bar')
 
-        assert bool(1 == 1) == truthy(0)       # type: ignore
-        assert bool(1 == 1) is not truthy(0)   # type: ignore
-        assert bool(1 == 0) == ~truthy(0)      # type: ignore
-        assert bool(1 == 0) is not ~truthy(0)  # type: ignore
+        assert bool(1 == 1 + 0) == truthy(0)
+        assert bool(1 == 2 - 1) is not truthy(0)
+        assert bool(1 == 1 - 1) == ~truthy(0)
+        assert bool(1 == 2 + 2) is not ~truthy(0)
         assert TRUTH == truthy(0) == truthy(1)
         assert TRUTH is not truthy(0)
         assert TRUTH is not truthy(1)
@@ -127,10 +127,10 @@ class TestBitwiseOperations():
 
         for b1 in [truth1, lie1]:
             for b2 in [truth1, lie1]:
-                ~(b1 & b2) is ~b1 | ~b2
-                ~(b1 | b2) is ~b1 & ~b2
+                assert ~(b1 & b2) is ~b1 | ~b2
+                assert ~(b1 | b2) is ~b1 & ~b2
 
         for b1 in [truth2, lie2]:
             for b2 in [truth2, lie2]:
-                ~(b1 & b2) is ~b1 | ~b2
-                ~(b1 | b2) is ~b1 & ~b2
+                assert ~(b1 & b2) is ~b1 | ~b2
+                assert ~(b1 | b2) is ~b1 & ~b2

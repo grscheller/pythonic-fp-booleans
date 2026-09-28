@@ -133,14 +133,7 @@ class SBool(int):
         return type(self)(True, self._flavor)
 
     def __and__(self, other: int) -> int:
-        try:
-            base_class = fca(type(self), type(other))
-        except TypeError:
-            if type(other) is bool:
-                base_class = int
-            else:
-                msg = f"unsupported operand type(s) for &: '{type(self)}' and '{type(other)}'"
-                raise TypeError(msg)
+        base_class = fca(type(self), type(other))
 
         if issubclass(base_class, SBool):
             if self._flavor == cast(SBool, other)._flavor:
@@ -155,15 +148,7 @@ class SBool(int):
             return int(self) & int(other)
 
     def __or__(self, other: int) -> int:
-        try:
-            base_class = fca(type(self), type(other))
-        except TypeError:
-            if type(other) is bool:
-                base_class = int
-            else:
-                msg = f"unsupported operand type(s) for |: '{type(self)}' and '{type(other)}'"
-                raise TypeError(msg)
-
+        base_class = fca(type(self), type(other))
         if issubclass(base_class, SBool):
             if self._flavor == cast(SBool, other)._flavor:
                 flavor = self._flavor
@@ -177,14 +162,7 @@ class SBool(int):
             return int(self) | int(other)
 
     def __xor__(self, other: int) -> int:
-        try:
-            base_class = fca(type(self), type(other))
-        except TypeError:
-            if type(other) is bool:
-                base_class = int
-            else:
-                msg = f"unsupported operand type(s) for ^: '{type(self)}' and '{type(other)}'"
-                raise TypeError(msg)
+        base_class = fca(type(self), type(other))
 
         if issubclass(base_class, SBool):
             if self._flavor == cast(SBool, other)._flavor:

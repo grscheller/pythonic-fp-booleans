@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
-from pythonic_fp.booleans.flavored import FBool, truthy, falsy
+from pythonic_fp.booleans.flavored import FBool, falsy, truthy
+from pythonic_fp.booleans.subtypable import LIE, TRUTH, SBool
 
-class TestBooleanBehaviors():
+
+class TestBooleanBehaviors:
     def test_bool(self) -> None:
         # First make sure we understand what bool does
         bool_t1 = True
@@ -48,13 +49,16 @@ class TestBooleanBehaviors():
         tup = (bool1 and (foo, 42) or bool2 and (foo, foo, 42)) or ()
         assert tup == (1, 42)
 
-        bool1 = True
-        bool2 = False
-        bool1 is bool1
-        bool2 is bool2
-        bool1 is not bool2
-        bool1 == (not bool2)
-        bool2 == (not bool1)
+        boolT1 = True
+        boolT2 = True
+        boolF1 = False
+        boolF2 = False
+        assert boolT1 is boolT2
+        assert boolF1 is boolF2
+        assert type(boolT1) is type(boolT2)
+        assert type(boolF1) is type(boolF2)
+        assert type(boolT1) is type(boolF2)
+        assert type(boolF1) is type(boolT2)
 
     def test_fbool(self) -> None:
         # Next make sure that FBool does the same as bool
@@ -98,21 +102,21 @@ class TestBooleanBehaviors():
         fbool_bar_t = truthy('bar')
         fbool_foo_f = falsy('foo')
         fbool_bar_f = falsy('bar')
-        fbool_foo_t is truthy('foo')
-        fbool_foo_t is not truthy('foobar')
-        fbool_foo_f is falsy('foo')
-        fbool_foo_f is not falsy('foobar')
-        fbool_foo_f is not fbool_bar_f
-        fbool_foo_f == fbool_bar_f
-        fbool_foo_t is not fbool_bar_t
-        fbool_foo_t == fbool_bar_t
-        fbool_foo_t != fbool_bar_f
-        fbool_foo_t is ~ fbool_foo_f
-        fbool_bar_t is ~ fbool_bar_f
-        fbool_foo_t is not ~fbool_bar_f
-        fbool_bar_t is not ~fbool_foo_f
-        fbool_foo_t == ~fbool_bar_f
-        fbool_bar_t == ~fbool_foo_f
+        assert fbool_foo_t is truthy('foo')
+        assert fbool_foo_t is not truthy('foobar')
+        assert fbool_foo_f is falsy('foo')
+        assert fbool_foo_f is not falsy('foobar')
+        assert fbool_foo_f is not fbool_bar_f
+        assert fbool_foo_f == fbool_bar_f
+        assert fbool_foo_t is not fbool_bar_t
+        assert fbool_foo_t == fbool_bar_t
+        assert fbool_foo_t != fbool_bar_f
+        assert fbool_foo_t is ~fbool_foo_f
+        assert fbool_bar_t is ~fbool_bar_f
+        assert fbool_foo_t is not ~fbool_bar_f
+        assert fbool_bar_t is not ~fbool_foo_f
+        assert fbool_foo_t == ~fbool_bar_f
+        assert fbool_bar_t == ~fbool_foo_f
 
     def test_arithmetic(self) -> None:
         bt1 = True
@@ -190,6 +194,6 @@ class TestBooleanBehaviors():
         assert LIE + ft1 == 1
         assert TRUTH + ft1 == 2
         assert ft0 + TRUTH + ft1 == 3
-        assert ft0 + SBool(1==1) + 3 == 5
+        assert ft0 + SBool(1 == 1 + 0) + 3 + ff0 == 5
         assert SBool('') + ff0 + ff0 == 0
         assert SBool('foo') + ft1 == 2

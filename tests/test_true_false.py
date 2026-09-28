@@ -12,23 +12,19 @@
 # See the License for the specific language governing permissions anddd
 # limitations under the License.
 
-from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
+from pythonic_fp.booleans.subtypable import LIE, TRUTH, SBool
 from pythonic_fp.booleans.truthy_falsy import (
-    TF_Bool,
-    T_Bool,
-    F_Bool,
     ALWAYS,
     NEVER,
+    F_Bool,
+    T_Bool,
+    TF_Bool,
 )
 
 
 class TestSBool:
     def test_equality(self) -> None:
-        assert TRUTH == TRUTH
-        assert LIE == LIE
         assert TRUTH != LIE
-        assert TRUTH is TRUTH
-        assert LIE is LIE
         assert TRUTH is not LIE
 
         sky_is_blue: SBool = TRUTH
@@ -176,14 +172,21 @@ class TestTruthsAndLies:
 
     def test_identities(self) -> None:
         yooT: SBool = ALWAYS
-        mooT: SBool = F_Bool()
-        mooF: SBool = T_Bool()
+        mooT: SBool = T_Bool()
+        mooF: SBool = F_Bool()
         yooF: SBool = NEVER
 
-        mooT == yooT
-        mooF == yooF
-        mooT != yooF
+        assert mooT == yooT
+        assert mooF == yooF
+        assert mooT != yooF
+        assert mooF != yooT
 
-        mooT is not yooT
-        mooF is not yooF
-        mooT is not yooF
+        assert mooT is yooT
+        assert mooF is yooF
+        assert mooT is not yooF
+        assert mooF is not yooT
+
+        assert type(mooT) is type(yooT)
+        assert type(mooF) is type(yooF)
+        assert type(mooT) is not type(yooF)
+        assert type(mooF) is not type(yooT)

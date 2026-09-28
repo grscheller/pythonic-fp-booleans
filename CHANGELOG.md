@@ -14,10 +14,15 @@ See [Semantic Versioning 2.0.0](https://semver.org>).
 
 ## Releases and Important Milestones
 
+### PyPI release 4.3.0 - 2026-09-28
+
+Was able to simplify subtypable.py by removing try blocks due
+to improvements in first_common_ancestor function from
+pythonic-fp-gadgets version 4.5.0, updated dependency.
+
 ### PyPI release 4.2.0 - 2026-09-24
 
-First release done with uv dependency resolution. Devel version
-tentatively 4.2.1 (updated after PyPI release).
+First release done with uv dependency resolution.
 
 ### PyPI Release v4.1.1 - 2026-05-19
 
