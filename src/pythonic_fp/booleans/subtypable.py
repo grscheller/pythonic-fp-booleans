@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Geoffrey R. Scheller
+# Copyright 2023-2026 Geoffrey R. Scheller
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ class SBool(int):
         .. admonition:: new
 
             :param witness: Determines truthiness of the ``SBool``.
-            :param flavor: Ignored
+            :param flavor: Ignored, here for Liskov  substitution principle
             :returns: The truthy or falsy ``SBool`` class instance.
 
         """
@@ -128,11 +128,32 @@ class SBool(int):
         self._flavor: Hashable | NoValue = NoValue()
 
     def __invert__(self) -> int:
+        """
+        .. admonition:: bitwise invert operator
+
+            Inverts the value of an SBool.
+
+            :returns: The inverted value of the SBool.
+
+        """
         if self:
             return type(self)(False, self._flavor)
         return type(self)(True, self._flavor)
 
     def __and__(self, other: int) -> int:
+        """
+        .. admonition:: bitwise and operator
+
+            Overloading ``&`` to perform Boolean "and" if ``other``
+            is another ``SBool``.
+
+            :param other: Any object derived from int.
+            :returns: Boolean "and" if other is an SBool
+                      otherwise returns bitwise "and".
+            :rtype: First common ancestor of the types of self and other
+                    if both of type SBool, otherwise int.
+
+        """
         base_class = fca(type(self), type(other))
 
         if issubclass(base_class, SBool):
@@ -148,6 +169,19 @@ class SBool(int):
             return int(self) & int(other)
 
     def __or__(self, other: int) -> int:
+        """
+        .. admonition:: bitwise or operator
+
+            Overloading ``|`` to perform Boolean "or" if ``other``
+            is another ``SBool``.
+
+            :param other: Any object derived from int.
+            :returns: Boolean "and" if other is an SBool
+                      otherwise returns bitwise "and".
+            :rtype: First common ancestor of the types of self and other
+                    if both of type SBool, otherwise int.
+
+        """
         base_class = fca(type(self), type(other))
         if issubclass(base_class, SBool):
             if self._flavor == cast(SBool, other)._flavor:
@@ -162,6 +196,19 @@ class SBool(int):
             return int(self) | int(other)
 
     def __xor__(self, other: int) -> int:
+        """
+        .. admonition:: bitwise xor operator
+
+            Overloading ``^`` to perform Boolean "xor" if ``other``
+            is another ``SBool``.
+
+            :param other: Any object derived from int.
+            :returns: Boolean "and" if other is an SBool
+                      otherwise returns bitwise "and".
+            :rtype: First common ancestor of the types of self and other
+                    if both of type SBool, otherwise int.
+
+        """
         base_class = fca(type(self), type(other))
 
         if issubclass(base_class, SBool):
@@ -181,10 +228,9 @@ class SBool(int):
         """
         .. admonition:: repr string
 
-            - 'SBool(True)' if truthy
-            - 'SBool(False)' if falsy
+            A string to reproduce the ``SBool``.
 
-            :returns: A string to reproduce the ``SBool``.
+            :returns: 'SBool(True)' if truthy, 'SBool(False)' if falsy.
 
         """
         if self:
@@ -196,10 +242,9 @@ class SBool(int):
         """
         .. admonition:: user string
 
-            - 'TRUTH' if truthy
-            - 'LIE' if falsy
+            A string meaningful to an end user.
 
-            :returns: A string meaningful to an end user.
+            :returns: 'TRUTH' if truthy, 'LIE' if falsy.
 
         """
         if self:

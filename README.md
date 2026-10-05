@@ -1,6 +1,6 @@
 # Pythonic FP - Booleans
 
-Subtypable Boolean like classes.
+Boolean like classes.
 
 PyPI project
 [pythonic-fp-booleans](https://pypi.org/project/pythonic-fp-booleans).

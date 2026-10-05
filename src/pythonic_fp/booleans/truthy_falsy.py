@@ -14,9 +14,7 @@
 
 from collections.abc import Hashable
 from threading import Lock
-from typing import ClassVar, Final, Self, cast
-
-from pythonic_fp.gadgets.sentinels.novalue import NoValue
+from typing import ClassVar, Final, Self, cast, final
 
 from .subtypable import SBool
 
@@ -37,7 +35,10 @@ class TF_Bool(SBool):
         values are distinct singleton subclasses, not just
         distinct singleton values.
 
-        A subtype of SBool.
+        .. important::
+
+            Do not subclass ``TF_Bool`` itself. Subclassing it is
+            designed to fail at runtime.
 
         .. tip::
 
@@ -46,37 +47,49 @@ class TF_Bool(SBool):
         .. warning::
 
             Although these datastructures are completely compatible
-            with Python shortcut evaluation, care needs to be taken when
-            using them with the "and", "or", and "not" builtins.
+            with Python shortcut evaluation, care needs to be taken
+            when using them with the ``and``, ``or``, and ``not`` builtins.
 
-            For example, ``~ALWAYS is NEVER`` but ``not ALWAYS is False``
-            because ``ALWAYS`` is truthy.
+            For example:
 
-            Similarly, ``(ALWAYS and False) is False`` while
-            ``(ALWAYS or False) is ALWAYS``.
+            - ``~ALWAYS is NEVER``
+            - ``not ALWAYS is False``
+            - ``(ALWAYS and False) is False``
+            - ``(ALWAYS or False) is ALWAYS``
 
     """
 
-    no_value = NoValue()
-
-    def __new__(
-        cls,
-        witness: object,
-        flavor: Hashable = no_value,
-    ) -> Self:
+    def __new__(cls, witness: object, flavor: Hashable = None) -> Self:
         """
         .. admonition:: new
 
-            :param witness: Determines which subtype, T_Bool or F_Bool to return.
-            :param flavor: Ignored parameter, only two flavors, one truthy and one falsy.
-            :returns: The singleton truthy or singleton falsy instances.
+            :param witness: Determines which subtype,
+                            ``T_Bool`` or ``F_Bool``,
+                            of ``TF_Bool`` to return.
+            :param flavor: Ignored parameter, only two flavors,
+                           one truthy and one falsy.
+            :returns: The singleton truthy or singleton falsy instance.
 
         """
         if witness:
             return cast(Self, T_Bool())
         return cast(Self, F_Bool())
 
+    def __init_subclass__(cls, **kwargs: object) -> None:
+        super().__init_subclass__(**kwargs)
+        if TF_Bool in cls.__bases__ and cls.__module__ != TF_Bool.__module__:
+            msg = 'TF_Bool is sealed'
+            raise TypeError(msg)
+
     def __invert__(self) -> TF_Bool:
+        """
+        .. admonition:: bitwise invert operator
+
+            Inverts the value of an TF_Bool.
+
+            :returns: The inverted value of the SBool.
+
+        """
         if self:
             return F_Bool()
         return T_Bool()
@@ -85,24 +98,22 @@ class TF_Bool(SBool):
         """
         .. admonition:: repr string
 
-            - if truthy return 'TF_Bool(True)'
-            - if falsy return 'TF_Bool(False)'
+            A string to reproduce the TF_Bool.
 
-            :returns: A string to reproduce the TF_Bool.
+            :returns: 'T_Bool()' if truthy, otherwise `F_Bool()`
 
         """
         if self:
-            return 'TF_Bool(True)'
-        return 'TF_Bool(False)'
+            return 'T_Bool()'
+        return 'F_Bool()'
 
     def __str__(self) -> str:
         """
         .. admonition:: user string
 
-            - if truthy return 'ALWAYS'
-            - if falsy return 'NEVER'
+            A string meaningful to an end user.
 
-            :returns: A string meaningful to an end user.
+            :returns: 'ALWAYS' if truthy, otherwise 'NEVER'
 
         """
         if self:
@@ -110,50 +121,92 @@ class TF_Bool(SBool):
         return 'NEVER'
 
 
+@final
 class T_Bool(TF_Bool):
     """
     .. admonition:: Truthy TF_Bool subclass
 
-         Type of the truthy singleton TS_Bool instance.
+         Type of the truthy singleton TF_Bool instance.
          A distinct type from F_Bool.
 
     """
 
-    no_value = NoValue()
-
-    _truthy: ClassVar[T_Bool | NoValue] = no_value
     _lock: ClassVar[Lock] = Lock()
 
-    def __new__(
-        cls,
-        witness: object = no_value,
-        flavor: Hashable | NoValue = no_value,
-    ) -> Self:
+    def __new__(cls, witness: object = None, flavor: Hashable = None) -> Self:
         """
         .. admonition:: new
 
-            :param witness: Ignored parameter, a T_Bool is always truthy.
-            :param flavor: Ignored parameter, only one truthy "flavor".
-            :returns: The truthy T_Bool singleton instance.
+            :param witness: Ignored parameter, a T_Bool or T_Bool subtype is always truthy.
+            :param flavor: Ignored parameter, only one truthy "flavor" for each T_Bool subtype.
+            :returns: The truthy T_Bool or T_Bool subtype singleton instance.
 
         """
-        if cls._truthy is (no_value := NoValue()):
-            with cls._lock:
-                if cls._truthy is no_value:
-                    cls._truthy = super(SBool, cls).__new__(cls, 1)
-        return cast(Self, cls._truthy)
+        inst = cls.__dict__.get('_truthy')
+        if inst is None:
+            with T_Bool._lock:
+                inst = cls.__dict__.get('_truthy')
+                if inst is None:
+                    inst = super(SBool, cls).__new__(cls, 1)
+                    cls._truthy = inst
+        return cast(Self, inst)
+
+    def __init_subclass__(cls, **kwargs: object) -> None:
+        super().__init_subclass__(**kwargs)
+        if T_Bool in cls.__bases__ and cls.__module__ != T_Bool.__module__:
+            msg = 'T_Bool is final'
+            raise TypeError(msg)
 
     def __and__(self, other: int) -> int:
+        """
+        .. admonition:: bitwise and operator
+
+            Overloading ``&`` to perform Boolean "and" if ``other``
+            is another ``TF_Bool``.
+
+            :param other: Any object derived from int.
+            :returns: Boolean "and" if other is an SBool
+                      otherwise returns bitwise "and".
+            :rtype: First common ancestor of the types of self and other
+                    if both of type SBool, otherwise int.
+
+        """
         if isinstance(other, TF_Bool):
             return other
         return super().__and__(other)
 
     def __or__(self, other: int) -> int:
+        """
+        .. admonition:: bitwise or operator
+
+            Overloading ``|`` to perform Boolean "or" if ``other``
+            is another ``TF_Bool``.
+
+            :param other: Any object derived from int.
+            :returns: Boolean "or" if other is an SBool
+                      otherwise returns bitwise "or".
+            :rtype: First common ancestor of the types of self and other
+                    if both of type SBool, otherwise int.
+
+        """
         if isinstance(other, TF_Bool):
             return self
         return super().__or__(other)
 
     def __xor__(self, other: int) -> int:
+        """
+        .. admonition:: bitwise xor operator
+
+            Overloading ``^`` to perform Boolean "xor" if ``other``
+            is another ``TF_Bool``.
+
+            :param other: Any object derived from int.
+            :returns: Boolean "xor" if other is an SBool
+                      otherwise returns bitwise "xor".
+            :rtype: First common ancestor of the types of self and other
+                    if both of type SBool, otherwise int.
+
+        """
         if isinstance(other, TF_Bool):
             if other:
                 return ~self
@@ -161,38 +214,41 @@ class T_Bool(TF_Bool):
         return super().__xor__(other)
 
 
+@final
 class F_Bool(TF_Bool):
     """
     .. admonition:: Falsy TF_Bool subclass
 
-         Type of the falsy singleton TS_Bool instance.
+         Type of the falsy singleton TF_Bool instance.
          A distinct type from T_Bool.
 
     """
 
-    no_value = NoValue()
-
-    _falsy: ClassVar[F_Bool | NoValue] = no_value
     _lock: ClassVar[Lock] = Lock()
 
-    def __new__(
-        cls,
-        witness: object = NoValue(),
-        flavor: Hashable | NoValue = no_value,
-    ) -> Self:
+    def __new__(cls, witness: object = None, flavor: Hashable = None) -> Self:
         """
         .. admonition:: new
 
-            :param witness: Parameter ignored, an F_Bool is always falsy.
-            :param flavor: Parameter ignored, only one falsy "flavor".
-            :returns: The falsy F_Bool singleton instance.
+            :param witness: Ignored parameter, an F_Bool or F_Bool subtype is always truthy.
+            :param flavor: Ignored parameter, only one truthy "flavor" for each F_Bool subtype.
+            :returns: The truthy F_Bool or F_Bool subtype singleton instance.
 
         """
-        if cls._falsy is (no_value := NoValue()):
-            with cls._lock:
-                if cls._falsy is no_value:
-                    cls._falsy = super(SBool, cls).__new__(cls, 0)
-        return cast(Self, cls._falsy)
+        inst = cls.__dict__.get('_falsy')
+        if inst is None:
+            with T_Bool._lock:
+                inst = cls.__dict__.get('_falsy')
+                if inst is None:
+                    inst = super(SBool, cls).__new__(cls, 0)
+                    cls._falsy = inst
+        return cast(Self, inst)
+
+    def __init_subclass__(cls, **kwargs: object) -> None:
+        super().__init_subclass__(**kwargs)
+        if F_Bool in cls.__bases__ and cls.__module__ != F_Bool.__module__:
+            msg = 'F_Bool is final'
+            raise TypeError(msg)
 
     def __and__(self, other: int) -> int:
         if issubclass(type(other), TF_Bool):
@@ -222,7 +278,7 @@ ALWAYS: Final[TF_Bool] = T_Bool()
 
 NEVER: Final[TF_Bool] = F_Bool()
 """
-.. admonition:: Never
+.. admonition:: NEVER
 
     :var NEVER: The falsy singleton TF_Bool subtyped instance.
 

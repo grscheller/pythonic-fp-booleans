@@ -14,6 +14,26 @@ See [Semantic Versioning 2.0.0](https://semver.org>).
 
 ## Releases and Important Milestones
 
+### PyPI release 5.0.0 - 2026-10-04
+
+Now T_Bool and F_Bool are final classes. Class TS_Bool is essentially
+"sealed". It now will raise a runtime TypeError exception if subclassed
+to anything other than T_Bool or F_Bool. T_Bool and F_Bool will also now
+raise TypeError at runtime if subclassed.
+
+While attempting to subtype T_Bool and F_Bool for pythonic-fp-fptools,
+I discovered some problems with the TF_Bool design. There are
+significant typing advantages having truthy and falsy values as
+distinct subtypes. I did not want to do what I did for FBool by making
+different flavors runtime incompatible. FBool instances of different
+flavors really are not distinct types. I can't naively  use the
+first_common_ancestor trick from pythonic-fp-gadgets like I did for
+SBool since the first common ancestor would be TF_Bool.
+
+I considered only supporting one level of subclassing, of the
+T_Bool and F_Bool pair, but found myself going down a typing
+rabbit hole.
+
 ### PyPI release 4.3.0 - 2026-09-28
 
 Was able to simplify subtypable.py by removing try blocks due
@@ -91,9 +111,9 @@ TODO:
 - bitwise operators not symmetric when used with `SBool` types and `int` or `bool`
 
   - may need to define reversed bit-wise operators
-  - `TS_Boolean` has a code smell to it
+  - `TF_Boolean` has a code smell to it
     - may be just a hack to get get around sub-optimal type usage
-    - Using `TS_Bool` as a variable type may be enough 
+    - Using `TF_Bool` as a variable type may be enough 
 
 ### PyPI 1.1.2 - 2025-09-09
 

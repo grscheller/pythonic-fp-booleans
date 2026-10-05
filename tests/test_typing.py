@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 from pythonic_fp.booleans.flavored import FBool, falsy, truthy
 from pythonic_fp.booleans.subtypable import SBool
 from pythonic_fp.booleans.truthy_falsy import F_Bool, T_Bool, TF_Bool
@@ -165,3 +166,38 @@ class TestArithmetic:
         assert sbt + (fbt1 + tb1) + tb2 == 4
         assert sbt + (fbt1 - tb1) + fb2 == 1
         assert (sbt + sbf) * (fbt1 + fbf1 + fbt2 + fbf2) * (tb1 + tb2 + fb1 + fb2) == 4
+
+class TestSealed:
+    def test_tf_bool_sealed(self) -> None:
+        try:
+            class TF_Bool_Subclass(TF_Bool):
+                def msg(self) -> str:
+                    return 'I am a TF_Bool subclass!'
+
+        except TypeError as err:
+            assert str(err) == 'TF_Bool is sealed'
+        else:
+            assert False
+
+class TestFinal:
+    def test_t_bool_final(self) -> None:
+        try:
+            class T_Bool_Subclass(T_Bool):  # type: ignore
+                def msg(self) -> str:
+                    return 'I am a TF_Bool subclass!'
+
+        except TypeError as err:
+            assert str(err) == 'T_Bool is final'
+        else:
+            assert False
+
+    def test_f_bool_final(self) -> None:
+        try:
+            class F_Bool_Subclass(F_Bool):  # type: ignore
+                def msg(self) -> str:
+                    return 'I am a F_Bool subclass!'
+
+        except TypeError as err:
+            assert str(err) == 'F_Bool is final'
+        else:
+            assert False

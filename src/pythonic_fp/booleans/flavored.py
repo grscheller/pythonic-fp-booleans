@@ -86,6 +86,18 @@ class FBool(SBool):
             self._flavor = flavor
 
     def __and__(self, other: int) -> int:
+        """
+        .. admonition:: bitwise and operator
+
+            Overloading ``&`` to perform Boolean "and" if ``other`` is
+            another FBool of the same flavor.
+
+            :param other: Any object derived from int.
+            :returns: Boolean "and" if other is an FBool of the same
+                      flavor, otherwise returns bitwise "and".
+            :raises: ValueError if other is an FBool of a different flavor.
+
+        """
         if type(other) is type(self):
             if other.flavor() != self._flavor:
                 msg = 'Error: diffent flavored booleans compared with & operator'
@@ -97,6 +109,18 @@ class FBool(SBool):
         return super().__and__(other)
 
     def __or__(self, other: int) -> int:
+        """
+        .. admonition:: bitwise or operator
+
+            Overloading ``|`` to perform Boolean "or" if ``other`` is
+            another FBool of the same flavor.
+
+            :param other: Any object derived from int.
+            :returns: Boolean "or" if other is an FBool of the same
+                      flavor, otherwise returns bitwise "or".
+            :raises: ValueError if other is an FBool of a different flavor.
+
+        """
         if type(other) is type(self):
             if other.flavor() != self.flavor():
                 msg = 'Error: diffent flavored booleans compared with | operator'
@@ -108,6 +132,18 @@ class FBool(SBool):
         return super().__or__(other)
 
     def __xor__(self, other: int) -> int:
+        """
+        .. admonition:: bitwise xor operator
+
+            Overloading ``^`` to perform Boolean "xor" if ``other`` is
+            another FBool of the same flavor.
+
+            :param other: Any object derived from int.
+            :returns: Boolean "xor" if other is an FBool of the same
+                      flavor, otherwise returns bitwise "or".
+            :raises: ValueError if other is an FBool of a different flavor.
+
+        """
         if type(other) is type(self):
             if other.flavor() != self._flavor:
                 msg = 'Error: diffent flavored booleans compared with ^ operator'
@@ -160,7 +196,7 @@ class FBool(SBool):
 
             Get the flavor of the ``FBool``, a hashable value.
 
-            :returns: The flavor.
+            :returns: The flavor of the FBool.
 
         """
         return self._flavor
