@@ -2,24 +2,32 @@
 
 PyPI **pythonic-fp-booleans** project. Subtypable Boolean classes.
 
-## Semantic Versioning
+## Release Versioning
 
-Strict 3 digit semantic versioning adopted 2025-05-19.
+A tiered strict 3 digit semantic versioning will be used
 
-- **MAJOR** version incremented for incompatible API changes
-- **MINOR** version incremented for backward compatible added functionality
-- **PATCH** version incremented for backward compatible bug fixes
+- **MAJOR** incremented for incompatible API changes across Pythonic FP libraries
+- **MINOR** incremented for backward compatible added functionality
+- **PATCH** incremented for backward compatible bug fixes
 
-See [Semantic Versioning 2.0.0](https://semver.org>).
+All versions with the same major release numbers should be consistent
+with each other. Note that lower floors will still be used.
 
 ## Releases and Important Milestones
 
+### PyPI release 6.0.0 - 2026-10-TBA
+
+No substantive changes were made to this library.
+
+Going forward, consistent releases of the Pythonic FP libraries will
+share a common major release number. Will use caps to keep the major
+release lines from mixing.
+
 ### PyPI release 5.1.0 - 2026-10-10
 
-Put <6 caps on dependencies, all pythonic-fp projects will be bumped
-up to the 6.0.0 release level, if not already at the 6.x.y level.
-The next pythonic-fp release will be 6.0.0 to track these for
-integration testing.
+Put `<6` caps on dependencies. If not already at the `6.x.y` level, all
+pythonic-fp projects will be bumped up to the version `6.0.0`. The next
+pythonic-fp release will be `6.0.0` mostly for integration testing.
 
 ### PyPI release 5.0.0 - 2026-10-04
 
@@ -45,13 +53,13 @@ rabbit hole.
 
 Was able to simplify subtypable.py by removing try blocks due
 to improvements in first_common_ancestor function from
-pythonic-fp-gadgets version 4.5.0, updated dependency.
+pythonic-fp-gadgets version `4.5.0`, updated dependency.
 
 ### PyPI release 4.2.0 - 2026-09-24
 
 First release done with uv dependency resolution.
 
-### PyPI Release v4.1.1 - 2026-05-19
+### PyPI Release 4.1.1 - 2026-05-19
 
 Start of an effort to standardize the pythonic-fp and the :boring-math
 documentation. This first step has brought pythonic-fp-booleans in
@@ -101,7 +109,6 @@ Docstring updates.
 
 Now requires pythonic-fp-gadgets 4.0.1 to be installed.
 
-
 ### PyPI 2.0.0 - 2025-09-27
 
 Released to get the next consistent set of Pythonic FP out (v3.2.0) out.
@@ -130,7 +137,6 @@ Fixed pyproject.toml dependency issues.
 
 Only change was to give README.rst a final edit. Missed this on
 the v1.1.0 release.
-
 
 ### PyPI 1.1.0 - 2025-09-02
 
