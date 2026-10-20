@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # Generate conf.py Sphinx configuration executable
 
-import os
 import sys
 
 project_prefix = 'Pythonic FP'
@@ -23,19 +22,12 @@ else:
     sys.exit('Error: gen_conf.py takes exactly 4 arguments')
 
 match build_type:
-    case 'custom':
-        release = f'{version}'
-        release_string = f'**Custom PyPI Non-release version {release}**'
     case 'devel':
         release = f'{version}'
         release_string = f'**Proposed PyPI release version {release}**'
     case 'release':
         release = f'{version}'
         release_string = f'**PyPI release version {release}**'
-    case 'redo':
-        if not os.path.isfile('source/conf.py'):
-            sys.exit('Error: cannot redo without source/conf.py')
-        sys.exit()
     case _:
         sys.exit(f'Error: unknown built_type {build_type} given')
 
