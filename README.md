@@ -5,10 +5,13 @@ Boolean like classes.
 PyPI project
 [pythonic-fp-booleans](https://pypi.org/project/pythonic-fp-booleans).
 Part of the
-[pythonic-fp](https://grscheller.github.io/pythonic-fp/)
+[pythonic-fp](https://grscheller.github.io/pythonic-fp)
 PyPI projects.
 
-## Description
+## Documentation
+
+Documentation and other links for this project are hosted on
+[GitHub Pages](https://grscheller.github.io/pythonic-fp-booleans).
 
 While still compatible with Python shortcut logic, these singleton
 classes can be non-shortcut logically composed with Python’s bitwise

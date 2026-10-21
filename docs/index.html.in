@@ -153,8 +153,8 @@ footer {
 <main>
   <h1>Pythonic FP @PROJECTNAME@</h1>
   <p class="lede">
-    A collection of miscellaneous self-contained functions and classes with
-    minimal dependencies.
+    Boolean like classes. Like Python's built in bool, these classes are
+    singleton subclasses of int. Unlike bool, they can be further subclassed.
   </p>
 
   <div class="builds">
