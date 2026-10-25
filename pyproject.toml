@@ -26,8 +26,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  # "pythonic-fp-gadgets>=6",
-  "pythonic-fp-gadgets",
+  "pythonic-fp-gadgets>=6,<7",
 ]
 
 [project.urls]
@@ -90,3 +89,6 @@ docstring-quotes = "double"
 [tool.ruff.format]
 quote-style = "single"
 docstring-code-line-length = 72
+
+[tool.uv.sources]
+pythonic-fp-gadgets = { path = "../pythonic-fp-gadgets", editable = true }
