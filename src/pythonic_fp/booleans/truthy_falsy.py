@@ -137,8 +137,8 @@ class T_Bool(TF_Bool):
         """
         .. admonition:: new
 
-            :param witness: Ignored parameter, a T_Bool or T_Bool subtype is always truthy.
-            :param flavor: Ignored parameter, only one truthy "flavor" for each T_Bool subtype.
+            :param witness: Ignored parameter, a T_Bool is always truthy.
+            :param flavor: Ignored parameter, only one truthy "flavor"
             :returns: The truthy T_Bool or T_Bool subtype singleton instance.
 
         """
@@ -230,9 +230,9 @@ class F_Bool(TF_Bool):
         """
         .. admonition:: new
 
-            :param witness: Ignored parameter, an F_Bool or F_Bool subtype is always truthy.
-            :param flavor: Ignored parameter, only one truthy "flavor" for each F_Bool subtype.
-            :returns: The truthy F_Bool or F_Bool subtype singleton instance.
+            :param witness: Ignored parameter, an F_Bool is always falsy.
+            :param flavor: Ignored parameter, only one falsy "flavor".
+            :returns: The falsy F_Bool singleton instance.
 
         """
         inst = cls.__dict__.get('_falsy')
