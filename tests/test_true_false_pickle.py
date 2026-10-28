@@ -19,15 +19,13 @@ import pickle
 import subprocess
 import sys
 
-import pytest
-
 from pythonic_fp.booleans.truthy_falsy import ALWAYS, NEVER, F_Bool, T_Bool, TF_Bool
 
 tbool: TF_Bool = T_Bool()
 fbool: TF_Bool = F_Bool()
 
 
-class TestSentinelPickle:
+class TestBooleanPickle:
     def test_equalitY_survives_all_protocols(self) -> None:
         for item in ALWAYS, NEVER, tbool, fbool:
             for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
@@ -40,50 +38,84 @@ class TestSentinelPickle:
                 restored = pickle.loads(pickle.dumps(item, protocol=protocol))
                 assert restored is item, f'protocol {protocol} made a new instance'
 
-    def test_identity_with_TS_Bool_constructor(self) -> None:
-        truthy, falsy = TF_Bool(True), TF_Bool(False)
+    def test_identity_with_TF_Bool_constructor(self) -> None:
+        truthy, falsy = TF_Bool({'one': 1, 'two': 2}), TF_Bool({})
         for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
-            r_truthy, r_falsy = pickle.loads(pickle.dumps((truthy, falsy)))
+            r_truthy, r_falsy = pickle.loads(
+                pickle.dumps((truthy, falsy), protocol=protocol)
+            )
             assert r_truthy is ALWAYS
             assert r_falsy is NEVER
             assert r_truthy is truthy
             assert r_falsy is falsy
             assert truthy is not falsy
 
-#   def test_identity_inside_containers(self) -> None:
-#       sentinel = Sentinel('alpha')
-#       payload = {'one': [sentinel], 'two': (sentinel, sentinel)}
-#       restored = pickle.loads(pickle.dumps(payload))
-#       assert restored['one'][0] is sentinel
-#       assert restored['two'][0] is sentinel
-#       assert restored['two'][1] is sentinel
+    def test_identity_inside_containers(self) -> None:
+        payload = {'a': [tbool], 'b': (fbool, ALWAYS), 'c': NEVER}
+        for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
+            restored = pickle.loads(pickle.dumps(payload, protocol=protocol))
+            assert restored['a'][0] is tbool
+            assert restored['b'][0] is fbool
+            assert restored['b'][1] is ALWAYS
+            assert restored['c'] is NEVER
 
-#   def test_copy_and_deepcopy_return_the_singleton(self) -> None:
-#       sentinel = Sentinel('alpha')
-#       assert copy.copy(sentinel) is sentinel
-#       assert copy.deepcopy(sentinel) is sentinel
+    def test_copy_and_deepcopy_return_the_singleton(self) -> None:
+        t1 = TF_Bool(1 + 1 == 2)
+        f1 = TF_Bool(1 + 1 == 42)
+        t2 = T_Bool()
+        f2 = F_Bool()
+        assert copy.copy(t1) is t1
+        assert copy.copy(f1) is f1
+        assert copy.deepcopy(t1) is t1
+        assert copy.deepcopy(f1) is f1
+        assert copy.deepcopy(t2) is t2
+        assert copy.deepcopy(f2) is f2
+        assert t1 is t2
+        assert f1 is f2
 
-#   def test_identity_in_a_fresh_interpreter(self) -> None:
-#       """A sentinel unpickled in a new process is that process's singleton."""
-#       blob = pickle.dumps(Sentinel('alpha'))
-#       script = (
-#           'import pickle, sys\n'
-#           'from pythonic_fp.gadgets.sentinels.flavored import Sentinel\n'
-#           'restored = pickle.loads(sys.stdin.buffer.read())\n'
-#           "assert restored is Sentinel('alpha')\n"
-#           "assert restored.flavor() == 'alpha'\n"
-#           "print('ok')\n"
-#       )
-#       done = subprocess.run(
-#           [sys.executable, '-c', script], input=blob,
-#           capture_output=True, check=True,
-#       )
-#       assert done.stdout.strip() == b'ok'
+    @staticmethod
+    def _run(script: str, data: bytes) -> subprocess.CompletedProcess[bytes]:
 
-#   def test_unhashable_flavor_rejected(self) -> None:
-#       with pytest.raises(TypeError):
-#           Sentinel(([1, 2],))
+        done = subprocess.run(
+            [sys.executable, '-c', script],
+            input=data,
+            capture_output=True,
+            check=False,
+        )
+        assert done.returncode == 0, (
+            f'child process failed:\n{done.stderr.decode(errors="replace")}'
+        )
+        return done
 
-#   def test_repr_reproduces_the_sentinel(self) -> None:
-#       sentinel = Sentinel('alpha')
-#      assert eval(repr(sentinel)) is sentinel
+    def test_identity_in_a_fresh_interpreter(self) -> None:
+        _SCRIPT = """
+        import pickle, sys
+        from pythonic_fp.booleans.truthy_falsy import F_Bool, T_Bool, TF_Bool
+        restored = pickle.loads(sys.stdin.buffer.read())
+        assert restored[0] is T_Bool(), 'truthy came back as a duplicate'
+        assert restored[1] is F_Bool(), 'falsy came back as a duplicate'
+        assert restored[2] is T_Bool(), 'truthy came back as a duplicate'
+        assert restored[3] is F_Bool(), 'falsy came back as a duplicate'
+        assert restored[4] is T_Bool(), 'truthy came back as a duplicate'
+        assert restored[5] is F_Bool(), 'falsy came back as a duplicate'
+        assert restored[6] is TF_Bool([1, 2, 3]), 'truthy came back as a duplicate'
+        assert restored[7] is TF_Bool(()), 'falsy came back as a duplicate'
+        print('ok')
+        """
+
+        for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
+            blob = pickle.dumps(
+                (
+                    tbool,
+                    fbool,
+                    TF_Bool(42),
+                    TF_Bool(0),
+                    TF_Bool('foobar'),
+                    TF_Bool(''),
+                    TF_Bool(['foo', 'bar']),
+                    TF_Bool([]),
+                ),
+                protocol=protocol,
+            )
+            done = self._run(_SCRIPT, blob)
+            assert done.stdout.strip() == b'ok', f'protocol {protocol}'

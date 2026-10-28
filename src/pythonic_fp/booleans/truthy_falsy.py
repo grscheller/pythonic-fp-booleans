@@ -169,7 +169,7 @@ class T_Bool(TF_Bool):
         .. admonition:: reduce
 
             Tell ``pickle`` and ``copy`` how to reconstruct the
-            ``T_Bool`` singleton: call ``T_Bool()`` rather than
+            ``T_Bool`` singleton by calling ``T_Bool()`` rather than
             rebuilding the object directly.
 
             - reconstruction goes through ``__new__``, so the flavor
@@ -289,7 +289,7 @@ class F_Bool(TF_Bool):
         .. admonition:: reduce
 
             Tell ``pickle`` and ``copy`` how to reconstruct the
-            ``F_Bool`` singleton: call ``T_Bool()`` rather than
+            ``F_Bool`` singleton by calling ``F_Bool()`` rather than
             rebuilding the object directly.
 
             - reconstruction goes through ``__new__``, so the flavor
@@ -299,13 +299,13 @@ class F_Bool(TF_Bool):
             - ``copy`` and ``deepcopy`` use the same protocol, so they
               return the singleton unchanged
 
-            :returns: The pair ``(TBool, ())``, which
+            :returns: The pair ``(FBool, ())``, which
                       ``pickle`` calls to rebuild the sentinel.
 
             .. important::
 
                 Without this, ``pickle`` would construct a duplicate
-                ``T_Bool`` outside the instance ``dict``, and ``is``
+                ``F_Bool`` outside the instance ``dict``, and ``is``
                 comparisons against it would silently fail.
 
         """
