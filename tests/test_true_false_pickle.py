@@ -14,10 +14,10 @@
 
 """Pickle tests for truthy_falsy booleans."""
 
-import copy
 import pickle
 import subprocess
 import sys
+from copy import copy, deepcopy
 
 from pythonic_fp.booleans.truthy_falsy import ALWAYS, NEVER, F_Bool, T_Bool, TF_Bool
 
@@ -26,7 +26,7 @@ fbool: TF_Bool = F_Bool()
 
 
 class TestBooleanPickle:
-    def test_equalitY_survives_all_protocols(self) -> None:
+    def test_equality_survives_all_protocols(self) -> None:
         for item in ALWAYS, NEVER, tbool, fbool:
             for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
                 restored = pickle.loads(pickle.dumps(item, protocol=protocol))
@@ -59,23 +59,27 @@ class TestBooleanPickle:
             assert restored['b'][1] is ALWAYS
             assert restored['c'] is NEVER
 
-    def test_copy_and_deepcopy_return_the_singleton(self) -> None:
+    def test_copy_and_deepcopy_return_the_singletons(self) -> None:
         t1 = TF_Bool(1 + 1 == 2)
         f1 = TF_Bool(1 + 1 == 42)
         t2 = T_Bool()
         f2 = F_Bool()
-        assert copy.copy(t1) is t1
-        assert copy.copy(f1) is f1
-        assert copy.deepcopy(t1) is t1
-        assert copy.deepcopy(f1) is f1
-        assert copy.deepcopy(t2) is t2
-        assert copy.deepcopy(f2) is f2
+        assert copy(t1) is t1
+        assert copy(f1) is f1
+
+        type ThingType = tuple[TF_Bool, list[dict[int, TF_Bool]]]
+        thing1: ThingType = (t1, [{21: f1, 42: t2}, {7: f2}])
+        thing2 = deepcopy(thing1)
+        assert thing2[0] is t1
+        assert thing2[1][0][21] is f1
+        assert thing2[1][0][42] is t2
+        assert thing2[1][1][7] is f2
         assert t1 is t2
         assert f1 is f2
+        assert thing1 == thing2
 
     @staticmethod
     def _run(script: str, data: bytes) -> subprocess.CompletedProcess[bytes]:
-
         done = subprocess.run(
             [sys.executable, '-c', script],
             input=data,
@@ -88,6 +92,7 @@ class TestBooleanPickle:
         return done
 
     def test_identity_in_a_fresh_interpreter(self) -> None:
+        # Remove additional whitespace below if tested on Python <3.14
         _SCRIPT = """
         import pickle, sys
         from pythonic_fp.booleans.truthy_falsy import F_Bool, T_Bool, TF_Bool
