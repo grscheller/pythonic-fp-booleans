@@ -26,7 +26,13 @@ fbool: TF_Bool = F_Bool()
 
 
 class TestBooleanPickle:
-    def test_equality_survives_all_protocols(self) -> None:
+    def test_int_value_survives_all_protocols(self) -> None:
+        """T_Bool and F_Bool inherit int.__eq__, so this compares the
+        integer payload, not identity. A duplicated singleton still
+        compares equal -- test_identity_survives_all_protocols covers
+        that. What this catches is a __reduce__ that reconstructs the
+        wrong class.
+        """
         for item in ALWAYS, NEVER, tbool, fbool:
             for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
                 restored = pickle.loads(pickle.dumps(item, protocol=protocol))
