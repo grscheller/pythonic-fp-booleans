@@ -61,7 +61,7 @@ class TF_Bool(SBool):
 
     def __new__(cls, witness: object, flavor: Hashable = None) -> Self:
         """
-        .. admonition:: new
+        .. admonition:: __new__
 
             :param witness: Determines which subtype,
                             ``T_Bool`` or ``F_Bool``,
@@ -76,6 +76,13 @@ class TF_Bool(SBool):
         return cast(Self, F_Bool())
 
     def __init_subclass__(cls, **kwargs: object) -> None:
+        """
+        .. admonition:: __init_subclass__
+
+            :raises TypeError: Fails at runtime if any attempt to
+                    subclass is made.
+
+        """
         super().__init_subclass__(**kwargs)
         if TF_Bool in cls.__bases__ and cls.__module__ != TF_Bool.__module__:
             msg = 'TF_Bool is sealed'
@@ -126,8 +133,8 @@ class T_Bool(TF_Bool):
     """
     .. admonition:: Truthy TF_Bool subclass
 
-         Type of the truthy singleton TF_Bool instance.
-         A distinct type from F_Bool.
+         Type of the truthy singleton ``TF_Bool`` instance.
+         A distinct type from ``F_Bool``.
 
     """
 
@@ -139,7 +146,7 @@ class T_Bool(TF_Bool):
 
             :param witness: Ignored parameter, a T_Bool is always truthy.
             :param flavor: Ignored parameter, only one truthy "flavor"
-            :returns: The truthy T_Bool or T_Bool subtype singleton instance.
+            :returns: The truthy T_Bool singleton instance.
 
         """
         inst = cls.__dict__.get('_truthy')
@@ -156,6 +163,33 @@ class T_Bool(TF_Bool):
         if T_Bool in cls.__bases__ and cls.__module__ != T_Bool.__module__:
             msg = 'T_Bool is final'
             raise TypeError(msg)
+
+    def __reduce__(self) -> tuple[type[T_Bool], tuple[()]]:
+        """
+        .. admonition:: reduce
+
+            Tell ``pickle`` and ``copy`` how to reconstruct the
+            ``T_Bool`` singleton: call ``T_Bool()`` rather than
+            rebuilding the object directly.
+
+            - reconstruction goes through ``__new__``, so the flavor
+              cache is consulted
+            - unpickling returns the existing singleton of that flavor,
+              or creates and caches it in a fresh interpreter
+            - ``copy`` and ``deepcopy`` use the same protocol, so they
+              return the singleton unchanged
+
+            :returns: The pair ``(TBool, ())``, which
+                      ``pickle`` calls to rebuild the sentinel.
+
+            .. important::
+
+                Without this, ``pickle`` would construct a duplicate
+                ``T_Bool`` outside the instance ``dict``, and ``is``
+                comparisons against it would silently fail.
+
+        """
+        return (T_Bool, ())
 
     def __and__(self, other: int) -> int:
         """
@@ -219,8 +253,8 @@ class F_Bool(TF_Bool):
     """
     .. admonition:: Falsy TF_Bool subclass
 
-         Type of the falsy singleton TF_Bool instance.
-         A distinct type from T_Bool.
+         Type of the falsy singleton ``TF_Bool`` instance.
+         A distinct type from ``T_Bool``.
 
     """
 
@@ -250,6 +284,33 @@ class F_Bool(TF_Bool):
             msg = 'F_Bool is final'
             raise TypeError(msg)
 
+    def __reduce__(self) -> tuple[type[F_Bool], tuple[()]]:
+        """
+        .. admonition:: reduce
+
+            Tell ``pickle`` and ``copy`` how to reconstruct the
+            ``F_Bool`` singleton: call ``T_Bool()`` rather than
+            rebuilding the object directly.
+
+            - reconstruction goes through ``__new__``, so the flavor
+              cache is consulted
+            - unpickling returns the existing singleton of that flavor,
+              or creates and caches it in a fresh interpreter
+            - ``copy`` and ``deepcopy`` use the same protocol, so they
+              return the singleton unchanged
+
+            :returns: The pair ``(TBool, ())``, which
+                      ``pickle`` calls to rebuild the sentinel.
+
+            .. important::
+
+                Without this, ``pickle`` would construct a duplicate
+                ``T_Bool`` outside the instance ``dict``, and ``is``
+                comparisons against it would silently fail.
+
+        """
+        return (F_Bool, ())
+
     def __and__(self, other: int) -> int:
         if issubclass(type(other), TF_Bool):
             return self
@@ -272,7 +333,7 @@ ALWAYS: Final[TF_Bool] = T_Bool()
 """
 .. admonition:: ALWAYS
 
-    :var ALWAYS: The truthy singleton TF_Bool subtyped instance.
+    :var ALWAYS: The truthy singleton TF_Bool instance.
 
 """
 
@@ -280,6 +341,6 @@ NEVER: Final[TF_Bool] = F_Bool()
 """
 .. admonition:: NEVER
 
-    :var NEVER: The falsy singleton TF_Bool subtyped instance.
+    :var NEVER: The falsy singleton TF_Bool instance.
 
 """
