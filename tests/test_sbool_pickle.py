@@ -14,13 +14,14 @@
 
 """Pickle tests for subtypable booleans."""
 
+import os
 import pickle
 import subprocess
 import sys
 from collections.abc import Hashable
 from copy import copy, deepcopy
 from threading import Lock
-from typing import ClassVar, Self, cast, overload
+from typing import ClassVar, Self, overload
 
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
 
@@ -105,7 +106,7 @@ class TestSBoolPickle:
         return done
 
     def test_identity_in_a_fresh_interpreter(self) -> None:
-        # Remove additional whitespace below if tested on Python <3.14
+        # Remove leading whitespace below if tested on Python <3.14
         _SCRIPT = """
         import pickle, sys
         from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
@@ -140,10 +141,10 @@ class TestSBoolPickle:
 
 
 class DBool(SBool):
-    _false_one: ClassVar[SBool | NoValue] = NoValue()
+    _false_one: ClassVar[SBool | NoValue] = no_value
     _false_one_lock: ClassVar[Lock] = Lock()
 
-    _true_one: ClassVar[SBool | NoValue] = NoValue()
+    _true_one: ClassVar[SBool | NoValue] = no_value
     _true_one_lock: ClassVar[Lock] = Lock()
 
     @overload
@@ -167,24 +168,41 @@ class DBool(SBool):
 
         """
         if witness:
-            if cls._true_one is NoValue():
-                with cls._true_one_lock:
-                    if cls._true_one is NoValue():
-                        cls._true_one = super().__new__(cls, 1)
-            return cast(Self, cls._true_one)
+            inst = cls.__dict__.get('_truthy')
+            if inst is None:
+                with DBool._true_one_lock:
+                    inst = cls.__dict__.get('_truthy')
+                    if inst is None:
+                        inst = super(SBool, cls).__new__(cls, 1)
+                        cls._truthy = inst
+            return inst
         else:
-            if cls._false_one is NoValue():
-                with cls._false_one_lock:
-                    if cls._false_one is NoValue():
-                        cls._false_one = super().__new__(cls, 0)
-            return cast(Self, cls._false_one)
+            inst = cls.__dict__.get('_falsy')
+            if inst is None:
+                with DBool._false_one_lock:
+                    inst = cls.__dict__.get('_falsy')
+                    if inst is None:
+                        inst = super(SBool, cls).__new__(cls, 0)
+                        cls._falsy = inst
+            return inst
 
 
 tdbool: DBool = DBool(42)
 fdbool: DBool = DBool(0)
 
+class TestSBoolDBoolInstancesDistinct:
+    def test_identities(self) -> None:
+        assert tsbool is not tdbool
+        assert fsbool is not fdbool
+        assert tsbool is not fdbool
+        assert fsbool is not tdbool
+        assert tsbool is not fsbool
+        assert fsbool is not tsbool
+        assert tdbool is not fdbool
+        assert fdbool is not tdbool
+
 class TestSubtypedSBoolPickle:
-    def test_int_value_survives_all_protocols(self) -> None:
+    def test_subtype_int_value_survives_all_protocols(self) -> None:
         """DBool inherits int.__eq__, so this compares the
         integer payload, not identity. A duplicated singleton still
         compares equal -- test_identity_survives_all_protocols covers
@@ -202,7 +220,7 @@ class TestSubtypedSBoolPickle:
                 restored = pickle.loads(pickle.dumps(item, protocol=protocol))
                 assert restored is item, f'protocol {protocol} made a new instance'
 
-    def test_identity_with_DBool_constructor(self) -> None:
+    def test_subtype_identity_with_DBool_constructor(self) -> None:
         true_one, false_one = DBool({'one': 1, 'two': 2}), DBool({})
         for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
             r_true_one, r_false_one = pickle.loads(
@@ -214,7 +232,7 @@ class TestSubtypedSBoolPickle:
             assert r_false_one is false_one
             assert true_one is not false_one
 
-    def test_identity_inside_containers(self) -> None:
+    def test_subtype_identity_inside_containers(self) -> None:
         payload = {'a': [tdbool], 'b': (fdbool, 42.0), 'c': 0.0}
         for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
             restored = pickle.loads(pickle.dumps(payload, protocol=protocol))
@@ -223,7 +241,7 @@ class TestSubtypedSBoolPickle:
             assert restored['b'][1] == 42.0
             assert restored['c'] == 0.0
 
-    def test_copy_and_deepcopy_return_the_singletons(self) -> None:
+    def test_subtype_copy_and_deepcopy_return_the_singletons(self) -> None:
         t1 = DBool(1 + 1 == 2)
         f1 = DBool(1 + 1 == 42)
         t2 = DBool('foo')
@@ -255,11 +273,14 @@ class TestSubtypedSBoolPickle:
         )
         return done
 
-    def test_identity_in_a_fresh_interpreter(self) -> None:
-        # Remove additional whitespace below if tested on Python <3.14
-        _SCRIPT = """
+    def test_subtype_identity_in_a_fresh_interpreter(self) -> None:
+        _TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+        # Remove leading whitespace below if tested on Python <3.14
+        _SCRIPT = f"""
         import pickle, sys
-        from . import DBool
+        sys.path.insert(0, {_TESTS_DIR!r})
+        from test_sbool_pickle import DBool
         restored = pickle.loads(sys.stdin.buffer.read())
         assert restored[0] is DBool('string'), 'true_one came back as a duplicate'
         assert restored[1] is DBool(''), 'false_one came back as a duplicate'

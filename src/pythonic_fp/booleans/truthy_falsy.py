@@ -156,7 +156,7 @@ class T_Bool(TF_Bool):
                 if inst is None:
                     inst = super(SBool, cls).__new__(cls, 1)
                     cls._truthy = inst
-        return cast(Self, inst)
+        return inst
 
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
@@ -164,7 +164,7 @@ class T_Bool(TF_Bool):
             msg = 'T_Bool is final'
             raise TypeError(msg)
 
-    def __reduce__(self) -> tuple[type[T_Bool], tuple[()]]:
+    def __reduce__(self) -> tuple[type[T_Bool], tuple[object]]:
         """
         .. admonition:: reduce
 
@@ -179,8 +179,10 @@ class T_Bool(TF_Bool):
             - ``copy`` and ``deepcopy`` use the same protocol, so they
               return the singleton unchanged
 
-            :returns: The pair ``(TBool, ())``, which
-                      ``pickle`` calls to rebuild the sentinel.
+            :returns: The pair ``(TBool, (None,))``, which ``pickle``
+                      calls to rebuild the sentinel. The argument is
+                      ignored and is there only to satisfy the Liskov
+                      substitution principle.
 
             .. important::
 
@@ -189,7 +191,7 @@ class T_Bool(TF_Bool):
                 comparisons against it would silently fail.
 
         """
-        return (T_Bool, ())
+        return (T_Bool, (None,))
 
     def __and__(self, other: int) -> int:
         """
@@ -271,12 +273,12 @@ class F_Bool(TF_Bool):
         """
         inst = cls.__dict__.get('_falsy')
         if inst is None:
-            with T_Bool._lock:
+            with F_Bool._lock:
                 inst = cls.__dict__.get('_falsy')
                 if inst is None:
                     inst = super(SBool, cls).__new__(cls, 0)
                     cls._falsy = inst
-        return cast(Self, inst)
+        return inst
 
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
@@ -284,7 +286,7 @@ class F_Bool(TF_Bool):
             msg = 'F_Bool is final'
             raise TypeError(msg)
 
-    def __reduce__(self) -> tuple[type[F_Bool], tuple[()]]:
+    def __reduce__(self) -> tuple[type[F_Bool], tuple[object]]:
         """
         .. admonition:: reduce
 
@@ -299,8 +301,10 @@ class F_Bool(TF_Bool):
             - ``copy`` and ``deepcopy`` use the same protocol, so they
               return the singleton unchanged
 
-            :returns: The pair ``(FBool, ())``, which
-                      ``pickle`` calls to rebuild the sentinel.
+            :returns: The pair ``(FBool, (None,))``, which ``pickle``
+                      calls to rebuild the sentinel. The argument is
+                      ignored and is there only to satisfy the Liskov
+                      substitution principle.
 
             .. important::
 
@@ -309,7 +313,7 @@ class F_Bool(TF_Bool):
                 comparisons against it would silently fail.
 
         """
-        return (F_Bool, ())
+        return (F_Bool, (None,))
 
     def __and__(self, other: int) -> int:
         if issubclass(type(other), TF_Bool):

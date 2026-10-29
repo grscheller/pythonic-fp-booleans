@@ -69,12 +69,10 @@ class SBool(int):
                 objects not descended from int.
 
     """
-
-    _falsy: ClassVar[SBool | NoValue] = NoValue()
-    _falsy_lock: ClassVar[Lock] = Lock()
-
-    _truthy: ClassVar[SBool | NoValue] = NoValue()
+    _truthy: ClassVar[SBool]
+    _falsy: ClassVar[SBool]
     _truthy_lock: ClassVar[Lock] = Lock()
+    _falsy_lock: ClassVar[Lock] = Lock()
 
     @overload
     def __new__(cls, witness: object) -> Self: ...
@@ -97,17 +95,23 @@ class SBool(int):
 
         """
         if witness:
-            if cls._truthy is no_value:
-                with cls._truthy_lock:
-                    if cls._truthy is NoValue():
-                        cls._truthy = super().__new__(cls, 1)
-            return cast(Self, cls._truthy)
+            inst = cls.__dict__.get('_truthy')
+            if inst is None:
+                with SBool._truthy_lock:
+                    inst = cls.__dict__.get('_truthy')
+                    if inst is None:
+                        inst = super().__new__(cls, 1)
+                        cls._truthy = inst
+            return inst
         else:
-            if cls._falsy is no_value:
-                with cls._falsy_lock:
-                    if cls._falsy is NoValue():
-                        cls._falsy = super().__new__(cls, 0)
-            return cast(Self, cls._falsy)
+            inst = cls.__dict__.get('_falsy')
+            if inst is None:
+                with SBool._falsy_lock:
+                    inst = cls.__dict__.get('_falsy')
+                    if inst is None:
+                        inst = super().__new__(cls, 0)
+                        cls._falsy = inst
+            return inst
 
     @overload
     def __init__(self, witness: object) -> None: ...
@@ -153,9 +157,7 @@ class SBool(int):
                 comparisons against it would silently fail.
 
         """
-        if self:
-            return (SBool, (1,))
-        return (SBool, (0,))
+        return (type(self), (int(self),))
 
     def __invert__(self) -> int:
         """
