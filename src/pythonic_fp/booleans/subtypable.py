@@ -23,6 +23,7 @@ __all__ = ['SBool', 'TRUTH', 'LIE']
 
 no_value = NoValue()
 
+
 class SBool(int):
     """
     .. admonition:: Subtypable Boolean
@@ -96,13 +97,13 @@ class SBool(int):
 
         """
         if witness:
-            if cls._truthy is NoValue():
+            if cls._truthy is no_value:
                 with cls._truthy_lock:
                     if cls._truthy is NoValue():
                         cls._truthy = super().__new__(cls, 1)
             return cast(Self, cls._truthy)
         else:
-            if cls._falsy is NoValue():
+            if cls._falsy is no_value:
                 with cls._falsy_lock:
                     if cls._falsy is NoValue():
                         cls._falsy = super().__new__(cls, 0)
@@ -126,6 +127,35 @@ class SBool(int):
                            the Liskov Substitution Principle.
         """
         self._flavor: Hashable | NoValue = NoValue()
+
+    def __reduce__(self) -> tuple[type[SBool], tuple[object,]]:
+        """
+        .. admonition:: reduce
+
+            Tell ``pickle`` and ``copy`` how to reconstruct the
+            ``SBool`` singleton by calling ``SBool()`` rather than
+            rebuilding the object directly.
+
+            - reconstruction goes through ``__new__``, so the flavor
+              cache is consulted
+            - unpickling returns the existing singleton of that flavor,
+              or creates and caches it in a fresh interpreter
+            - ``copy`` and ``deepcopy`` use the same protocol, so they
+              return the singleton unchanged
+
+            :returns: The pair ``(SBool, ((self._flavor)))``, which
+                      ``pickle`` calls to rebuild the sentinel.
+
+            .. important::
+
+                Without this, ``pickle`` would construct a duplicate
+                ``SBool`` outside the instance ``dict``, and ``is``
+                comparisons against it would silently fail.
+
+        """
+        if self:
+            return (SBool, (1,))
+        return (SBool, (0,))
 
     def __invert__(self) -> int:
         """

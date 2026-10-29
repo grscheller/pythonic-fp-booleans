@@ -94,7 +94,7 @@ class TF_Bool(SBool):
 
             Inverts the value of an TF_Bool.
 
-            :returns: The inverted value of the SBool.
+            :returns: The inverted value of the TF_Bool.
 
         """
         if self:

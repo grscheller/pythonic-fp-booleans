@@ -85,6 +85,46 @@ class FBool(SBool):
         if not hasattr(self, '_flavor'):
             self._flavor = flavor
 
+    def __reduce__(self) -> tuple[type[FBool], tuple[Hashable,]]:
+        """
+        .. admonition:: reduce
+
+            Tell ``pickle`` and ``copy`` how to reconstruct the
+            ``SBool`` singleton by calling ``SBool()`` rather than
+            rebuilding the object directly.
+
+            - reconstruction goes through ``__new__``, so the flavor
+              cache is consulted
+            - unpickling returns the existing singleton of that flavor,
+              or creates and caches it in a fresh interpreter
+            - ``copy`` and ``deepcopy`` use the same protocol, so they
+              return the singleton unchanged
+
+            :returns: The pair ``(SBool, ((self._flavor)))``, which
+                      ``pickle`` calls to rebuild the sentinel.
+
+            .. important::
+
+                Without this, ``pickle`` would construct a duplicate
+                ``SBool`` outside the instance ``dict``, and ``is``
+                comparisons against it would silently fail.
+
+        """
+        return (FBool, (self._flavor,))
+
+    def __invert__(self) -> FBool:
+        """
+        .. admonition:: bitwise invert operator
+
+            Inverts the value of an FBool.
+
+            :returns: The inverted value of the FBool.
+
+        """
+        if self:
+            return FBool(False, self._flavor)
+        return FBool(True, self._flavor)
+
     def __and__(self, other: int) -> int:
         """
         .. admonition:: bitwise and operator
