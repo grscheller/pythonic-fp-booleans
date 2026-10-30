@@ -18,14 +18,13 @@ import os
 import pickle
 import subprocess
 import sys
-from collections.abc import Hashable
 from copy import copy, deepcopy
-from threading import Lock
-from typing import ClassVar, Self, overload
 
 from pythonic_fp.gadgets.sentinels.novalue import NoValue
 
 from pythonic_fp.booleans.subtypable import LIE, TRUTH, SBool
+
+from .sbool_pickle_helper import NO, YES, DBool
 
 no_value = NoValue()
 
@@ -110,15 +109,16 @@ class TestSBoolPickle:
         _SCRIPT = """
         import pickle, sys
         from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
+        from tests.sbool_pickle_helper import DBool, YES, NO
         restored = pickle.loads(sys.stdin.buffer.read())
-        assert restored[0] is TRUTH, 'truthy came back as a duplicate'
-        assert restored[1] is LIE, 'falsy came back as a duplicate'
-        assert restored[2] is TRUTH, 'truthy came back as a duplicate'
-        assert restored[3] is LIE, 'falsy came back as a duplicate'
-        assert restored[4] is TRUTH, 'truthy came back as a duplicate'
-        assert restored[5] is LIE, 'falsy came back as a duplicate'
-        assert restored[6] is SBool([1, 2, 3]), 'truthy came back as a duplicate'
-        assert restored[7] is SBool(()), 'falsy came back as a duplicate'
+        assert restored[0] is TRUTH, 'tsbool came back as a duplicate'
+        assert restored[1] is LIE, 'fsbool came back as a duplicate'
+        assert restored[2] is TRUTH, 'TRUTH came back as a duplicate'
+        assert restored[3] is LIE, 'LIE came back as a duplicate'
+        assert restored[4] is TRUTH, 'truthy value came back as a duplicate'
+        assert restored[5] is LIE, 'falsy value came back as a duplicate'
+        assert restored[6] is TRUTH, 'non-empty value came back as a duplicate'
+        assert restored[7] is LIE, 'empty value came back as a duplicate'
         print('ok')
         """
 
@@ -127,12 +127,12 @@ class TestSBoolPickle:
                 (
                     tsbool,
                     fsbool,
+                    TRUTH,
+                    LIE,
                     SBool(42),
                     SBool(0),
                     SBool('foobar'),
                     SBool(''),
-                    SBool(['foo', 'bar']),
-                    SBool([]),
                 ),
                 protocol=protocol,
             )
@@ -140,57 +140,11 @@ class TestSBoolPickle:
             assert done.stdout.strip() == b'ok', f'protocol {protocol}'
 
 
-class DBool(SBool):
-    _false_one: ClassVar[SBool | NoValue] = no_value
-    _false_one_lock: ClassVar[Lock] = Lock()
-
-    _true_one: ClassVar[SBool | NoValue] = no_value
-    _true_one_lock: ClassVar[Lock] = Lock()
-
-    @overload
-    def __new__(cls, witness: object) -> Self: ...
-    @overload
-    def __new__(
-        cls, witness: object, flavor: Hashable | NoValue = no_value
-    ) -> Self: ...
-
-    def __new__(
-        cls,
-        witness: object,
-        flavor: Hashable | NoValue = no_value,
-    ) -> Self:
-        """
-        .. admonition:: new
-
-            :param witness: Determines truthiness of the ``SBool``.
-            :param flavor: Ignored, here for Liskov  substitution principle
-            :returns: The truthy or falsy ``SBool`` class instance.
-
-        """
-        if witness:
-            inst = cls.__dict__.get('_truthy')
-            if inst is None:
-                with DBool._true_one_lock:
-                    inst = cls.__dict__.get('_truthy')
-                    if inst is None:
-                        inst = super(SBool, cls).__new__(cls, 1)
-                        cls._truthy = inst
-            return inst
-        else:
-            inst = cls.__dict__.get('_falsy')
-            if inst is None:
-                with DBool._false_one_lock:
-                    inst = cls.__dict__.get('_falsy')
-                    if inst is None:
-                        inst = super(SBool, cls).__new__(cls, 0)
-                        cls._falsy = inst
-            return inst
-
-
 tdbool: DBool = DBool(42)
 fdbool: DBool = DBool(0)
 
-class TestSBoolDBoolInstancesDistinct:
+
+class TestSubtypedSBoolInstancesDistinct:
     def test_identities(self) -> None:
         assert tsbool is not tdbool
         assert fsbool is not fdbool
@@ -201,8 +155,9 @@ class TestSBoolDBoolInstancesDistinct:
         assert tdbool is not fdbool
         assert fdbool is not tdbool
 
+
 class TestSubtypedSBoolPickle:
-    def test_subtype_int_value_survives_all_protocols(self) -> None:
+    def test_subtyped_int_value_survives_all_protocols(self) -> None:
         """DBool inherits int.__eq__, so this compares the
         integer payload, not identity. A duplicated singleton still
         compares equal -- test_identity_survives_all_protocols covers
@@ -214,13 +169,13 @@ class TestSubtypedSBoolPickle:
                 restored = pickle.loads(pickle.dumps(item, protocol=protocol))
                 assert restored == item, f'protocol {protocol} made an unequal copy'
 
-    def test_subtype_identity_survives_all_protocols(self) -> None:
+    def test_subtyped_identity_survives_all_protocols(self) -> None:
         for item in tdbool, fdbool:
             for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
                 restored = pickle.loads(pickle.dumps(item, protocol=protocol))
                 assert restored is item, f'protocol {protocol} made a new instance'
 
-    def test_subtype_identity_with_DBool_constructor(self) -> None:
+    def test_subtyped_identity_with_DBool_constructor(self) -> None:
         true_one, false_one = DBool({'one': 1, 'two': 2}), DBool({})
         for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
             r_true_one, r_false_one = pickle.loads(
@@ -232,7 +187,7 @@ class TestSubtypedSBoolPickle:
             assert r_false_one is false_one
             assert true_one is not false_one
 
-    def test_subtype_identity_inside_containers(self) -> None:
+    def test_subtyped_identity_inside_containers(self) -> None:
         payload = {'a': [tdbool], 'b': (fdbool, 42.0), 'c': 0.0}
         for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
             restored = pickle.loads(pickle.dumps(payload, protocol=protocol))
@@ -241,7 +196,7 @@ class TestSubtypedSBoolPickle:
             assert restored['b'][1] == 42.0
             assert restored['c'] == 0.0
 
-    def test_subtype_copy_and_deepcopy_return_the_singletons(self) -> None:
+    def test_subtyped_copy_and_deepcopy_return_the_singletons(self) -> None:
         t1 = DBool(1 + 1 == 2)
         f1 = DBool(1 + 1 == 42)
         t2 = DBool('foo')
@@ -280,29 +235,29 @@ class TestSubtypedSBoolPickle:
         _SCRIPT = f"""
         import pickle, sys
         sys.path.insert(0, {_TESTS_DIR!r})
-        from test_sbool_pickle import DBool
+        from sbool_pickle_helper import NO, YES, DBool
         restored = pickle.loads(sys.stdin.buffer.read())
-        assert restored[0] is DBool('string'), 'true_one came back as a duplicate'
-        assert restored[1] is DBool(''), 'false_one came back as a duplicate'
-        assert restored[2] is DBool(True), 'true_one came back as a duplicate'
-        assert restored[3] is DBool(False), 'false_one came back as a duplicate'
-        assert restored[4] is DBool((1,2,3)), 'true_one came back as a duplicate'
-        assert restored[5] is DBool(()), 'false_one came back as a duplicate'
-        assert restored[6] is DBool([1, 2, 3]), 'true_one came back as a duplicate'
-        assert restored[7] is DBool([]), 'false_one came back as a duplicate'
+        assert restored[0] is YES, 'YES came back as a duplicate'
+        assert restored[1] is NO, 'NO came back as a duplicate'
+        assert restored[2] is YES, 'tdbool came back as a duplicate'
+        assert restored[3] is NO, 'fdbool came back as a duplicate'
+        assert restored[4] is YES, 'truthy value came back as a duplicate'
+        assert restored[5] is NO, 'falsy value came back as a duplicate'
+        assert restored[6] is YES, 'non-empty came back as a duplicate'
+        assert restored[7] is NO, 'empty came back as a duplicate'
         print('ok')
         """
 
         for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
             blob = pickle.dumps(
                 (
+                    YES,
+                    NO,
                     tdbool,
                     fdbool,
                     DBool(42),
                     DBool(0),
-                    DBool('foobar'),
-                    DBool(''),
-                    DBool(['foo', 'bar']),
+                    DBool(['not', 'empty']),
                     DBool([]),
                 ),
                 protocol=protocol,
