@@ -225,13 +225,14 @@ class TestSubtypedSBoolPickle:
         return done
 
     def test_subtype_identity_in_a_fresh_interpreter(self) -> None:
-        _TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
+        _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
         # Remove leading whitespace below if tested on Python <3.14
         _SCRIPT = f"""
         import pickle, sys
-        sys.path.insert(0, {_TESTS_DIR!r})
-        from sbool_pickle_helper import NO, YES, DBool
+        sys.path.insert(0, {_ROOT!r})
+        from pythonic_fp.booleans.subtypable import SBool
+        from tests.sbool_pickle_helper import NO, YES, DBool
         restored = pickle.loads(sys.stdin.buffer.read())
         assert restored[0] is YES, 'YES came back as a duplicate'
         assert restored[1] is NO, 'NO came back as a duplicate'
@@ -241,6 +242,8 @@ class TestSubtypedSBoolPickle:
         assert restored[5] is NO, 'falsy value came back as a duplicate'
         assert restored[6] is YES, 'non-empty came back as a duplicate'
         assert restored[7] is NO, 'empty came back as a duplicate'
+        assert restored[0] is not SBool(True), 'DBool collapsed into the SBool singleton'
+        assert restored[1] is not SBool(False), 'DBool collapsed into the SBool singleton'
         print('ok')
         """
 

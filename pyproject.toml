@@ -31,7 +31,7 @@ dependencies = [
 
 [project.urls]
 Changelog = "https://github.com/grscheller/pythonic-fp-booleans/blob/main/CHANGELOG.md"
-Documentation ="https://grscheller.github.io/pythonic-fp-booleans"
+Documentation = "https://grscheller.github.io/pythonic-fp-booleans"
 Homepage = "https://grscheller.github.io/pythonic-fp"
 Source = "https://github.com/grscheller/pythonic-fp-booleans"
 
@@ -58,18 +58,23 @@ exclude = [
   "**/.dmypy.json",
 ]
 
-[tool.pytest]
-addopts = ["-ra"]
-consider_namespace_packages = true
-testpaths = ["tests/"]
-
 [tool.mypy]
 explicit_package_bases = true
 local_partial_types = true
 namespace_packages = true
+strict = true
 warn_redundant_casts = true
 warn_return_any = true
 warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+strict_equality = false
+
+[tool.pytest]
+addopts = ["-ra"]
+consider_namespace_packages = true
+testpaths = ["tests/"]
 
 [tool.ruff]
 target-version = "py314"

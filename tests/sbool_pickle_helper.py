@@ -14,9 +14,7 @@
 
 """Pickle tests for subtypable booleans."""
 
-from collections.abc import Hashable
-from threading import Lock
-from typing import ClassVar, Final, Self
+from typing import Final
 
 from pythonic_fp.booleans.subtypable import SBool
 
@@ -24,36 +22,7 @@ __all__ = ['DBool', 'YES', 'NO']
 
 
 class DBool(SBool):
-    _truthy_lock: ClassVar[Lock] = Lock()
-    _falsy_lock: ClassVar[Lock] = Lock()
-
-    def __new__(cls, witness: object, flavor: Hashable = None) -> Self:
-        """
-        .. admonition:: new
-
-            :param witness: Determines truthiness of the ``DBool``.
-            :param flavor: Ignored, here for Liskov  substitution principle
-            :returns: The truthy or falsy ``SBool`` class instance.
-
-        """
-        if witness:
-            inst = cls.__dict__.get('_truthy')
-            if inst is None:
-                with DBool._truthy_lock:
-                    inst = cls.__dict__.get('_truthy')
-                    if inst is None:
-                        inst = super(SBool, cls).__new__(cls, 1)
-                        cls._truthy = inst
-            return inst
-        else:
-            inst = cls.__dict__.get('_falsy')
-            if inst is None:
-                with DBool._falsy_lock:
-                    inst = cls.__dict__.get('_falsy')
-                    if inst is None:
-                        inst = super(SBool, cls).__new__(cls, 0)
-                        cls._falsy = inst
-            return inst
+    pass
 
 
 YES: Final[DBool] = DBool(1)

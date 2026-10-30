@@ -4,4 +4,4 @@
 #
 # Side effect: test modules are named tests.test_* rather than test_*,
 # which is the module path pickle records for classes defined here.
-# The subprocess in test_sbool_pickle.py depends on that name.
+# The sub-process test in test_sbool_pickle.py depends on that name.
