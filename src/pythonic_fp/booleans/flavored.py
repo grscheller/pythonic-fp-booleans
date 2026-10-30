@@ -101,7 +101,7 @@ class FBool(SBool):
               return the singleton unchanged
 
             :returns: The pair ``(SBool, ((self._flavor)))``, which
-                      ``pickle`` calls to rebuild the sentinel.
+                      ``pickle`` uses to rebuild the singleton.
 
             .. important::
 

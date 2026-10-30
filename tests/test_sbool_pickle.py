@@ -20,13 +20,9 @@ import subprocess
 import sys
 from copy import copy, deepcopy
 
-from pythonic_fp.gadgets.sentinels.novalue import NoValue
-
 from pythonic_fp.booleans.subtypable import LIE, TRUTH, SBool
 
 from .sbool_pickle_helper import NO, YES, DBool
-
-no_value = NoValue()
 
 tsbool: SBool = SBool('not empty')
 fsbool: SBool = SBool('')
@@ -111,10 +107,10 @@ class TestSBoolPickle:
         from pythonic_fp.booleans.subtypable import SBool, TRUTH, LIE
         from tests.sbool_pickle_helper import DBool, YES, NO
         restored = pickle.loads(sys.stdin.buffer.read())
-        assert restored[0] is TRUTH, 'tsbool came back as a duplicate'
-        assert restored[1] is LIE, 'fsbool came back as a duplicate'
-        assert restored[2] is TRUTH, 'TRUTH came back as a duplicate'
-        assert restored[3] is LIE, 'LIE came back as a duplicate'
+        assert restored[0] is TRUTH, 'TRUTH came back as a duplicate'
+        assert restored[1] is LIE, 'LIE came back as a duplicate'
+        assert restored[2] is TRUTH, 'tsbool came back as a duplicate'
+        assert restored[3] is LIE, 'fsbool came back as a duplicate'
         assert restored[4] is TRUTH, 'truthy value came back as a duplicate'
         assert restored[5] is LIE, 'falsy value came back as a duplicate'
         assert restored[6] is TRUTH, 'non-empty value came back as a duplicate'
@@ -125,10 +121,10 @@ class TestSBoolPickle:
         for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
             blob = pickle.dumps(
                 (
-                    tsbool,
-                    fsbool,
                     TRUTH,
                     LIE,
+                    tsbool,
+                    fsbool,
                     SBool(42),
                     SBool(0),
                     SBool('foobar'),

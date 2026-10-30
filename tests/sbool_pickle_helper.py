@@ -16,36 +16,18 @@
 
 from collections.abc import Hashable
 from threading import Lock
-from typing import ClassVar, Final, Self, overload
-
-from pythonic_fp.gadgets.sentinels.novalue import NoValue
+from typing import ClassVar, Final
 
 from pythonic_fp.booleans.subtypable import SBool
 
 __all__ = ['DBool', 'YES', 'NO']
 
-no_value = NoValue()
-
 
 class DBool(SBool):
-    _false_one: ClassVar[SBool | NoValue] = no_value
-    _false_one_lock: ClassVar[Lock] = Lock()
+    _truthy_lock: ClassVar[Lock] = Lock()
+    _falsy_lock: ClassVar[Lock] = Lock()
 
-    _true_one: ClassVar[SBool | NoValue] = no_value
-    _true_one_lock: ClassVar[Lock] = Lock()
-
-    @overload
-    def __new__(cls, witness: object) -> Self: ...
-    @overload
-    def __new__(
-        cls, witness: object, flavor: Hashable | NoValue = no_value
-    ) -> Self: ...
-
-    def __new__(
-        cls,
-        witness: object,
-        flavor: Hashable | NoValue = no_value,
-    ) -> Self:
+    def __new__(cls, witness: object, flavor: Hashable = None) -> DBool:
         """
         .. admonition:: new
 
@@ -57,7 +39,7 @@ class DBool(SBool):
         if witness:
             inst = cls.__dict__.get('_truthy')
             if inst is None:
-                with DBool._true_one_lock:
+                with DBool._truthy_lock:
                     inst = cls.__dict__.get('_truthy')
                     if inst is None:
                         inst = super(SBool, cls).__new__(cls, 1)
@@ -66,7 +48,7 @@ class DBool(SBool):
         else:
             inst = cls.__dict__.get('_falsy')
             if inst is None:
-                with DBool._false_one_lock:
+                with DBool._falsy_lock:
                     inst = cls.__dict__.get('_falsy')
                     if inst is None:
                         inst = super(SBool, cls).__new__(cls, 0)
@@ -74,6 +56,6 @@ class DBool(SBool):
             return inst
 
 
-YES: Final[SBool] = SBool(True)
+YES: Final[DBool] = DBool(True)
 
-NO: Final[SBool] = SBool(False)
+NO: Final[DBool] = DBool(False)

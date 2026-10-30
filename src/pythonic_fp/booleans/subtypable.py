@@ -17,11 +17,8 @@ from threading import Lock
 from typing import ClassVar, Final, Self, cast, overload
 
 from pythonic_fp.gadgets import first_common_ancestor as fca
-from pythonic_fp.gadgets.sentinels.novalue import NoValue
 
 __all__ = ['SBool', 'TRUTH', 'LIE']
-
-no_value = NoValue()
 
 
 class SBool(int):
@@ -69,6 +66,7 @@ class SBool(int):
                 objects not descended from int.
 
     """
+
     _truthy: ClassVar[SBool]
     _falsy: ClassVar[SBool]
     _truthy_lock: ClassVar[Lock] = Lock()
@@ -78,13 +76,13 @@ class SBool(int):
     def __new__(cls, witness: object) -> Self: ...
     @overload
     def __new__(
-        cls, witness: object, flavor: Hashable | NoValue = no_value
+        cls, witness: object, flavor: Hashable = None
     ) -> Self: ...
 
     def __new__(
         cls,
         witness: object,
-        flavor: Hashable | NoValue = no_value,
+        flavor: Hashable = None,
     ) -> Self:
         """
         .. admonition:: new
@@ -121,7 +119,7 @@ class SBool(int):
     def __init__(
         self,
         witness: object = False,
-        flavor: Hashable | NoValue = no_value,
+        flavor: Hashable = None,
     ) -> None:
         """
         .. admonition:: init
@@ -130,7 +128,7 @@ class SBool(int):
             :param flavor: Ignored by ``SBool``, here only to support
                            the Liskov Substitution Principle.
         """
-        self._flavor: Hashable | NoValue = NoValue()
+        self._flavor: Hashable = None
 
     def __reduce__(self) -> tuple[type[SBool], tuple[object,]]:
         """
@@ -148,7 +146,7 @@ class SBool(int):
               return the singleton unchanged
 
             :returns: The pair ``(SBool, ((self._flavor)))``, which
-                      ``pickle`` calls to rebuild the sentinel.
+                      ``pickle`` uses to rebuild the singleton.
 
             .. important::
 
@@ -192,7 +190,7 @@ class SBool(int):
             if self._flavor == cast(SBool, other)._flavor:
                 flavor = self._flavor
             else:
-                flavor = NoValue()
+                flavor = None
 
             if self and other:
                 return base_class(True, flavor)
@@ -219,7 +217,7 @@ class SBool(int):
             if self._flavor == cast(SBool, other)._flavor:
                 flavor = self._flavor
             else:
-                flavor = NoValue()
+                flavor = None
 
             if self or other:
                 return base_class(True, flavor)
@@ -247,7 +245,7 @@ class SBool(int):
             if self._flavor == cast(SBool, other)._flavor:
                 flavor = self._flavor
             else:
-                flavor = NoValue()
+                flavor = None
 
             if self and not other or other and not self:
                 return base_class(True, flavor)

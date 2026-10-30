@@ -14,7 +14,7 @@
 
 from collections.abc import Hashable
 from threading import Lock
-from typing import ClassVar, Final, Self, cast, final
+from typing import ClassVar, Final, Self, final
 
 from .subtypable import SBool
 
@@ -64,16 +64,16 @@ class TF_Bool(SBool):
         .. admonition:: __new__
 
             :param witness: Determines which subtype,
-                            ``T_Bool`` or ``F_Bool``,
-                            of ``TF_Bool`` to return.
+                            ``T_Bool`` or ``F_Bool``, of
+                            ``TF_Bool`` to return.
             :param flavor: Ignored parameter, only two flavors,
                            one truthy and one falsy.
             :returns: The singleton truthy or singleton falsy instance.
 
         """
         if witness:
-            return cast(Self, T_Bool())
-        return cast(Self, F_Bool())
+            return T_Bool()
+        return F_Bool()
 
     def __init_subclass__(cls, **kwargs: object) -> None:
         """
@@ -88,7 +88,7 @@ class TF_Bool(SBool):
             msg = 'TF_Bool is sealed'
             raise TypeError(msg)
 
-    def __invert__(self) -> TF_Bool:
+    def __invert__(self) -> Self:
         """
         .. admonition:: bitwise invert operator
 
@@ -180,9 +180,9 @@ class T_Bool(TF_Bool):
               return the singleton unchanged
 
             :returns: The pair ``(TBool, (None,))``, which ``pickle``
-                      calls to rebuild the sentinel. The argument is
-                      ignored and is there only to satisfy the Liskov
-                      substitution principle.
+                      uses to rebuild the singleton. The ``None``
+                      argument is ignored and is there only to satisfy
+                      the Liskov substitution principle.
 
             .. important::
 
