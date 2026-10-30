@@ -1,4 +1,4 @@
-# Copyright 2023-2025 Geoffrey R. Scheller
+# Copyright 2023-2026 Geoffrey R. Scheller
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,84 +45,108 @@ class TestInvert:
         try:
             ~(FBool(False, 'foo') & FBool(False, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with & operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with & operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(True, 'foo') & FBool(False, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with & operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with & operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(False, 'foo') & FBool(True, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with & operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with & operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(True, 'foo') & FBool(True, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with & operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with & operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(False, 'foo') | FBool(False, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with | operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(True, 'foo') | FBool(False, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with | operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(False, 'foo') | FBool(True, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with | operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(True, 'foo') | FBool(True, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with | operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with | operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(False, 'foo') ^ FBool(False, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(True, 'foo') ^ FBool(False, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(False, 'foo') ^ FBool(True, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+            )
         else:
             assert False
 
         try:
             ~(FBool(True, 'foo') ^ FBool(True, 'bar'))
         except ValueError as err:
-            assert str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+            assert (
+                str(err) == 'Error: diffent flavored booleans compared with ^ operator'
+            )
 
         assert ~truthy(42) is falsy(42)
         assert ~falsy(42) is truthy(42)
@@ -167,37 +191,80 @@ class TestArithmetic:
         assert sbt + (fbt1 - tb1) + fb2 == 1
         assert (sbt + sbf) * (fbt1 + fbf1 + fbt2 + fbf2) * (tb1 + tb2 + fb1 + fb2) == 4
 
+
 class TestSealed:
     def test_tf_bool_sealed(self) -> None:
         try:
+
             class TF_Bool_Subclass(TF_Bool):
                 def msg(self) -> str:
                     return 'I am a TF_Bool subclass!'
 
         except TypeError as err:
-            assert str(err) == 'TF_Bool is sealed'
+            assert str(err) == 'TF_Bool is sealed, subtype T_Bool and F_Bool instead'
         else:
             assert False
+
 
 class TestFinal:
-    def test_t_bool_final(self) -> None:
+    def test_t_bool_f_Bool_not_final(self) -> None:
         try:
-            class T_Bool_Subclass(T_Bool):  # type: ignore
+
+            class T_Bool_Subclass(T_Bool):
                 def msg(self) -> str:
-                    return 'I am a TF_Bool subclass!'
+                    return 'I am a T_Bool subclass!'
+
+                def __str__(self) -> str:
+                    return 'true_one'
+
+                def __repr__(self) -> str:
+                    return 'T_Bool_Subclass()'
 
         except TypeError as err:
-            assert str(err) == 'T_Bool is final'
+            assert False, str(err)
         else:
-            assert False
+            true_one = T_Bool_Subclass()
+            assert true_one.msg() == 'I am a T_Bool subclass!'
 
-    def test_f_bool_final(self) -> None:
         try:
-            class F_Bool_Subclass(F_Bool):  # type: ignore
+
+            class F_Bool_Subclass(F_Bool):
                 def msg(self) -> str:
-                    return 'I am a F_Bool subclass!'
+                    return 'I am an F_Bool subclass!'
+
+                def __str__(self) -> str:
+                    return 'false_one'
+
+                def __repr__(self) -> str:
+                    return 'F_Bool_Subclass()'
 
         except TypeError as err:
-            assert str(err) == 'F_Bool is final'
+            assert False, str(err)
         else:
-            assert False
+            false_one = F_Bool_Subclass()
+            assert false_one.msg() == 'I am an F_Bool subclass!'
+
+        assert true_one == 1
+        assert true_one == T_Bool()
+        assert true_one == T_Bool_Subclass()
+        assert true_one is T_Bool_Subclass()
+        assert true_one is not T_Bool()
+
+        assert true_one & true_one is true_one
+        assert true_one & false_one is false_one
+        assert false_one & true_one is false_one
+        assert false_one & false_one is false_one
+
+        assert true_one | true_one is true_one
+        assert true_one | false_one is true_one
+        assert false_one | true_one is true_one
+        assert false_one | false_one is false_one
+
+        assert true_one ^ false_one is true_one
+        assert false_one ^ true_one is true_one
+        assert false_one ^ false_one is false_one
+
+        assert T_Bool() ^ T_Bool() is F_Bool()
+        assert true_one ^ true_one == false_one
+        assert true_one ^ true_one is not false_one
+        assert true_one ^ true_one is false_one

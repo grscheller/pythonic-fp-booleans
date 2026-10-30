@@ -80,12 +80,13 @@ class TF_Bool(SBool):
         .. admonition:: __init_subclass__
 
             :raises TypeError: Fails at runtime if any attempt to
-                    subclass is made.
+                    subclass is made. Subclass ``T_Bool`` and ``F_Bool``
+                    instead.
 
         """
         super().__init_subclass__(**kwargs)
         if TF_Bool in cls.__bases__ and cls.__module__ != TF_Bool.__module__:
-            msg = 'TF_Bool is sealed'
+            msg = 'TF_Bool is sealed, subtype T_Bool and F_Bool instead'
             raise TypeError(msg)
 
     def __invert__(self) -> Self:
@@ -128,7 +129,6 @@ class TF_Bool(SBool):
         return 'NEVER'
 
 
-@final
 class T_Bool(TF_Bool):
     """
     .. admonition:: Truthy TF_Bool subclass
@@ -157,12 +157,6 @@ class T_Bool(TF_Bool):
                     inst = super(SBool, cls).__new__(cls, 1)
                     cls._truthy = inst
         return inst
-
-    def __init_subclass__(cls, **kwargs: object) -> None:
-        super().__init_subclass__(**kwargs)
-        if T_Bool in cls.__bases__ and cls.__module__ != T_Bool.__module__:
-            msg = 'T_Bool is final'
-            raise TypeError(msg)
 
     def __reduce__(self) -> tuple[type[T_Bool], tuple[object]]:
         """
@@ -250,7 +244,6 @@ class T_Bool(TF_Bool):
         return super().__xor__(other)
 
 
-@final
 class F_Bool(TF_Bool):
     """
     .. admonition:: Falsy TF_Bool subclass
@@ -279,12 +272,6 @@ class F_Bool(TF_Bool):
                     inst = super(SBool, cls).__new__(cls, 0)
                     cls._falsy = inst
         return inst
-
-    def __init_subclass__(cls, **kwargs: object) -> None:
-        super().__init_subclass__(**kwargs)
-        if F_Bool in cls.__bases__ and cls.__module__ != F_Bool.__module__:
-            msg = 'F_Bool is final'
-            raise TypeError(msg)
 
     def __reduce__(self) -> tuple[type[F_Bool], tuple[object]]:
         """
