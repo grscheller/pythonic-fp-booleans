@@ -14,7 +14,7 @@
 
 from collections.abc import Hashable
 from threading import Lock
-from typing import ClassVar, Final, Self, cast, overload
+from typing import ClassVar, Final, Self, cast
 
 from pythonic_fp.gadgets import first_common_ancestor as fca
 
@@ -72,13 +72,6 @@ class SBool(int):
     _truthy_lock: ClassVar[Lock] = Lock()
     _falsy_lock: ClassVar[Lock] = Lock()
 
-    @overload
-    def __new__(cls, witness: object) -> Self: ...
-    @overload
-    def __new__(
-        cls, witness: object, flavor: Hashable = None
-    ) -> Self: ...
-
     def __new__(
         cls,
         witness: object,
@@ -99,6 +92,7 @@ class SBool(int):
                     inst = cls.__dict__.get('_truthy')
                     if inst is None:
                         inst = super().__new__(cls, 1)
+                        inst._flavor = None
                         cls._truthy = inst
             return inst
         else:
@@ -108,13 +102,9 @@ class SBool(int):
                     inst = cls.__dict__.get('_falsy')
                     if inst is None:
                         inst = super().__new__(cls, 0)
+                        inst._flavor = None
                         cls._falsy = inst
             return inst
-
-    @overload
-    def __init__(self, witness: object) -> None: ...
-    @overload
-    def __init__(self, witness: object, flavor: Hashable) -> None: ...
 
     def __init__(
         self,
@@ -128,7 +118,7 @@ class SBool(int):
             :param flavor: Ignored by ``SBool``, here only to support
                            the Liskov Substitution Principle.
         """
-        self._flavor: Hashable = None
+        self._flavor = None
 
     def __reduce__(self) -> tuple[type[SBool], tuple[object,]]:
         """

@@ -37,10 +37,9 @@ class FBool(SBool):
 
     """
 
+    _truthy_dict: ClassVar[dict[Hashable, FBool]] = {}
     _falsy_dict: ClassVar[dict[Hashable, FBool]] = {}
     _falsy_dict_lock: ClassVar[Lock] = Lock()
-
-    _truthy_dict: ClassVar[dict[Hashable, FBool]] = {}
     _truthy_dict_lock: ClassVar[Lock] = Lock()
 
     def __new__(cls, witness: object, flavor: Hashable) -> Self:

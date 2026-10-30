@@ -14,7 +14,7 @@
 
 from collections.abc import Hashable
 from threading import Lock
-from typing import ClassVar, Final, Self, final
+from typing import ClassVar, Final, Self, cast, final
 
 from .subtypable import SBool
 
@@ -72,8 +72,8 @@ class TF_Bool(SBool):
 
         """
         if witness:
-            return T_Bool()
-        return F_Bool()
+            return cast(Self, T_Bool())
+        return cast(Self, F_Bool())
 
     def __init_subclass__(cls, **kwargs: object) -> None:
         """
@@ -98,8 +98,8 @@ class TF_Bool(SBool):
 
         """
         if self:
-            return F_Bool()
-        return T_Bool()
+            return cast(Self, F_Bool())
+        return cast(Self, T_Bool())
 
     def __repr__(self) -> str:
         """

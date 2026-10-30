@@ -16,7 +16,7 @@
 
 from collections.abc import Hashable
 from threading import Lock
-from typing import ClassVar, Final
+from typing import ClassVar, Final, Self
 
 from pythonic_fp.booleans.subtypable import SBool
 
@@ -27,11 +27,11 @@ class DBool(SBool):
     _truthy_lock: ClassVar[Lock] = Lock()
     _falsy_lock: ClassVar[Lock] = Lock()
 
-    def __new__(cls, witness: object, flavor: Hashable = None) -> DBool:
+    def __new__(cls, witness: object, flavor: Hashable = None) -> Self:
         """
         .. admonition:: new
 
-            :param witness: Determines truthiness of the ``SBool``.
+            :param witness: Determines truthiness of the ``DBool``.
             :param flavor: Ignored, here for Liskov  substitution principle
             :returns: The truthy or falsy ``SBool`` class instance.
 
@@ -56,6 +56,6 @@ class DBool(SBool):
             return inst
 
 
-YES: Final[DBool] = DBool(True)
+YES: Final[DBool] = DBool(1)
 
-NO: Final[DBool] = DBool(False)
+NO: Final[DBool] = DBool(0)
