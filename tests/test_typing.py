@@ -192,7 +192,7 @@ class TestArithmetic:
         assert (sbt + sbf) * (fbt1 + fbf1 + fbt2 + fbf2) * (tb1 + tb2 + fb1 + fb2) == 4
 
 
-class TestSealed:
+class TestTF_BoolSealed:
     def test_tf_bool_sealed(self) -> None:
         try:
 
@@ -201,66 +201,33 @@ class TestSealed:
                     return 'I am a TF_Bool subclass!'
 
         except TypeError as err:
-            assert str(err) == 'TF_Bool is sealed, subtype T_Bool and F_Bool instead'
+            assert str(err) == 'TF_Bool is sealed'
         else:
             assert False
 
 
-class TestFinal:
-    def test_t_bool_f_Bool_not_final(self) -> None:
+class TestTF_BoolDerivedFinal:
+    def test_t_bool_final(self) -> None:
         try:
 
-            class T_Bool_Subclass(T_Bool):
+            class T_Bool_Subclass(T_Bool):  #type: ignore  # This is what is being tested.
                 def msg(self) -> str:
                     return 'I am a T_Bool subclass!'
 
-                def __str__(self) -> str:
-                    return 'true_one'
-
-                def __repr__(self) -> str:
-                    return 'T_Bool_Subclass()'
-
         except TypeError as err:
-            assert False, str(err)
+            assert str(err) == 'T_Bool is final'
         else:
-            true_one = T_Bool_Subclass()
-            assert true_one.msg() == 'I am a T_Bool subclass!'
+            assert False
 
+
+    def test_f_bool_final(self) -> None:
         try:
 
-            class F_Bool_Subclass(F_Bool):
+            class F_Bool_Subclass(F_Bool):  #type: ignore  # This is what is being tested.
                 def msg(self) -> str:
-                    return 'I am an F_Bool subclass!'
-
-                def __str__(self) -> str:
-                    return 'false_one'
-
-                def __repr__(self) -> str:
-                    return 'F_Bool_Subclass()'
+                    return 'I am a F_Bool subclass!'
 
         except TypeError as err:
-            assert False, str(err)
+            assert str(err) == 'F_Bool is final'
         else:
-            false_one = F_Bool_Subclass()
-            assert false_one.msg() == 'I am an F_Bool subclass!'
-
-        assert true_one == 1
-        assert true_one == T_Bool()
-        assert true_one == T_Bool_Subclass()
-        assert true_one is T_Bool_Subclass()
-        assert true_one is not T_Bool()
-
-        assert false_one & false_one is false_one
-        assert false_one & true_one is false_one
-        assert true_one & false_one is false_one
-        assert true_one & true_one is true_one
-
-        assert false_one | false_one is false_one
-        assert false_one | true_one is true_one
-        assert true_one | false_one is true_one
-        assert true_one | true_one is true_one
-
-        assert false_one ^ false_one is false_one
-        assert false_one ^ true_one is true_one
-        assert true_one ^ false_one is true_one
-        assert true_one ^ true_one is false_one
+            assert False

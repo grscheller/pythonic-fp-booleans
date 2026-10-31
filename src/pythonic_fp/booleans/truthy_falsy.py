@@ -85,7 +85,7 @@ class TF_Bool(SBool):
         """
         super().__init_subclass__(**kwargs)
         if TF_Bool in cls.__bases__ and cls.__module__ != TF_Bool.__module__:
-            msg = 'TF_Bool is sealed.'
+            msg = 'TF_Bool is sealed'
             raise TypeError(msg)
 
     def __invert__(self) -> Self:
@@ -128,6 +128,7 @@ class TF_Bool(SBool):
         return 'NEVER'
 
 
+@final
 class T_Bool(TF_Bool):
     """
     .. admonition:: Truthy TF_Bool subclass
@@ -158,8 +159,15 @@ class T_Bool(TF_Bool):
         return inst
 
     def __init_subclass__(cls, **kwargs: object) -> None:
+        """
+        .. admonition:: __init_subclass__
+
+            :raises TypeError: Fails at runtime if an attempt to
+                    subclass outside this module is made.
+
+        """
         super().__init_subclass__(**kwargs)
-        if TF_Bool in cls.__bases__ and cls.__module__ != T_Bool.__module__:
+        if T_Bool in cls.__bases__ and cls.__module__ != T_Bool.__module__:
             msg = 'T_Bool is final'
             raise TypeError(msg)
 
@@ -249,6 +257,7 @@ class T_Bool(TF_Bool):
         return super().__xor__(other)
 
 
+@final
 class F_Bool(TF_Bool):
     """
     .. admonition:: Falsy TF_Bool subclass
@@ -279,8 +288,15 @@ class F_Bool(TF_Bool):
         return inst
 
     def __init_subclass__(cls, **kwargs: object) -> None:
+        """
+        .. admonition:: __init_subclass__
+
+            :raises TypeError: Fails at runtime if an attempt to
+                    subclass outside this module is made.
+
+        """
         super().__init_subclass__(**kwargs)
-        if TF_Bool in cls.__bases__ and cls.__module__ != F_Bool.__module__:
+        if F_Bool in cls.__bases__ and cls.__module__ != F_Bool.__module__:
             msg = 'F_Bool is final'
             raise TypeError(msg)
 
