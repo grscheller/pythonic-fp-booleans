@@ -167,7 +167,7 @@ class T_Bool(TF_Bool):
 
         """
         super().__init_subclass__(**kwargs)
-        if T_Bool in cls.__bases__ and cls.__module__ != T_Bool.__module__:
+        if T_Bool in cls.__bases__:
             msg = 'T_Bool is final'
             raise TypeError(msg)
 
@@ -198,7 +198,7 @@ class T_Bool(TF_Bool):
                 comparisons against it would silently fail.
 
         """
-        return (T_Bool, (None,))
+        return (T_Bool, (object,))
 
     def __and__(self, other: int) -> int:
         """
@@ -296,7 +296,7 @@ class F_Bool(TF_Bool):
 
         """
         super().__init_subclass__(**kwargs)
-        if F_Bool in cls.__bases__ and cls.__module__ != F_Bool.__module__:
+        if F_Bool in cls.__bases__:
             msg = 'F_Bool is final'
             raise TypeError(msg)
 
@@ -327,7 +327,7 @@ class F_Bool(TF_Bool):
                 comparisons against it would silently fail.
 
         """
-        return (F_Bool, (None,))
+        return (F_Bool, (object,))
 
     def __and__(self, other: int) -> int:
         if issubclass(type(other), TF_Bool):

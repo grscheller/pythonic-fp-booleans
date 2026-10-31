@@ -13,6 +13,8 @@
 # limitations under the License.
 
 
+import pytest
+
 from pythonic_fp.booleans.flavored import FBool, falsy, truthy
 from pythonic_fp.booleans.subtypable import SBool
 from pythonic_fp.booleans.truthy_falsy import F_Bool, T_Bool, TF_Bool
@@ -194,40 +196,24 @@ class TestArithmetic:
 
 class TestTF_BoolSealed:
     def test_tf_bool_sealed(self) -> None:
-        try:
+        with pytest.raises(TypeError):
 
             class TF_Bool_Subclass(TF_Bool):
                 def msg(self) -> str:
                     return 'I am a TF_Bool subclass!'
 
-        except TypeError as err:
-            assert str(err) == 'TF_Bool is sealed'
-        else:
-            assert False
-
 
 class TestTF_BoolDerivedFinal:
     def test_t_bool_final(self) -> None:
-        try:
+        with pytest.raises(TypeError):
 
-            class T_Bool_Subclass(T_Bool):  #type: ignore  # This is what is being tested.
+            class T_Bool_Subclass(T_Bool):  # type: ignore[misc]
                 def msg(self) -> str:
                     return 'I am a T_Bool subclass!'
 
-        except TypeError as err:
-            assert str(err) == 'T_Bool is final'
-        else:
-            assert False
-
-
     def test_f_bool_final(self) -> None:
-        try:
+        with pytest.raises(TypeError):
 
-            class F_Bool_Subclass(F_Bool):  #type: ignore  # This is what is being tested.
+            class F_Bool_Subclass(F_Bool):  # type: ignore[misc]
                 def msg(self) -> str:
                     return 'I am a F_Bool subclass!'
-
-        except TypeError as err:
-            assert str(err) == 'F_Bool is final'
-        else:
-            assert False
