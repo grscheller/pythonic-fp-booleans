@@ -97,6 +97,9 @@ class TF_Bool(SBool):
             :returns: The inverted value of the TF_Bool.
 
         """
+        # TODO: Remove hard coded F_Bool and T_Bool when a
+        #       subtyping factory function is introduced
+        #       for the 6.1.0 coordinated release.
         if self:
             return cast(Self, F_Bool())
         return cast(Self, T_Bool())
