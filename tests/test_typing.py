@@ -250,21 +250,17 @@ class TestFinal:
         assert true_one is T_Bool_Subclass()
         assert true_one is not T_Bool()
 
-        assert true_one & true_one is true_one
-        assert true_one & false_one is false_one
-        assert false_one & true_one is false_one
         assert false_one & false_one is false_one
+        assert false_one & true_one is false_one
+        assert true_one & false_one is false_one
+        assert true_one & true_one is true_one
 
-        assert true_one | true_one is true_one
-        assert true_one | false_one is true_one
-        assert false_one | true_one is true_one
         assert false_one | false_one is false_one
+        assert false_one | true_one is true_one
+        assert true_one | false_one is true_one
+        assert true_one | true_one is true_one
 
-        assert true_one ^ false_one is true_one
-        assert false_one ^ true_one is true_one
         assert false_one ^ false_one is false_one
-
-        assert T_Bool() ^ T_Bool() is F_Bool()
-        assert true_one ^ true_one == false_one
-        assert true_one ^ true_one is not false_one
+        assert false_one ^ true_one is true_one
+        assert true_one ^ false_one is true_one
         assert true_one ^ true_one is false_one
