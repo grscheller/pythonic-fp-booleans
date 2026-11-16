@@ -9,10 +9,10 @@
 # the versions below tell CI which ones to install from PyPI and are shown
 # on the landing page.
 
-PROJECT_NAME = Gadgets
-PYPI_NAME = gadgets
+PROJECT_NAME = Booleans
+PYPI_NAME = booleans
 CURR_RELEASE_VERSION = 6.0.0
-PREV_RELEASE_VERSION = 4.6.0
+PREV_RELEASE_VERSION = 5.1.0
 
 SPHINXOPTS ?=
 SPHINXBUILD ?= sphinx-build
